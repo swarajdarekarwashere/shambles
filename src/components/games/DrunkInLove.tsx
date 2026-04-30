@@ -1,8 +1,10 @@
 import { useMemo, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useGame } from "@/state/GameContext";
 import { Mode } from "@/lib/gameTypes";
 import { ADULT_BOARD, BOARD, TILE_STYLE } from "@/lib/drunkInLoveTiles";
+import adultBoardImage from "@/assets/drunk-in-love-board.webp";
+import lightBoardImage from "@/assets/drunk-in-love-board-1.webp";
 
 interface Props {
   mode: Mode;
@@ -10,31 +12,44 @@ interface Props {
   onFinish: () => void;
 }
 
-// Build perimeter coordinates for a W x H grid, starting bottom-left, going up the left,
-// across the top, down the right, and back across the bottom (matches reference image).
-const COLS = 7;
-const ROWS = 5;
+type Point = {
+  x: number;
+  y: number;
+};
 
-function buildPerimeter() {
-  const coords: { col: number; row: number }[] = [];
-  // bottom row, left → right
-  for (let c = 0; c < COLS; c++) coords.push({ col: c, row: ROWS - 1 });
-  // right column, bottom-1 → top
-  for (let r = ROWS - 2; r >= 0; r--) coords.push({ col: COLS - 1, row: r });
-  // top row, right-1 → left
-  for (let c = COLS - 2; c >= 0; c--) coords.push({ col: c, row: 0 });
-  // left column, top+1 → bottom-1
-  for (let r = 1; r <= ROWS - 2; r++) coords.push({ col: 0, row: r });
-  return coords;
-}
+const TRACK: Point[] = [
+  { x: 8.0, y: 20.1 },
+  { x: 8.0, y: 34.0 },
+  { x: 23.5, y: 34.0 },
+  { x: 31.8, y: 20.0 },
+  { x: 39.8, y: 20.0 },
+  { x: 48.0, y: 20.0 },
+  { x: 56.2, y: 20.0 },
+  { x: 64.6, y: 20.0 },
+  { x: 72.8, y: 20.0 },
+  { x: 81.0, y: 20.0 },
+  { x: 89.4, y: 20.0 },
+  { x: 89.4, y: 34.0 },
+  { x: 89.2, y: 48.6 },
+  { x: 80.8, y: 48.6 },
+  { x: 72.6, y: 48.6 },
+  { x: 64.2, y: 48.6 },
+  { x: 56.0, y: 62.9 },
+  { x: 47.6, y: 62.9 },
+  { x: 39.3, y: 62.9 },
+  { x: 31.2, y: 77.2 },
+  { x: 39.6, y: 77.2 },
+  { x: 48.0, y: 77.2 },
+  { x: 56.4, y: 77.2 },
+  { x: 64.6, y: 77.2 },
+];
 
-const PERIM = buildPerimeter(); // length = 2*(COLS-1)+2*(ROWS-1) = 12+8 = 20
-// Adjust BOARD length to match PERIM length by trimming or padding light tiles
 function buildTiles(board: typeof BOARD) {
   const out = [...board];
-  while (out.length > PERIM.length - 1) out.splice(out.length - 2, 1); // remove from middle
-  while (out.length < PERIM.length) out.push({ type: "light", prompt: "Take a sip & vibe 💖", emoji: "🍷" });
-  // Ensure last tile is end
+  while (out.length > TRACK.length) out.splice(out.length - 2, 1);
+  while (out.length < TRACK.length) {
+    out.push({ type: "light", prompt: "Take a sip and stay sweet", emoji: "🍷" });
+  }
   out[out.length - 1] = board[board.length - 1];
   out[0] = board[0];
   return out;
@@ -46,10 +61,13 @@ function rollDie() {
 
 export default function DrunkInLove({ mode, onExit, onFinish }: Props) {
   const { players, addScore, tone } = useGame();
-  const TILES = useMemo(
-    () => buildTiles(tone === "adult" ? ADULT_BOARD : BOARD),
-    [tone]
+  const isAdult = tone === "adult";
+  const boardImage = isAdult ? adultBoardImage : lightBoardImage;
+  const tiles = useMemo(
+    () => buildTiles(isAdult ? ADULT_BOARD : BOARD),
+    [isAdult]
   );
+
   const [positions, setPositions] = useState<Record<string, number>>(() =>
     Object.fromEntries(players.map((p) => [p.id, 0]))
   );
@@ -61,28 +79,33 @@ export default function DrunkInLove({ mode, onExit, onFinish }: Props) {
 
   const currentPlayer = players[turnIdx % players.length];
 
-  const cellPct = useMemo(() => ({
-    w: 100 / COLS,
-    h: 100 / ROWS,
-  }), []);
+  const tileGroups = useMemo(() => {
+    const groups: Record<number, string[]> = {};
+    for (const player of players) {
+      const tile = positions[player.id] ?? 0;
+      (groups[tile] ||= []).push(player.id);
+    }
+    return groups;
+  }, [players, positions]);
 
   const handleRoll = () => {
     if (rolling || activeTile !== null || !currentPlayer) return;
     if (skipNext[currentPlayer.id]) {
-      setSkipNext((s) => ({ ...s, [currentPlayer.id]: false }));
-      setTurnIdx((t) => t + 1);
+      setSkipNext((state) => ({ ...state, [currentPlayer.id]: false }));
+      setTurnIdx((value) => value + 1);
       return;
     }
+
     setRolling(true);
     let count = 0;
-    const interval = setInterval(() => {
+    const interval = window.setInterval(() => {
       setDie(rollDie());
       count++;
       if (count > 8) {
-        clearInterval(interval);
+        window.clearInterval(interval);
         const final = rollDie();
         setDie(final);
-        setTimeout(() => movePlayer(final), 300);
+        window.setTimeout(() => movePlayer(final), 300);
       }
     }, 70);
   };
@@ -90,18 +113,18 @@ export default function DrunkInLove({ mode, onExit, onFinish }: Props) {
   const movePlayer = (steps: number) => {
     if (!currentPlayer) return;
     const cur = positions[currentPlayer.id] ?? 0;
-    let target = cur + steps;
-    if (target >= TILES.length - 1) target = TILES.length - 1;
-    setPositions((p) => ({ ...p, [currentPlayer.id]: target }));
+    const target = Math.min(cur + steps, tiles.length - 1);
+
+    setPositions((state) => ({ ...state, [currentPlayer.id]: target }));
     setRolling(false);
 
-    if (target === TILES.length - 1) {
-      // Winner
+    if (target === tiles.length - 1) {
       addScore(currentPlayer.id, 5);
-      setTimeout(() => onFinish(), 900);
+      window.setTimeout(() => onFinish(), 900);
       return;
     }
-    setTimeout(() => setActiveTile(target), 450);
+
+    window.setTimeout(() => setActiveTile(target), 450);
   };
 
   const closeTileCard = (didIt: boolean) => {
@@ -109,128 +132,131 @@ export default function DrunkInLove({ mode, onExit, onFinish }: Props) {
       setActiveTile(null);
       return;
     }
-    const tile = TILES[activeTile];
+
+    const tile = tiles[activeTile];
     if (didIt) addScore(currentPlayer.id, 1);
+
     if (tile.effect?.kind === "skip") {
-      setSkipNext((s) => ({ ...s, [currentPlayer.id]: true }));
+      setSkipNext((state) => ({ ...state, [currentPlayer.id]: true }));
     } else if (tile.effect?.kind === "back") {
       const back = Math.max(0, (positions[currentPlayer.id] ?? 0) - tile.effect.n);
-      setPositions((p) => ({ ...p, [currentPlayer.id]: back }));
+      setPositions((state) => ({ ...state, [currentPlayer.id]: back }));
     }
+
     setActiveTile(null);
-    setTurnIdx((t) => t + 1);
+    setTurnIdx((value) => value + 1);
   };
 
   return (
-    <section className="relative min-h-dvh w-full overflow-hidden bg-gradient-cream px-3 pb-28 pt-3 md:px-6">
+    <section
+      className={`drunk-in-love-screen relative h-dvh w-full overflow-hidden px-3 ${
+        isAdult
+          ? "bg-[radial-gradient(circle_at_50%_0%,#460714,#1d0710_48%,#090308_100%)]"
+          : "bg-gradient-cream"
+      }`}
+    >
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -left-20 top-20 h-72 w-72 rounded-full bg-glow blur-3xl" />
-        <div className="absolute -right-20 bottom-20 h-72 w-72 rounded-full bg-glow blur-3xl" />
+        <div className={`absolute -left-20 top-20 h-72 w-72 rounded-full blur-3xl ${isAdult ? "bg-rose-700/25" : "bg-glow"}`} />
+        <div className={`absolute -right-20 bottom-20 h-72 w-72 rounded-full blur-3xl ${isAdult ? "bg-rose-600/20" : "bg-glow"}`} />
       </div>
 
-      <header className="relative z-10 mx-auto flex max-w-3xl items-center justify-between">
+      <header className="drunk-in-love-header relative z-10 mx-auto flex max-w-5xl items-center justify-between">
         <button
           onClick={onExit}
-          className="rounded-full border border-border bg-card/80 px-3 py-1.5 font-pixel text-[10px] text-foreground/70 backdrop-blur"
+          className={`rounded-full border px-3 py-1.5 font-pixel text-[9px] backdrop-blur sm:text-[10px] ${
+            isAdult
+              ? "border-white/15 bg-white/10 text-white/80"
+              : "border-border bg-card/80 text-foreground/70"
+          }`}
         >
           ← Exit
         </button>
-        <div className="rounded-full border border-border bg-card/80 px-3 py-1 font-pixel text-[9px] text-foreground/70 backdrop-blur">
+        <div
+          className={`rounded-full border px-2.5 py-1 font-pixel text-[7px] tracking-widest backdrop-blur sm:px-3 sm:text-[9px] ${
+            isAdult
+              ? "border-white/15 bg-white/10 text-white/80"
+              : "border-border bg-card/80 text-foreground/70"
+          }`}
+        >
           DRUNK IN LOVE · {mode === "couple" ? "COUPLES" : "PARTY"}
         </div>
       </header>
 
-      {/* Turn banner */}
-      <div className="relative z-10 mx-auto mt-3 flex max-w-3xl items-center justify-center gap-2">
-        <span
-          className="h-3 w-3 rounded-full"
-          style={{ background: currentPlayer?.color }}
-        />
-        <p className="font-script text-xl text-accent">
+      <div className="drunk-in-love-turn relative z-10 mx-auto flex max-w-5xl items-center justify-center gap-2">
+        <span className="h-2.5 w-2.5 rounded-full ring-2 ring-white sm:h-3 sm:w-3" style={{ background: currentPlayer?.color }} />
+        <p className={`font-script text-[clamp(2rem,8vw,3rem)] leading-none ${isAdult ? "text-rose-200" : "text-accent"}`}>
           {currentPlayer?.name}'s turn
         </p>
       </div>
 
-      {/* Board */}
-      <div className="relative z-10 mx-auto mt-4 w-full max-w-md">
+      <div className="drunk-in-love-board-wrap relative z-10 mx-auto w-full max-w-md md:max-w-3xl lg:max-w-5xl">
         <div
-          className="relative w-full overflow-hidden rounded-3xl border-4 border-accent/60 bg-card p-2 shadow-card"
-          style={{ aspectRatio: `${COLS} / ${ROWS}` }}
+          className={`drunk-in-love-board-frame overflow-auto rounded-[1.5rem] border-[3px] shadow-[0_20px_60px_-18px_rgba(236,72,153,0.45)] ${
+            isAdult
+              ? "border-rose-200/25 bg-black/25"
+              : "border-accent/50 bg-card/90"
+          }`}
         >
-          {/* Tiles */}
-          {PERIM.map((coord, i) => {
-            const tile = TILES[i];
-            const style = TILE_STYLE[tile.type];
-            const left = coord.col * cellPct.w;
-            const top = coord.row * cellPct.h;
-            return (
-              <div
-                key={i}
-                className={`absolute flex flex-col items-center justify-center rounded-md border border-white/40 p-0.5 text-center ${style.bg} ${style.text}`}
-                style={{
-                  left: `${left}%`,
-                  top: `${top}%`,
-                  width: `${cellPct.w}%`,
-                  height: `${cellPct.h}%`,
-                }}
-              >
-                <span className="text-base leading-none">{tile.emoji}</span>
-                <span className="mt-0.5 font-pixel text-[5px] leading-tight opacity-80">
-                  {style.label}
-                </span>
-              </div>
-            );
-          })}
+          <div className="relative min-w-[280px]">
+            <img
+              src={boardImage}
+              alt={isAdult ? "Drunk In Love adult board" : "Drunk In Love light board"}
+              className={`block h-auto w-full select-none ${isAdult ? "brightness-[0.84] contrast-110 saturate-[1.05]" : ""}`}
+              draggable={false}
+            />
 
-          {/* Center title */}
-          <div className="absolute inset-x-[16%] inset-y-[24%] flex flex-col items-center justify-center rounded-2xl bg-gradient-romance p-2 text-center text-primary-foreground shadow-glow">
-            <span className="font-pixel text-[10px] sm:text-xs">DRUNK</span>
-            <span className="font-script text-2xl leading-none sm:text-3xl">in love</span>
-            <span className="mt-1 text-xl">💗</span>
+            <div className="pointer-events-none absolute inset-0">
+              {Object.entries(tileGroups).map(([tileStr, ids]) => {
+                const index = Number(tileStr);
+                const point = TRACK[index] ?? TRACK[0];
+
+                return ids.map((id, tokenIndex) => {
+                  const player = players.find((entry) => entry.id === id)!;
+                  const angle = (tokenIndex / Math.max(ids.length, 1)) * Math.PI * 2;
+                  const radius = ids.length > 1 ? 1.1 : 0;
+                  const dx = Math.cos(angle) * radius;
+                  const dy = Math.sin(angle) * radius;
+
+                  return (
+                    <motion.span
+                      key={player.id}
+                      layoutId={`drunk-in-love-token-${player.id}`}
+                      initial={false}
+                      animate={{
+                        left: `calc(${point.x}% + ${dx}%)`,
+                        top: `calc(${point.y}% + ${dy}%)`,
+                      }}
+                      transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                      className="absolute grid h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-2 border-white shadow-[0_0_12px_rgba(0,0,0,0.3)] sm:h-4 sm:w-4 md:h-5 md:w-5"
+                      style={{ background: player.color }}
+                    >
+                      <span className="h-1 w-1 rounded-full bg-white/90 sm:h-1.5 sm:w-1.5 md:h-2 md:w-2" />
+                    </motion.span>
+                  );
+                });
+              })}
+            </div>
           </div>
-
-          {/* Player tokens */}
-          {players.map((p, idx) => {
-            const pos = positions[p.id] ?? 0;
-            const coord = PERIM[pos];
-            if (!coord) return null;
-            const offsetX = (idx % 2) * 6 - 3;
-            const offsetY = Math.floor(idx / 2) * 6 - 3;
-            return (
-              <motion.div
-                key={p.id}
-                animate={{
-                  left: `calc(${coord.col * cellPct.w}% + ${cellPct.w / 2}% + ${offsetX}px)`,
-                  top: `calc(${coord.row * cellPct.h}% + ${cellPct.h / 2}% + ${offsetY}px)`,
-                }}
-                transition={{ type: "spring", stiffness: 220, damping: 22 }}
-                className="absolute h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow-md"
-                style={{ background: p.color }}
-              />
-            );
-          })}
         </div>
       </div>
 
-      {/* Dice + roll */}
-      <div className="game-bottom-controls fixed inset-x-0 z-30 flex justify-center px-4">
+      <div className="drunk-in-love-controls fixed inset-x-0 z-30 flex justify-center px-4">
         <button
           onClick={handleRoll}
           disabled={rolling || activeTile !== null}
-          className="flex items-center gap-3 rounded-full bg-gradient-romance px-6 py-3 font-pixel text-[11px] text-primary-foreground shadow-glow transition-all enabled:hover:scale-105 disabled:opacity-50"
+          className="flex items-center gap-3 rounded-full bg-gradient-romance px-5 py-2.5 font-pixel text-[10px] text-primary-foreground shadow-glow transition-all enabled:hover:scale-105 disabled:opacity-50 sm:px-6 sm:py-3 sm:text-[11px]"
         >
           <motion.span
             animate={rolling ? { rotate: [0, 360] } : { rotate: 0 }}
             transition={{ duration: 0.4, repeat: rolling ? Infinity : 0, ease: "linear" }}
-            className="grid h-9 w-9 place-items-center rounded-lg bg-white text-foreground font-pixel text-base shadow-inner"
+            className="grid h-8 w-8 place-items-center rounded-lg bg-white font-pixel text-sm text-foreground shadow-inner sm:h-9 sm:w-9 sm:text-base"
           >
             {die ?? "🎲"}
           </motion.span>
-          {rolling ? "Rolling…" : skipNext[currentPlayer?.id ?? ""] ? "Skip Turn" : "Roll Dice"}
+          {rolling ? "Rolling..." : skipNext[currentPlayer?.id ?? ""] ? "Skip Turn" : "Roll Dice"}
         </button>
       </div>
 
-      {/* Tile card popup */}
       <AnimatePresence>
         {activeTile !== null && (
           <motion.div
@@ -247,19 +273,19 @@ export default function DrunkInLove({ mode, onExit, onFinish }: Props) {
               className="relative w-full max-w-xs rounded-2xl bg-[#1a1a1a] p-6 text-center shadow-2xl"
             >
               <span
-                className={`absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 font-pixel text-[8px] ${TILE_STYLE[TILES[activeTile].type].bg} ${TILE_STYLE[TILES[activeTile].type].text}`}
+                className={`absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 font-pixel text-[8px] ${TILE_STYLE[tiles[activeTile].type].bg} ${TILE_STYLE[tiles[activeTile].type].text}`}
               >
-                {TILE_STYLE[TILES[activeTile].type].label}
+                {TILE_STYLE[tiles[activeTile].type].label}
               </span>
               <p className="mt-3 font-pixel text-[11px] uppercase leading-relaxed text-white">
-                {TILES[activeTile].prompt}
+                {tiles[activeTile].prompt}
               </p>
-              {TILES[activeTile].altDrink && (
+              {tiles[activeTile].altDrink && (
                 <p className="mt-3 font-script text-xl italic text-pink-300">
-                  {TILES[activeTile].altDrink}
+                  {tiles[activeTile].altDrink}
                 </p>
               )}
-              <div className="mt-5 text-4xl">{TILES[activeTile].emoji}</div>
+              <div className="mt-5 text-4xl">{tiles[activeTile].emoji}</div>
               <div className="mt-6 flex gap-2">
                 <button
                   onClick={() => closeTileCard(false)}
