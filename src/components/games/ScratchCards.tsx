@@ -136,7 +136,11 @@ export default function ScratchCards({ onExit, onFinish }: Props) {
         >
           {/* Reveal layer */}
           <div className="absolute inset-0 flex flex-col items-center justify-between p-5 text-center">
-
+            <div className="flex w-full items-start justify-end">
+              <div className="rounded-md  px-2 py-0.5 font-pixel text-[8px] tracking-widest text-pink-900">
+                {/* {card.tone === "shot" ? "SHOT 🥃" : "SIP 🍸"} */}
+              </div>
+            </div>
             <div className="px-2">
               <h3
                 className="font-pixel text-2xl leading-tight drop-shadow-[2px_2px_0_rgba(255,255,255,0.6)]"
