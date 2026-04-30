@@ -7,7 +7,7 @@ import gameDice from "@/assets/game-ladders-art.png";
 import gameCouple from "@/assets/game-couple.png";
 import gameEnvelope from "@/assets/game-intimacy-art.png";
 import gameBoard from "@/assets/game-dice.png";
-import gameWasted from "@/assets/lets-get-wasted.png";
+import gameWasted from "@/assets/lets-get-wasted.webp";
 import { COUPLE_GAMES, Mode, PARTY_GAMES } from "@/lib/gameTypes";
 import { useGame } from "@/state/GameContext";
 import { Switch } from "@/components/ui/switch";

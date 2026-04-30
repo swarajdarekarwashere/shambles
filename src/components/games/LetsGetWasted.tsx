@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useGame } from "@/state/GameContext";
-import board from "@/assets/lets-get-wasted.png";
+import board from "@/assets/lets-get-wasted.webp";
 
 interface Props {
   onExit: () => void;
