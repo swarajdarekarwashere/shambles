@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import gameWheel from "@/assets/game-wheel-art.png";
@@ -7,7 +7,10 @@ import gameDice from "@/assets/game-ladders-art.png";
 import gameCouple from "@/assets/game-couple.png";
 import gameEnvelope from "@/assets/game-intimacy-art.png";
 import gameBoard from "@/assets/game-dice.png";
+import gameWasted from "@/assets/lets-get-wasted.png";
 import { COUPLE_GAMES, Mode, PARTY_GAMES } from "@/lib/gameTypes";
+import { useGame } from "@/state/GameContext";
+import { Switch } from "@/components/ui/switch";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,6 +21,7 @@ const IMAGE_MAP: Record<string, string> = {
   dice: gameDice,
   "spicy-starters": gameCouple,
   intimacy: gameEnvelope,
+  "lets-get-wasted": gameWasted,
 };
 
 interface Props {
@@ -27,10 +31,16 @@ interface Props {
 }
 
 export default function GameDiscovery({ mode, onBack, onPickGame }: Props) {
-  const games = (mode === "couple" ? COUPLE_GAMES : PARTY_GAMES).map((g) => ({
-    ...g,
-    image: IMAGE_MAP[g.id],
-  }));
+  const { tone, toggleTone } = useGame();
+  const isAdult = tone === "adult";
+  const games = useMemo(
+    () =>
+      (mode === "couple" ? COUPLE_GAMES : PARTY_GAMES).map((g) => ({
+        ...g,
+        image: IMAGE_MAP[g.id],
+      })),
+    [mode]
+  );
 
   const containerRef = useRef<HTMLDivElement>(null);
   const stageRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -116,7 +126,7 @@ export default function GameDiscovery({ mode, onBack, onPickGame }: Props) {
     }, containerRef);
 
     return () => ctx.revert();
-  }, [mode]);
+  }, [games]);
 
   // Refresh ScrollTrigger on resize for mobile dvh
   useEffect(() => {
@@ -130,7 +140,11 @@ export default function GameDiscovery({ mode, onBack, onPickGame }: Props) {
   return (
     <section
       ref={containerRef}
-      className="relative w-full bg-gradient-cream"
+      className={`relative w-full transition-colors duration-500 ${
+        isAdult
+          ? "bg-[radial-gradient(circle_at_50%_0%,#3b0620,#170716_48%,#07030b_100%)]"
+          : "bg-gradient-cream"
+      }`}
       style={{ height: `${games.length * 100}vh` }}
     >
       {/* Sticky viewport */}
@@ -138,7 +152,11 @@ export default function GameDiscovery({ mode, onBack, onPickGame }: Props) {
         {/* Back button */}
         <button
           onClick={onBack}
-          className="absolute left-3 top-4 z-40 rounded-full border border-border bg-card/80 px-3 py-2 font-pixel text-[9px] text-foreground/70 backdrop-blur transition-all hover:scale-105 hover:text-foreground sm:left-4 sm:px-4 sm:text-[10px]"
+          className={`absolute left-3 top-4 z-40 rounded-full border px-3 py-2 font-pixel text-[9px] backdrop-blur transition-all hover:scale-105 sm:left-4 sm:px-4 sm:text-[10px] ${
+            isAdult
+              ? "border-white/15 bg-white/10 text-white/75 hover:text-white"
+              : "border-border bg-card/80 text-foreground/70 hover:text-foreground"
+          }`}
         >
           ← Modes
         </button>
@@ -153,22 +171,77 @@ export default function GameDiscovery({ mode, onBack, onPickGame }: Props) {
         </div>
 
         {/* Section label */}
-        <div className="absolute right-3 top-4 z-30 sm:right-4">
-          <div className="rounded-full border border-border bg-card/80 px-3 py-1.5 font-pixel text-[8px] text-foreground/70 backdrop-blur sm:px-4 sm:text-[9px]">
+        <div className="absolute right-3 top-4 z-30 hidden sm:block sm:right-4">
+          <div className={`rounded-full border px-3 py-1.5 font-pixel text-[8px] backdrop-blur sm:px-4 sm:text-[9px] ${
+            isAdult
+              ? "border-white/15 bg-white/10 text-white/75"
+              : "border-border bg-card/80 text-foreground/70"
+          }`}>
             ✦ {current.num} / {String(games.length).padStart(2, "0")} ✦ {mode === "couple" ? "COUPLE" : "PARTY"}
           </div>
         </div>
 
+        <div className="absolute right-3 top-4 z-40 sm:hidden">
+          <div
+            className={`flex items-center gap-2 rounded-full border px-2 py-1 shadow-soft backdrop-blur ${
+              isAdult
+                ? "border-rose-300/40 bg-black/35 text-white"
+                : "border-border bg-card/85 text-foreground"
+            }`}
+          >
+            <span className="font-pixel text-[7px] uppercase tracking-wider">
+              {isAdult ? "18+" : "Light"}
+            </span>
+            <Switch
+              checked={isAdult}
+              onCheckedChange={toggleTone}
+              className={`h-5 w-9 transition-colors [&>span]:h-4 [&>span]:w-4 ${
+                isAdult
+                  ? "data-[state=checked]:bg-rose-500 border-rose-400/50"
+                  : "data-[state=unchecked]:bg-secondary"
+              }`}
+            />
+          </div>
+        </div>
+
+        {/* Tone Toggle */}
+        <div className="absolute left-1/2 top-4 z-40 hidden -translate-x-1/2 sm:block">
+          <div
+            className={`flex min-w-[14.5rem] items-center justify-between gap-3 rounded-full border px-4 py-2 shadow-soft backdrop-blur transition-all hover:scale-[1.02] sm:min-w-[16rem] ${
+              isAdult
+                ? "border-rose-300/40 bg-black/35 text-white"
+                : "border-border bg-card/85 text-foreground"
+            }`}
+          >
+            <span className="font-pixel text-[8px] sm:text-[9px] uppercase tracking-wider">
+              {isAdult ? "spice it up " : "stay Playful "}
+            </span>
+            <Switch
+              checked={isAdult}
+              onCheckedChange={toggleTone}
+              className={`transition-colors ${
+                isAdult 
+                  ? "data-[state=checked]:bg-rose-500 border-rose-400/50" 
+                  : "data-[state=unchecked]:bg-secondary"
+              }`}
+            />
+          </div>
+        </div>
+
         {/* Background ambient blobs */}
-        <div className="pointer-events-none absolute left-0 top-1/4 h-80 w-80 rounded-full bg-glow blur-3xl" />
-        <div className="pointer-events-none absolute bottom-0 right-0 h-96 w-96 rounded-full bg-glow blur-3xl opacity-70" />
+        <div className={`pointer-events-none absolute left-0 top-1/4 h-80 w-80 rounded-full blur-3xl ${
+          isAdult ? "bg-rose-700/30" : "bg-glow"
+        }`} />
+        <div className={`pointer-events-none absolute bottom-0 right-0 h-96 w-96 rounded-full blur-3xl ${
+          isAdult ? "bg-fuchsia-700/25 opacity-80" : "bg-glow opacity-70"
+        }`} />
 
         {/* Sparkles */}
         <div className="pointer-events-none absolute inset-0">
           {[...Array(20)].map((_, i) => (
             <span
               key={i}
-              className="absolute animate-sparkle text-primary/60"
+              className={`absolute animate-sparkle ${isAdult ? "text-rose-200/55" : "text-primary/60"}`}
               style={{
                 left: `${(i * 53) % 100}%`,
                 top: `${(i * 31) % 100}%`,
@@ -187,7 +260,9 @@ export default function GameDiscovery({ mode, onBack, onPickGame }: Props) {
           <div className="relative flex h-full min-h-0 items-center justify-center md:min-h-[70vh]">
             <div className="relative h-full w-full max-w-md">
               {/* Glow halo */}
-              <div className="absolute left-1/2 top-1/2 h-[80%] w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-glow animate-pulse-glow" />
+              <div className={`absolute left-1/2 top-1/2 h-[80%] w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full animate-pulse-glow ${
+                isAdult ? "bg-rose-700/25" : "bg-glow"
+              }`} />
               {games.map((g, i) => (
                 <div
                   key={g.id}
@@ -200,7 +275,11 @@ export default function GameDiscovery({ mode, onBack, onPickGame }: Props) {
                     width={1024}
                     height={1024}
                     loading={i === 0 ? "eager" : "lazy"}
-                    className="discovery-game-art pixelated object-contain animate-float drop-shadow-[0_12px_24px_hsl(348_70%_60%/0.35)] md:max-h-[70vh] md:w-full"
+                    className={`discovery-game-art pixelated object-contain animate-float md:max-h-[70vh] md:w-full ${
+                      isAdult
+                        ? "drop-shadow-[0_14px_30px_rgba(244,63,94,0.42)]"
+                        : "drop-shadow-[0_12px_24px_hsl(348_70%_60%/0.35)]"
+                    }`}
                   />
                 </div>
               ))}
@@ -219,18 +298,24 @@ export default function GameDiscovery({ mode, onBack, onPickGame }: Props) {
               >
                 <span
                   className={`discovery-kicker font-pixel ${
-                    g.accent === "accent" ? "text-accent" : "text-primary"
+                    isAdult ? "text-rose-200" : g.accent === "accent" ? "text-accent" : "text-primary"
                   }`}
                 >
                   {mode === "couple" ? "❤ COUPLE GAME" : "🎉 PARTY GAME"} · {g.num}
                 </span>
-                <h2 className="discovery-title font-serifd leading-[1.05] text-foreground md:text-6xl md:leading-[1.05]">
+                <h2 className={`discovery-title font-serifd leading-[1.05] md:text-6xl md:leading-[1.05] ${
+                  isAdult ? "text-white" : "text-foreground"
+                }`}>
                   {g.title}
                 </h2>
-                <p className="discovery-tagline font-script text-accent md:text-5xl">
+                <p className={`discovery-tagline font-script md:text-5xl ${
+                  isAdult ? "text-rose-300" : "text-accent"
+                }`}>
                   {g.tagline}
                 </p>
-                <p className="discovery-description max-w-md font-serifi leading-relaxed text-muted-foreground md:text-lg">
+                <p className={`discovery-description max-w-md font-serifi leading-relaxed md:text-lg ${
+                  isAdult ? "text-rose-200" : "text-muted-foreground"
+                }`}>
                   {g.description}
                 </p>
                 <button
@@ -259,10 +344,10 @@ export default function GameDiscovery({ mode, onBack, onPickGame }: Props) {
           {games.map((g, i) => (
             <div
               key={g.id}
-              className={`h-2 rounded-full transition-all duration-500 ${
+                  className={`h-2 rounded-full transition-all duration-500 ${
                 i === activeIdx
-                  ? "w-8 bg-primary"
-                  : "w-2 bg-border"
+                  ? isAdult ? "w-8 bg-rose-400" : "w-8 bg-primary"
+                  : isAdult ? "w-2 bg-white/25" : "w-2 bg-border"
               }`}
             />
           ))}

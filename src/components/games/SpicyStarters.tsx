@@ -34,7 +34,7 @@ const LEVEL_META: Record<Level, { label: string; emoji: string; bg: string; text
 
 type Card = { id: number; level: Level; prompt: string };
 
-const DECK: Card[] = [
+const DECK_NORMAL: Card[] = [
   { id: 1, level: "light", prompt: "What's your favorite memory of us?" },
   { id: 2, level: "light", prompt: "What made you first notice me?" },
   { id: 3, level: "light", prompt: "What's a tiny thing I do that makes you smile?" },
@@ -49,19 +49,37 @@ const DECK: Card[] = [
   { id: 12, level: "bold", prompt: "What's one thing you'd dare me to do tonight?" },
 ];
 
+const DECK_ADULT: Card[] = [
+  { id: 101, level: "light", prompt: "What kind of flirting gets your attention fastest?" },
+  { id: 102, level: "light", prompt: "What is one compliment that would instantly work on you?" },
+  { id: 103, level: "light", prompt: "Describe your ideal date after midnight." },
+  { id: 104, level: "light", prompt: "What is a tiny romantic gesture that feels intense to you?" },
+  { id: 105, level: "romantic", prompt: "Where would you want to be kissed if tonight were a movie?" },
+  { id: 106, level: "romantic", prompt: "What makes you feel most desired by me?" },
+  { id: 107, level: "romantic", prompt: "Describe a slow dance you would not want to end." },
+  { id: 108, level: "romantic", prompt: "What is one romantic boundary or preference I should know better?" },
+  { id: 109, level: "bold", prompt: "Whisper one thing you want more of tonight." },
+  { id: 110, level: "bold", prompt: "What is your boldest thought about us right now?" },
+  { id: 111, level: "bold", prompt: "Give me a dare that feels hot but still comfortable." },
+  { id: 112, level: "bold", prompt: "What would make this moment feel more electric?" },
+];
+
 interface Props {
   onExit: () => void;
   onFinish: () => void;
 }
 
 export default function SpicyStarters({ onExit, onFinish }: Props) {
-  const { players, addScore } = useGame();
+  const { players, addScore, tone } = useGame();
   const [filter, setFilter] = useState<Level | "all">("all");
   const [idx, setIdx] = useState(0);
 
   const cards = useMemo(
-    () => (filter === "all" ? DECK : DECK.filter((c) => c.level === filter)),
-    [filter]
+    () => {
+      const deck = tone === "adult" ? DECK_ADULT : DECK_NORMAL;
+      return filter === "all" ? deck : deck.filter((c) => c.level === filter);
+    },
+    [filter, tone]
   );
 
   const card = cards[idx];
@@ -69,7 +87,7 @@ export default function SpicyStarters({ onExit, onFinish }: Props) {
 
   const next = () => setIdx((i) => i + 1);
 
-  const handleSwipe = (_: any, info: PanInfo) => {
+  const handleSwipe = (_: unknown, info: PanInfo) => {
     if (Math.abs(info.offset.x) < 100) return;
     if (info.offset.x > 0) {
       // Agree — score everyone (mutual)
@@ -111,9 +129,15 @@ export default function SpicyStarters({ onExit, onFinish }: Props) {
   }
 
   return (
-    <section className="relative min-h-dvh w-full overflow-hidden px-6 pb-28 pt-3 md:px-12">
+    <section className={`relative min-h-dvh w-full overflow-hidden px-6 pb-28 pt-3 md:px-12 ${
+      tone === "adult" ? "bg-[#08030b] text-white" : ""
+    }`}>
       <img src={bgLetter} alt="" loading="lazy" className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-60" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-cream/60" />
+      <div className={`pointer-events-none absolute inset-0 ${
+        tone === "adult"
+          ? "bg-[radial-gradient(circle_at_50%_0%,rgba(136,19,55,0.72),rgba(9,3,13,0.92)_70%)]"
+          : "bg-gradient-cream/60"
+      }`} />
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -left-20 top-20 h-72 w-72 rounded-full bg-glow blur-3xl" />
       </div>

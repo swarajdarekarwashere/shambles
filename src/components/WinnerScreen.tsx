@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import type { FormEvent } from "react";
+import { motion } from "framer-motion";
 import { Mode } from "@/lib/gameTypes";
 import { useGame } from "@/state/GameContext";
-import winnerParty1 from "@/assets/winner-party-1.png";
 import winnerParty2 from "@/assets/winner-party-2.png";
 import winnerCouple1 from "@/assets/winner-couple-1.png";
-import winnerCouple2 from "@/assets/winner-couple-2.png";
 
 interface Props {
   mode: Mode;
@@ -19,13 +18,7 @@ export default function WinnerScreen({ mode, onPlayAgain, onSwitchMode }: Props)
   const winner = sorted[0];
 
   const isParty = mode === "party";
-  const frames = isParty ? [winnerParty1, winnerParty2] : [winnerCouple1, winnerCouple2];
-  const [frame, setFrame] = useState(0);
-
-  useEffect(() => {
-    const t = setInterval(() => setFrame((f) => (f + 1) % frames.length), 1400);
-    return () => clearInterval(t);
-  }, [frames.length]);
+  const winnerImage = isParty ? winnerParty2 : winnerCouple1;
 
   const handleAgain = () => {
     resetScores();
@@ -83,20 +76,13 @@ export default function WinnerScreen({ mode, onPlayAgain, onSwitchMode }: Props)
 
       <div className="relative z-10 mx-auto mt-6 flex max-w-2xl flex-col items-center text-center">
         <div className="relative h-[clamp(13rem,38dvh,18rem)] w-[clamp(13rem,76vw,18rem)] md:h-96 md:w-96">
-          <AnimatePresence mode="wait">
-            <motion.img
-              key={frame}
-              initial={{ scale: 0.85, opacity: 0, rotate: -3 }}
-              animate={{ scale: 1, opacity: 1, rotate: 0 }}
-              exit={{ scale: 1.05, opacity: 0, rotate: 3 }}
-              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-              src={frames[frame]}
-              alt={isParty ? "Party winner scene" : "Couple winner scene"}
-              width={1024}
-              height={1024}
-              className="absolute inset-0 h-full w-full object-contain animate-float drop-shadow-[0_12px_28px_hsl(348_70%_60%/0.55)]"
-            />
-          </AnimatePresence>
+          <img
+            src={winnerImage}
+            alt={isParty ? "Party winner scene" : "Couple winner scene"}
+            width={1024}
+            height={1024}
+            className="absolute inset-0 h-full w-full object-contain animate-float drop-shadow-[0_12px_28px_hsl(348_70%_60%/0.55)]"
+          />
         </div>
 
         <motion.p
@@ -175,7 +161,71 @@ export default function WinnerScreen({ mode, onPlayAgain, onSwitchMode }: Props)
             Switch Mode
           </button>
         </div>
+
+        <GameWishFeedback isParty={isParty} />
       </div>
     </section>
+  );
+}
+
+function GameWishFeedback({ isParty }: { isParty: boolean }) {
+  const [idea, setIdea] = useState("");
+  const [sent, setSent] = useState(false);
+
+  const submit = (e: FormEvent) => {
+    e.preventDefault();
+    const trimmed = idea.trim();
+    if (!trimmed) return;
+
+    const item = {
+      idea: trimmed,
+      mode: isParty ? "party" : "couple",
+      createdAt: new Date().toISOString(),
+    };
+    const existing = JSON.parse(localStorage.getItem("tc-game-wishes-v1") ?? "[]");
+    localStorage.setItem("tc-game-wishes-v1", JSON.stringify([item, ...existing].slice(0, 25)));
+    setIdea("");
+    setSent(true);
+  };
+
+  return (
+    <form
+      onSubmit={submit}
+      className={`mt-8 w-full max-w-md rounded-2xl border p-4 text-left backdrop-blur ${
+        isParty
+          ? "border-white/15 bg-white/8 text-white"
+          : "border-border bg-card/80 text-foreground"
+      }`}
+    >
+      <label className="font-pixel text-[9px] tracking-widest opacity-75">
+        WHAT GAME SHOULD WE MAKE NEXT?
+      </label>
+      <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+        <input
+          value={idea}
+          onChange={(e) => {
+            setIdea(e.target.value);
+            setSent(false);
+          }}
+          placeholder="Tell us your game idea"
+          className={`min-h-11 flex-1 rounded-full border px-4 font-serifi text-sm outline-none ${
+            isParty
+              ? "border-white/15 bg-black/25 text-white placeholder:text-white/45"
+              : "border-border bg-background text-foreground placeholder:text-muted-foreground"
+          }`}
+        />
+        <button
+          type="submit"
+          className="rounded-full bg-gradient-romance px-5 py-3 font-pixel text-[10px] text-primary-foreground shadow-soft transition hover:scale-105"
+        >
+          Send
+        </button>
+      </div>
+      {sent && (
+        <p className={`mt-2 font-script text-2xl ${isParty ? "text-pink-200" : "text-accent"}`}>
+          noted, thank you
+        </p>
+      )}
+    </form>
   );
 }

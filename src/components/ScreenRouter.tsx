@@ -9,6 +9,7 @@ import ComingSoon from "@/components/games/ComingSoon";
 import SpinTheWheel from "@/components/games/SpinTheWheel";
 import ScratchCards from "@/components/games/ScratchCards";
 import ShotsAndLadders from "@/components/games/ShotsAndLadders";
+import LetsGetWasted from "@/components/games/LetsGetWasted";
 import IntimacyCards from "@/components/games/IntimacyCards";
 import WinnerScreen from "@/components/WinnerScreen";
 import Scoreboard from "@/components/Scoreboard";
@@ -104,6 +105,8 @@ export default function ScreenRouter() {
           return <ScratchCards onExit={onExit} onFinish={onFinish} />;
         if (screen.gameId === "dice")
           return <ShotsAndLadders onExit={onExit} onFinish={onFinish} />;
+        if (screen.gameId === "lets-get-wasted")
+          return <LetsGetWasted onExit={onExit} onFinish={onFinish} />;
         if (screen.gameId === "intimacy")
           return <IntimacyCards onExit={onExit} onFinish={onFinish} />;
         return <ComingSoon gameId={screen.gameId} onExit={onExit} />;
@@ -130,7 +133,7 @@ export default function ScreenRouter() {
 
   const isDiscovery = screen.name === "discovery";
   // Stable key for transition
-  const transitionKey = screen.name === 'game' ? `game-${(screen as any).gameId}` : screen.name;
+  const transitionKey = screen.name === 'game' ? `game-${screen.gameId}` : screen.name;
 
   return (
     <main className="relative w-full">

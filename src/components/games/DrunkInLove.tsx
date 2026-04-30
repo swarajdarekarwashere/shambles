@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useGame } from "@/state/GameContext";
 import { Mode } from "@/lib/gameTypes";
-import { BOARD, TILE_STYLE } from "@/lib/drunkInLoveTiles";
+import { ADULT_BOARD, BOARD, TILE_STYLE } from "@/lib/drunkInLoveTiles";
 
 interface Props {
   mode: Mode;
@@ -30,22 +30,26 @@ function buildPerimeter() {
 
 const PERIM = buildPerimeter(); // length = 2*(COLS-1)+2*(ROWS-1) = 12+8 = 20
 // Adjust BOARD length to match PERIM length by trimming or padding light tiles
-const TILES = (() => {
-  const out = [...BOARD];
+function buildTiles(board: typeof BOARD) {
+  const out = [...board];
   while (out.length > PERIM.length - 1) out.splice(out.length - 2, 1); // remove from middle
   while (out.length < PERIM.length) out.push({ type: "light", prompt: "Take a sip & vibe 💖", emoji: "🍷" });
   // Ensure last tile is end
-  out[out.length - 1] = BOARD[BOARD.length - 1];
-  out[0] = BOARD[0];
+  out[out.length - 1] = board[board.length - 1];
+  out[0] = board[0];
   return out;
-})();
+}
 
 function rollDie() {
   return Math.floor(Math.random() * 6) + 1;
 }
 
 export default function DrunkInLove({ mode, onExit, onFinish }: Props) {
-  const { players, addScore } = useGame();
+  const { players, addScore, tone } = useGame();
+  const TILES = useMemo(
+    () => buildTiles(tone === "adult" ? ADULT_BOARD : BOARD),
+    [tone]
+  );
   const [positions, setPositions] = useState<Record<string, number>>(() =>
     Object.fromEntries(players.map((p) => [p.id, 0]))
   );

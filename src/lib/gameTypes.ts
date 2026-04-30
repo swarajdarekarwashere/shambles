@@ -1,4 +1,5 @@
 export type Mode = "party" | "couple";
+export type Tone = "normal" | "adult";
 
 export type Player = {
   id: string;
@@ -75,6 +76,18 @@ export const PARTY_GAMES: GameMeta[] = [
       "Roll the dice, climb the board, and pray you don't slide into the spicy tile.",
     cta: "Roll Dice",
     accent: "accent",
+    playable: true,
+  },
+  {
+    id: "lets-get-wasted",
+    num: "05",
+    mode: "party",
+    title: "Let's Get Wasted",
+    tagline: "A messy board for brave friends",
+    description:
+      "Roll across the hand-drawn drinking board, land on sips, dares, group shots, safe spaces, and sneaky go-back tiles.",
+    cta: "Start Board",
+    accent: "primary",
     playable: true,
   },
 ];

@@ -8,7 +8,7 @@ interface Props {
   onFinish: () => void;
 }
 
-const DARES = [
+const DARES_NORMAL = [
   { label: "Sing 🎤", text: "Sing the chorus of any song. Loud." },
   { label: "Spill ☕", text: "Spill your most embarrassing moment." },
   { label: "Dance 💃", text: "10 seconds of your worst dance moves." },
@@ -19,10 +19,22 @@ const DARES = [
   { label: "Confess 😏", text: "Confess one tiny crush you've had." },
 ];
 
+const DARES_ADULT: typeof DARES_NORMAL = [
+  { label: "Hot Truth", text: "Answer one bold question from the group." },
+  { label: "Slow Move", text: "Do your best slow dance move for 10 seconds." },
+  { label: "Confess", text: "Confess a crush, fantasy date, or your safest spicy secret." },
+  { label: "Kiss", text: "Blow a kiss to the person you would trust with a dare." },
+  { label: "Compliment", text: "Give someone a bold, specific compliment." },
+  { label: "Text", text: "Read your last flirty text or take a sip." },
+  { label: "Dare", text: "Let the table choose a hot-but-consensual dare." },
+  { label: "Drink", text: "Take a sip, then nominate someone tempting to sip too." },
+];
+
 const COLORS = ["#ef4d70", "#f97a5b", "#facc15", "#22c55e", "#3b82f6", "#a855f7", "#ec4899", "#14b8a6"];
 
 export default function SpinTheWheel({ onExit, onFinish }: Props) {
-  const { players, addScore } = useGame();
+  const { players, addScore, tone } = useGame();
+  const dares = tone === "adult" ? DARES_ADULT : DARES_NORMAL;
   const [turnIdx, setTurnIdx] = useState(0);
   const [rotation, setRotation] = useState(0);
   const [spinning, setSpinning] = useState(false);
@@ -30,11 +42,11 @@ export default function SpinTheWheel({ onExit, onFinish }: Props) {
   const [rounds, setRounds] = useState(0);
 
   const current = players[turnIdx % players.length];
-  const slice = 360 / DARES.length;
+  const slice = 360 / dares.length;
 
   const spin = () => {
     if (spinning || landed !== null) return;
-    const winner = Math.floor(Math.random() * DARES.length);
+    const winner = Math.floor(Math.random() * dares.length);
     const target = 360 * 5 + (360 - winner * slice - slice / 2);
     setSpinning(true);
     setRotation((r) => r + target);
@@ -81,11 +93,11 @@ export default function SpinTheWheel({ onExit, onFinish }: Props) {
             transition={{ duration: 3.5, ease: [0.22, 1, 0.36, 1] }}
             className="relative h-full w-full rounded-full border-[6px] border-pink-400/60 shadow-[0_0_40px_hsl(330_100%_60%/0.5)]"
             style={{
-              background: `conic-gradient(${DARES.map((_, i) => `${COLORS[i % COLORS.length]} ${i * slice}deg ${(i + 1) * slice}deg`).join(",")})`,
+              background: `conic-gradient(${dares.map((_, i) => `${COLORS[i % COLORS.length]} ${i * slice}deg ${(i + 1) * slice}deg`).join(",")})`,
             }}
           >
             {/* Slice labels — placed along radius pointing outward from center */}
-            {DARES.map((d, i) => {
+            {dares.map((d, i) => {
               const angle = i * slice + slice / 2; // center of slice, 0deg = top
               return (
                 <div
@@ -128,8 +140,8 @@ export default function SpinTheWheel({ onExit, onFinish }: Props) {
               transition={{ type: "spring", stiffness: 220, damping: 20 }}
               className="w-full max-w-xs rounded-2xl bg-[#1a1a1a] p-6 text-center shadow-2xl"
             >
-              <span className="rounded-full bg-pink-500 px-3 py-1 font-pixel text-[8px] text-white">{DARES[landed].label}</span>
-              <p className="mt-4 font-serifd text-2xl leading-snug text-white">{DARES[landed].text}</p>
+              <span className="rounded-full bg-pink-500 px-3 py-1 font-pixel text-[8px] text-white">{dares[landed].label}</span>
+              <p className="mt-4 font-serifd text-2xl leading-snug text-white">{dares[landed].text}</p>
               <p className="mt-2 font-script text-3xl text-pink-300">your move 😏</p>
               <div className="mt-6 flex gap-2">
                 <button onClick={() => close(false)} className="flex-1 rounded-full border border-white/20 py-2 font-pixel text-[10px] text-white/70">Skip 🥃</button>

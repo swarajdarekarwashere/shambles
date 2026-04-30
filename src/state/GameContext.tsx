@@ -7,7 +7,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import { Mode, Player, PLAYER_COLORS, Screen } from "@/lib/gameTypes";
+import { Mode, Player, PLAYER_COLORS, Screen, Tone } from "@/lib/gameTypes";
 import { supabase } from "@/lib/supabase";
 import { User } from "@supabase/supabase-js";
 
@@ -16,6 +16,7 @@ const STORAGE_KEY = "tc-game-state-v1";
 type Persisted = {
   screen: Screen;
   players: Player[];
+  tone?: Tone;
 };
 
 type Ctx = {
@@ -27,8 +28,11 @@ type Ctx = {
   isLoadingStats: boolean;
   showAuth: boolean;
   showPaywall: boolean;
+  tone: Tone;
   setShowAuth: (v: boolean) => void;
   setShowPaywall: (v: boolean) => void;
+  setTone: (tone: Tone) => void;
+  toggleTone: () => void;
   go: (s: Screen) => void;
   setPlayersFromNames: (names: string[], opts?: { couples?: boolean }) => void;
   addScore: (playerId: string, delta: number) => void;
@@ -64,6 +68,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const [isLoadingStats, setIsLoadingStats] = useState(true);
   const [showAuth, setShowAuth] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
+  const [tone, setTone] = useState<Tone>(initial?.tone ?? "normal");
 
   // Close paywall automatically if pass becomes active
   useEffect(() => {
@@ -141,7 +146,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
           filter: `user_id=eq.${user.id}`
         },
         (payload) => {
-          const newPass = payload.new as any;
+          const newPass = payload.new as { status?: string; expires_at?: string };
           if (newPass.status === 'active' && new Date(newPass.expires_at) > new Date()) {
             setHasActivePass(true);
           }
@@ -156,13 +161,17 @@ export function GameProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ screen, players }));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ screen, players, tone }));
     } catch {
       /* ignore */
     }
-  }, [screen, players]);
+  }, [screen, players, tone]);
 
   const go = useCallback((s: Screen) => setScreen(s), []);
+  const toggleTone = useCallback(
+    () => setTone((current) => (current === "normal" ? "adult" : "normal")),
+    []
+  );
 
   const setPlayersFromNames = useCallback(
     (names: string[], opts?: { couples?: boolean }) => {
@@ -226,8 +235,11 @@ export function GameProvider({ children }: { children: ReactNode }) {
       isLoadingStats,
       showAuth,
       showPaywall,
+      tone,
       setShowAuth,
       setShowPaywall,
+      setTone,
+      toggleTone,
       go, 
       setPlayersFromNames, 
       addScore, 
@@ -236,7 +248,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       recordSession,
       refreshStats
     }),
-    [screen, players, user, sessionCount, hasActivePass, isLoadingStats, showAuth, showPaywall, go, setPlayersFromNames, addScore, resetScores, resetAll, recordSession, refreshStats]
+    [screen, players, user, sessionCount, hasActivePass, isLoadingStats, showAuth, showPaywall, tone, go, setPlayersFromNames, addScore, resetScores, resetAll, recordSession, refreshStats, toggleTone]
   );
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

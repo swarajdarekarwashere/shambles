@@ -10,7 +10,7 @@ interface Props {
 
 type CardKind = "BLIND SHOT" | "GROUP PHOTO" | "DRINK IF" | "IF YOU OWN";
 
-const PROMPTS: { kind: CardKind; tone: "shot" | "sip"; title: string; sub: string; color: string }[] = [
+const PROMPTS_NORMAL: { kind: CardKind; tone: "shot" | "sip"; title: string; sub: string; color: string }[] = [
   { kind: "BLIND SHOT", tone: "shot", title: "BLIND SHOT", sub: "Another player picks ingredients. You drink it without looking or smelling.", color: "#ef4444" },
   { kind: "GROUP PHOTO", tone: "shot", title: "GROUP PHOTO", sub: "Then all take a shot together 📸", color: "#a855f7" },
   { kind: "DRINK IF", tone: "sip", title: "YOUR FAVOURITE POSITION IS DOGGY", sub: "Drink if true 🐶", color: "#a855f7" },
@@ -23,8 +23,22 @@ const PROMPTS: { kind: CardKind; tone: "shot" | "sip"; title: string; sub: strin
   { kind: "BLIND SHOT", tone: "shot", title: "TRUTH OR SHOT", sub: "Answer the room's question or take a shot.", color: "#ef4444" },
 ];
 
+const PROMPTS_ADULT: typeof PROMPTS_NORMAL = [
+  { kind: "BLIND SHOT", tone: "shot", title: "HOT SEAT", sub: "The table asks one bold question. Answer it or take a shot.", color: "#ef4444" },
+  { kind: "GROUP PHOTO", tone: "shot", title: "FLIRTY PHOTO", sub: "Take a dramatic group selfie, then everyone drinks.", color: "#a855f7" },
+  { kind: "DRINK IF", tone: "sip", title: "YOU HAVE A CRUSH HERE", sub: "Drink if true. Make eye contact if brave.", color: "#ec4899" },
+  { kind: "IF YOU OWN", tone: "sip", title: "if you own", sub: "a spicy secret in your camera roll, take a sip.", color: "#ec4899" },
+  { kind: "DRINK IF", tone: "sip", title: "YOU'D KISS SOMEONE HERE", sub: "Sip, smile, and say nothing else.", color: "#a855f7" },
+  { kind: "BLIND SHOT", tone: "shot", title: "TRADE DRINKS", sub: "Swap drinks with the person you find most tempting.", color: "#ef4444" },
+  { kind: "GROUP PHOTO", tone: "shot", title: "BEST SLOW MOVE", sub: "Show your slowest dance move. The table votes.", color: "#a855f7" },
+  { kind: "IF YOU OWN", tone: "sip", title: "more than 3 dating apps", sub: "take a long, honest sip.", color: "#ec4899" },
+  { kind: "DRINK IF", tone: "sip", title: "YOU'VE SENT A RISKY TEXT", sub: "Sip if true. Two sips if it worked.", color: "#a855f7" },
+  { kind: "BLIND SHOT", tone: "shot", title: "TRUTH OR SHOT", sub: "Answer the room's hottest question or take a shot.", color: "#ef4444" },
+];
+
 export default function ScratchCards({ onExit, onFinish }: Props) {
-  const { players, addScore } = useGame();
+  const { players, addScore, tone } = useGame();
+  const prompts = tone === "adult" ? PROMPTS_ADULT : PROMPTS_NORMAL;
   const [turnIdx, setTurnIdx] = useState(0);
   const [cardIdx, setCardIdx] = useState(0);
   const [revealed, setRevealed] = useState(false);
@@ -33,7 +47,7 @@ export default function ScratchCards({ onExit, onFinish }: Props) {
   const cleared = useRef(0);
 
   const current = players[turnIdx % players.length];
-  const card = PROMPTS[cardIdx % PROMPTS.length];
+  const card = prompts[cardIdx % prompts.length];
 
   useEffect(() => {
     const c = canvasRef.current;
@@ -70,7 +84,7 @@ export default function ScratchCards({ onExit, onFinish }: Props) {
 
     cleared.current = 0;
     setRevealed(false);
-  }, [cardIdx, turnIdx]);
+  }, [cardIdx, turnIdx, tone]);
 
   const scratchAt = (e: React.PointerEvent) => {
     if (!drawing.current || revealed) return;
@@ -98,7 +112,11 @@ export default function ScratchCards({ onExit, onFinish }: Props) {
   };
 
   return (
-    <section className="relative min-h-dvh w-full overflow-hidden bg-[radial-gradient(circle_at_50%_0%,#ffe1ec,#fbcfe8_45%,#f9a8d4_100%)] px-4 pb-32 pt-3">
+    <section className={`relative min-h-dvh w-full overflow-hidden px-4 pb-32 pt-3 ${
+      tone === "adult"
+        ? "bg-[radial-gradient(circle_at_50%_0%,#3b061d,#150612_50%,#07030b_100%)]"
+        : "bg-[radial-gradient(circle_at_50%_0%,#ffe1ec,#fbcfe8_45%,#f9a8d4_100%)]"
+    }`}>
       {/* confetti dots */}
       <div className="pointer-events-none absolute inset-0 opacity-60">
         {[...Array(40)].map((_, i) => (
