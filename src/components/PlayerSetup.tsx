@@ -145,7 +145,7 @@ export default function PlayerSetup({ mode, onBack, onContinue }: Props) {
         )}
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-20 bg-gradient-to-t from-background via-background/95 to-transparent px-5 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-10 sm:px-6">
+      <div className="fixed inset-x-0 bottom-0 z-20 bg-gradient-to-t from-background via-background/95 to-transparent px-5 pb-[calc(1.5rem_+_env(safe-area-inset-bottom))] pt-10 sm:px-6">
         <div className="mx-auto flex max-w-2xl items-center justify-between gap-3">
           <p className="shrink-0 font-pixel text-[9px] text-muted-foreground">
             {entries.filter((e) => e.trim()).length}/{entries.length} READY

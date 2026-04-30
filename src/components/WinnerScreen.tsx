@@ -34,7 +34,7 @@ export default function WinnerScreen({ mode, onPlayAgain, onSwitchMode }: Props)
 
   return (
     <section
-      className={`relative min-h-dvh w-full overflow-hidden px-6 py-10 md:px-12 ${
+      className={`mobile-scroll-page relative min-h-dvh w-full px-6 pb-[calc(2.5rem_+_env(safe-area-inset-bottom))] pt-10 md:px-12 ${
         isParty
           ? "bg-[radial-gradient(circle_at_30%_20%,hsl(280_80%_30%),hsl(340_60%_15%)_60%,#0b0414)]"
           : "bg-gradient-cream"
@@ -82,7 +82,7 @@ export default function WinnerScreen({ mode, onPlayAgain, onSwitchMode }: Props)
       </header>
 
       <div className="relative z-10 mx-auto mt-6 flex max-w-2xl flex-col items-center text-center">
-        <div className="relative h-72 w-72 md:h-96 md:w-96">
+        <div className="relative h-[clamp(13rem,38dvh,18rem)] w-[clamp(13rem,76vw,18rem)] md:h-96 md:w-96">
           <AnimatePresence mode="wait">
             <motion.img
               key={frame}
@@ -142,12 +142,12 @@ export default function WinnerScreen({ mode, onPlayAgain, onSwitchMode }: Props)
                   : "bg-card text-foreground"
               } ${i === 0 ? "ring-2 ring-primary" : ""}`}
             >
-              <span className="flex items-center gap-2">
+              <span className="flex min-w-0 items-center gap-2">
                 <span
-                  className="h-3 w-3 rounded-full"
+                  className="h-3 w-3 shrink-0 rounded-full"
                   style={{ background: p.color }}
                 />
-                <span className="font-pixel text-[10px]">
+                <span className="min-w-0 truncate font-pixel text-[10px]">
                   {i === 0 ? "👑 " : ""}
                   {p.name}
                 </span>

@@ -85,7 +85,7 @@ export default function PaywallModal({ isOpen, userId }: PaywallModalProps) {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto p-4 py-[calc(1rem_+_env(safe-area-inset-top))]">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -100,7 +100,7 @@ export default function PaywallModal({ isOpen, userId }: PaywallModalProps) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="relative w-full max-w-[425px] bg-background border-4 border-primary rounded-[2rem] shadow-2xl p-6 sm:p-8 overflow-hidden"
+            className="relative max-h-[calc(100dvh_-_2rem_-_env(safe-area-inset-top)_-_env(safe-area-inset-bottom))] w-full max-w-[425px] overflow-y-auto overflow-x-hidden rounded-[2rem] border-4 border-primary bg-background p-6 shadow-2xl sm:p-8"
           >
             <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-primary p-4 rounded-full shadow-lg z-10">
               <Lock className="w-8 h-8 text-white" />

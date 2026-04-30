@@ -11,7 +11,7 @@ export default function Scoreboard() {
   const sorted = [...players].sort((a, b) => b.score - a.score);
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-40 flex justify-center px-3">
+    <div className="pointer-events-none fixed inset-x-0 bottom-[calc(0.75rem_+_env(safe-area-inset-bottom))] z-40 flex justify-center px-3">
       <motion.div
         layout
         className="pointer-events-auto w-full max-w-md overflow-hidden rounded-2xl border border-border bg-card/95 shadow-card backdrop-blur"

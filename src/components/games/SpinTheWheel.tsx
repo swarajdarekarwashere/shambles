@@ -107,7 +107,7 @@ export default function SpinTheWheel({ onExit, onFinish }: Props) {
         </div>
       </div>
 
-      <div className="fixed inset-x-0 bottom-16 z-30 flex justify-center px-4">
+      <div className="game-bottom-controls fixed inset-x-0 z-30 flex justify-center px-4">
         <button
           onClick={spin}
           disabled={spinning || landed !== null}

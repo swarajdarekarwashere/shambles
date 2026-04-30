@@ -195,7 +195,7 @@ export default function SpicyStarters({ onExit, onFinish }: Props) {
       </div>
 
       {/* Tap controls (mobile-friendly alt) */}
-      <div className="fixed inset-x-0 bottom-16 z-30 flex justify-center gap-3 px-4">
+      <div className="game-bottom-controls fixed inset-x-0 z-30 flex justify-center gap-3 px-4">
         <button
           onClick={() => next()}
           className="rounded-full border-2 border-border bg-card px-6 py-3 font-pixel text-[10px] text-foreground shadow-soft"

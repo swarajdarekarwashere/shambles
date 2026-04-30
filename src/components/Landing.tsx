@@ -46,7 +46,7 @@ const Sparkles = () => (
 
 export default function Landing({ onPickMode }: LandingProps) {
   return (
-    <section className="relative min-h-dvh w-full overflow-hidden bg-gradient-cream">
+    <section className="mobile-scroll-page relative min-h-dvh w-full bg-gradient-cream pb-[calc(2rem_+_env(safe-area-inset-bottom))]">
       <Sparkles />
       {/* Glow blobs */}
       <div className="pointer-events-none absolute -left-20 top-20 h-72 w-72 rounded-full bg-glow blur-2xl" />
@@ -73,7 +73,7 @@ export default function Landing({ onPickMode }: LandingProps) {
         </p>
 
         {/* Mode cards */}
-        <div className="mt-12 grid w-full max-w-4xl grid-cols-1 gap-6 md:grid-cols-2">
+        <div className="mt-10 grid w-full max-w-4xl grid-cols-1 gap-5 md:mt-12 md:grid-cols-2 md:gap-6">
           {/* Party */}
           <button
             onClick={() => onPickMode("party")}
@@ -84,7 +84,7 @@ export default function Landing({ onPickMode }: LandingProps) {
               <div className="mb-4 inline-block rounded-full bg-accent/20 px-3 py-1 font-pixel text-[9px] text-accent">
                 🎉 GROUP MODE
               </div>
-              <div className="relative mx-auto h-44 w-44 md:h-56 md:w-56">
+              <div className="relative mx-auto h-[clamp(9rem,34dvh,11rem)] w-[clamp(9rem,44vw,11rem)] md:h-56 md:w-56">
                 <div className="absolute inset-0 rounded-full bg-glow" />
                 <img
                   src={heroParty}
@@ -113,7 +113,7 @@ export default function Landing({ onPickMode }: LandingProps) {
               <div className="mb-4 inline-block rounded-full bg-primary/20 px-3 py-1 font-pixel text-[9px] text-primary">
                 ❤ INTIMATE MODE
               </div>
-              <div className="relative mx-auto h-44 w-44 md:h-56 md:w-56">
+              <div className="relative mx-auto h-[clamp(9rem,34dvh,11rem)] w-[clamp(9rem,44vw,11rem)] md:h-56 md:w-56">
                 <div className="absolute inset-0 rounded-full bg-glow" />
                 <img
                   src={heroCouple}

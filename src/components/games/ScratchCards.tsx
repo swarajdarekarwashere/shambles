@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useGame } from "@/state/GameContext";
-import cardBg from "@/assets/scratch-card-bg.png";
+import cardBg from "@/assets/scratch-card-bg-2.webp";
 
 interface Props {
   onExit: () => void;
@@ -178,7 +178,7 @@ export default function ScratchCards({ onExit, onFinish }: Props) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-x-0 bottom-16 z-30 flex justify-center gap-2 px-4"
+            className="game-bottom-controls fixed inset-x-0 z-30 flex justify-center gap-2 px-4"
           >
             <button
               onClick={() => score(false)}

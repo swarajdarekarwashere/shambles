@@ -113,7 +113,7 @@ export default function IntimacyCards({ onExit, onFinish }: Props) {
         {opened && (
           <motion.div
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-            className="fixed inset-x-0 bottom-16 z-30 flex justify-center gap-2 px-4"
+            className="game-bottom-controls fixed inset-x-0 z-30 flex justify-center gap-2 px-4"
           >
             <button onClick={() => score(false)} className="rounded-full border-2 border-white/30 bg-white/10 px-5 py-3 font-pixel text-[10px] text-white/80 backdrop-blur">Maybe Later</button>
             <button onClick={() => score(true)} className="rounded-full bg-gradient-romance px-5 py-3 font-pixel text-[10px] text-primary-foreground shadow-glow">We Did It +2</button>

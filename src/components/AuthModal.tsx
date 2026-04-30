@@ -53,7 +53,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px] bg-background border-2 border-primary/20 shadow-xl">
+      <DialogContent className="max-h-[calc(100dvh_-_2rem)] overflow-y-auto border-2 border-primary/20 bg-background shadow-xl sm:max-w-[425px]">
         <DialogHeader className="text-center">
           <DialogTitle className="text-3xl font-display font-bold text-primary">
             {isSignUp ? "Join the Fun! 🎈" : "Welcome Back! ✨"}
