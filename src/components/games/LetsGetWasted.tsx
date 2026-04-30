@@ -511,41 +511,41 @@ export default function LetsGetWasted({ onExit, onFinish }: Props) {
   };
 
   return (
-    <section className={`relative min-h-dvh w-full overflow-hidden px-3 pb-[calc(6.5rem+env(safe-area-inset-bottom))] pt-3 ${
+    <section className={`lets-get-wasted-screen relative h-dvh w-full overflow-hidden px-3 ${
       isAdult
         ? "bg-[radial-gradient(circle_at_50%_0%,#3b061d,#150612_48%,#07030b_100%)]"
         : "bg-[radial-gradient(circle_at_50%_0%,#fef3c7,#fbcfe8_42%,#bae6fd_100%)]"
     }`}>
-      <header className="relative z-10 mx-auto flex max-w-4xl items-center justify-between">
+      <header className="lets-get-wasted-header relative z-10 mx-auto flex max-w-4xl items-center justify-between">
         <button
           onClick={onExit}
-          className={`rounded-full border px-3 py-1.5 font-pixel text-[10px] backdrop-blur ${
+          className={`rounded-full border px-3 py-1.5 font-pixel text-[9px] backdrop-blur sm:text-[10px] ${
             isAdult ? "border-white/15 bg-white/10 text-white/80" : "border-rose-300 bg-white/85 text-rose-950"
           }`}
         >
           ← Exit
         </button>
-        <div className={`rounded-full border px-3 py-1 font-pixel text-[9px] tracking-widest backdrop-blur ${
+        <div className={`rounded-full border px-2.5 py-1 font-pixel text-[7px] tracking-widest backdrop-blur sm:px-3 sm:text-[9px] ${
           isAdult ? "border-rose-300/30 bg-black/25 text-rose-100" : "border-cyan-300 bg-white/85 text-cyan-950"
         }`}>
           LET'S GET WASTED · {TILES.length} TILES
         </div>
       </header>
 
-      <div className="relative z-10 mx-auto mt-2 flex max-w-4xl items-center justify-center gap-2">
-        <span className="h-3 w-3 rounded-full ring-2 ring-white" style={{ background: current?.color }} />
-        <p className={`font-script text-3xl leading-none drop-shadow-sm md:text-5xl ${
+      <div className="lets-get-wasted-turn relative z-10 mx-auto flex max-w-4xl items-center justify-center gap-2">
+        <span className="h-2.5 w-2.5 rounded-full ring-2 ring-white sm:h-3 sm:w-3" style={{ background: current?.color }} />
+        <p className={`font-script text-[clamp(2rem,8vw,3rem)] leading-none drop-shadow-sm md:text-5xl ${
           isAdult ? "text-rose-200" : "text-rose-700"
         }`}>
           {current?.name}'s roll
         </p>
       </div>
 
-      <div className="relative z-10 mx-auto mt-2 w-full max-w-md md:mt-3 md:max-w-2xl lg:max-w-3xl">
-        <div className={`max-h-[calc(100dvh-14.25rem)] overflow-auto rounded-[1.25rem] border-[3px] shadow-[0_22px_60px_-20px_rgba(14,116,144,0.55)] md:max-h-[calc(100dvh-13rem)] ${
+      <div className="lets-get-wasted-board-wrap relative z-10 mx-auto w-full max-w-md md:max-w-2xl lg:max-w-3xl">
+        <div className={`lets-get-wasted-board-frame overflow-auto rounded-[1.25rem] border-[3px] shadow-[0_22px_60px_-20px_rgba(14,116,144,0.55)] ${
           isAdult ? "border-rose-200/30 bg-black/25" : "border-white bg-white"
         }`}>
-          <div className="relative min-w-[320px]">
+          <div className="relative min-w-[260px]">
           <img
             src={board}
             alt="Let's Get Wasted board"
@@ -583,7 +583,7 @@ export default function LetsGetWasted({ onExit, onFinish }: Props) {
           </div>
         </div>
 
-        <div className={`mx-auto mt-3 hidden max-w-xl flex-wrap items-center justify-center gap-2 md:flex md:gap-4 ${
+        <div className={`lets-get-wasted-legend mx-auto hidden max-w-xl flex-wrap items-center justify-center gap-2 md:flex md:gap-4 ${
           isAdult ? "text-white/80" : "text-rose-950"
         }`}>
           {(["drink", "group", "truth", "safe", "bonus", "penalty"] as TileKind[]).map((kind) => (
@@ -596,16 +596,16 @@ export default function LetsGetWasted({ onExit, onFinish }: Props) {
         </div>
       </div>
 
-      <div className="fixed inset-x-0 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-30 flex justify-center px-4">
+      <div className="lets-get-wasted-controls fixed inset-x-0 z-30 flex justify-center px-4">
         <button
           onClick={roll}
           disabled={rolling || !!event}
-          className="flex items-center gap-3 rounded-full bg-gradient-romance px-6 py-3 font-pixel text-[11px] text-primary-foreground shadow-glow enabled:hover:scale-105 disabled:opacity-50"
+          className="flex items-center gap-3 rounded-full bg-gradient-romance px-5 py-2.5 font-pixel text-[10px] text-primary-foreground shadow-glow enabled:hover:scale-105 disabled:opacity-50 sm:px-6 sm:py-3 sm:text-[11px]"
         >
           <motion.span
             animate={rolling ? { rotate: 360 } : { rotate: 0 }}
             transition={{ duration: 0.4, repeat: rolling ? Infinity : 0, ease: "linear" }}
-            className="grid h-9 w-9 place-items-center rounded-lg bg-white font-pixel text-base text-foreground shadow-inner"
+            className="grid h-8 w-8 place-items-center rounded-lg bg-white font-pixel text-sm text-foreground shadow-inner sm:h-9 sm:w-9 sm:text-base"
           >
             {die ?? "🎲"}
           </motion.span>

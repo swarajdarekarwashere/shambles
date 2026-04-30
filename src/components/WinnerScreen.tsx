@@ -3,6 +3,7 @@ import type { FormEvent } from "react";
 import { motion } from "framer-motion";
 import { Mode } from "@/lib/gameTypes";
 import { useGame } from "@/state/GameContext";
+import { supabase } from "@/lib/supabase";
 import winnerParty2 from "@/assets/winner-party-2.png";
 import winnerCouple1 from "@/assets/winner-couple-1.png";
 
@@ -169,23 +170,46 @@ export default function WinnerScreen({ mode, onPlayAgain, onSwitchMode }: Props)
 }
 
 function GameWishFeedback({ isParty }: { isParty: boolean }) {
+  const { user } = useGame();
   const [idea, setIdea] = useState("");
   const [sent, setSent] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
-  const submit = (e: FormEvent) => {
+  const submit = async (e: FormEvent) => {
     e.preventDefault();
     const trimmed = idea.trim();
-    if (!trimmed) return;
+    if (!trimmed || saving) return;
 
     const item = {
       idea: trimmed,
       mode: isParty ? "party" : "couple",
       createdAt: new Date().toISOString(),
     };
-    const existing = JSON.parse(localStorage.getItem("tc-game-wishes-v1") ?? "[]");
-    localStorage.setItem("tc-game-wishes-v1", JSON.stringify([item, ...existing].slice(0, 25)));
-    setIdea("");
-    setSent(true);
+
+    setSaving(true);
+    setSaveError(null);
+    try {
+      if (!user) throw new Error("Sign in to send feedback.");
+
+      const { error } = await supabase.from("game_feedback").insert({
+        user_id: user.id,
+        mode: item.mode,
+        idea: item.idea,
+      });
+
+      if (error) throw error;
+      setIdea("");
+      setSent(true);
+    } catch (error) {
+      const existing = JSON.parse(localStorage.getItem("tc-game-wishes-v1") ?? "[]");
+      localStorage.setItem("tc-game-wishes-v1", JSON.stringify([item, ...existing].slice(0, 25)));
+      setIdea("");
+      setSent(true);
+      setSaveError(error instanceof Error ? error.message : "Saved locally for now.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -206,6 +230,7 @@ function GameWishFeedback({ isParty }: { isParty: boolean }) {
           onChange={(e) => {
             setIdea(e.target.value);
             setSent(false);
+            setSaveError(null);
           }}
           placeholder="Tell us your game idea"
           className={`min-h-11 flex-1 rounded-full border px-4 font-serifi text-sm outline-none ${
@@ -216,14 +241,15 @@ function GameWishFeedback({ isParty }: { isParty: boolean }) {
         />
         <button
           type="submit"
+          disabled={saving}
           className="rounded-full bg-gradient-romance px-5 py-3 font-pixel text-[10px] text-primary-foreground shadow-soft transition hover:scale-105"
         >
-          Send
+          {saving ? "Sending" : "Send"}
         </button>
       </div>
       {sent && (
         <p className={`mt-2 font-script text-2xl ${isParty ? "text-pink-200" : "text-accent"}`}>
-          noted, thank you
+          {saveError ? "saved locally for now" : "noted, thank you"}
         </p>
       )}
     </form>

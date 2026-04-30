@@ -70,15 +70,25 @@ CREATE TABLE IF NOT EXISTS public.razorpay_webhooks (
   processed BOOLEAN DEFAULT FALSE
 );
 
--- 8. Enable Row Level Security (RLS)
+-- 8. Game Feedback / Requested Games
+CREATE TABLE IF NOT EXISTS public.game_feedback (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE NOT NULL,
+  mode TEXT,
+  idea TEXT NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 9. Enable Row Level Security (RLS)
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.day_passes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.game_sessions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.game_scores ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.game_content ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.razorpay_webhooks ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.game_feedback ENABLE ROW LEVEL SECURITY;
 
--- 9. RLS Policies
+-- 10. RLS Policies
 
 -- Profiles: Users can see and update their own profiles
 CREATE POLICY "Users can view their own profile" ON public.profiles
@@ -123,7 +133,13 @@ CREATE POLICY "Game content is publicly readable" ON public.game_content
 -- Razorpay Webhooks: No public access (Service Role Only)
 -- (No policies = Access denied to everyone except service role)
 
--- 10. Functions & Triggers (Auto-profile creation)
+-- Game Feedback: Users can submit and view their own ideas
+CREATE POLICY "Users can insert their own feedback" ON public.game_feedback
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can view their own feedback" ON public.game_feedback
+  FOR SELECT USING (auth.uid() = user_id);
+
+-- 11. Functions & Triggers (Auto-profile creation)
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
