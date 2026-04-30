@@ -182,9 +182,9 @@ export default function GameDiscovery({ mode, onBack, onPickGame }: Props) {
         </div>
 
         {/* Layout: mobile stacked, desktop split */}
-        <div className="relative z-10 mx-auto grid h-full max-w-7xl grid-rows-[55%_45%] gap-0 px-6 pb-6 pt-16 md:grid-cols-2 md:grid-rows-1 md:items-stretch md:gap-8 md:px-12 md:pt-20">
+        <div className="relative z-10 mx-auto grid h-full max-w-7xl grid-rows-[52%_48%] gap-0 px-6 pb-20 pt-16 md:grid-cols-2 md:grid-rows-1 md:items-stretch md:gap-8 md:px-12 md:pb-6 md:pt-20">
           {/* Canvas */}
-          <div className="relative flex h-full min-h-[55vh] items-center justify-center md:min-h-[70vh]">
+          <div className="relative flex h-full min-h-0 items-center justify-center md:min-h-[70vh]">
             <div className="relative h-full w-full max-w-md">
               {/* Glow halo */}
               <div className="absolute left-1/2 top-1/2 h-[80%] w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-glow animate-pulse-glow" />
@@ -200,7 +200,7 @@ export default function GameDiscovery({ mode, onBack, onPickGame }: Props) {
                     width={1024}
                     height={1024}
                     loading={i === 0 ? "eager" : "lazy"}
-                    className="pixelated max-h-[55vh] w-full object-contain animate-float drop-shadow-[0_12px_24px_hsl(348_70%_60%/0.35)] md:max-h-[70vh]"
+                    className="pixelated max-h-[48dvh] w-[96%] object-contain animate-float drop-shadow-[0_12px_24px_hsl(348_70%_60%/0.35)] sm:max-h-[52dvh] sm:w-full md:max-h-[70vh]"
                   />
                 </div>
               ))}
@@ -224,18 +224,18 @@ export default function GameDiscovery({ mode, onBack, onPickGame }: Props) {
                 >
                   {mode === "couple" ? "❤ COUPLE GAME" : "🎉 PARTY GAME"} · {g.num}
                 </span>
-                <h2 className="mt-3 font-serifd text-4xl leading-[1.05] text-foreground sm:text-5xl md:text-6xl md:leading-[1.05]">
+                <h2 className="mt-2 font-serifd text-4xl leading-[1.05] text-foreground sm:text-5xl md:mt-3 md:text-6xl md:leading-[1.05]">
                   {g.title}
                 </h2>
-                <p className="mt-2 font-script text-4xl text-accent md:text-5xl">
+                <p className="mt-1 font-script text-4xl text-accent md:mt-2 md:text-5xl">
                   {g.tagline}
                 </p>
-                <p className="mt-3 max-w-md font-serifi text-base leading-relaxed text-muted-foreground md:text-lg">
+                <p className="mt-2 max-w-md font-serifi text-base leading-relaxed text-muted-foreground md:mt-3 md:text-lg">
                   {g.description}
                 </p>
                 <button
                   onClick={() => onPickGame(g.id)}
-                  className={`group mt-5 inline-flex items-center gap-2 rounded-full px-6 py-3 font-pixel text-[11px] shadow-soft transition-all hover:scale-105 hover:shadow-glow ${
+                  className={`group mt-4 inline-flex items-center gap-2 rounded-full px-6 py-3 font-pixel text-[11px] shadow-soft transition-all hover:scale-105 hover:shadow-glow md:mt-5 ${
                     g.accent === "accent"
                       ? "bg-accent text-accent-foreground"
                       : "bg-primary text-primary-foreground"
