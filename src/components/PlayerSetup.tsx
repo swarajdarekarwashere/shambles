@@ -62,36 +62,36 @@ export default function PlayerSetup({ mode, onBack, onContinue }: Props) {
   };
 
   return (
-    <section className="relative min-h-dvh w-full overflow-hidden bg-gradient-cream px-6 pb-32 pt-6 md:px-12">
+    <section className="player-setup-screen relative min-h-dvh w-full overflow-x-hidden bg-gradient-cream px-5 pt-6 sm:px-6 md:px-12">
       {/* glow blobs */}
       <div className="pointer-events-none absolute -left-20 top-20 h-72 w-72 rounded-full bg-glow blur-2xl" />
       <div className="pointer-events-none absolute -right-20 bottom-20 h-72 w-72 rounded-full bg-glow blur-2xl" />
 
-      <header className="relative z-10 mx-auto flex max-w-2xl items-center justify-between">
+      <header className="relative z-10 mx-auto flex w-full max-w-2xl items-center justify-between gap-3">
         <button
           onClick={onBack}
-          className="flex items-center gap-2 rounded-full border border-border bg-card/80 px-4 py-2 font-pixel text-[10px] text-foreground/70 backdrop-blur transition-all hover:scale-105 hover:text-foreground"
+          className="flex shrink-0 items-center gap-2 rounded-full border border-border bg-card/80 px-3 py-2 font-pixel text-[9px] text-foreground/70 backdrop-blur transition-all hover:scale-105 hover:text-foreground sm:px-4 sm:text-[10px]"
         >
           ← Back
         </button>
-        <div className="rounded-full border border-border bg-card/80 px-3 py-1 font-pixel text-[10px] text-foreground/70 backdrop-blur">
+        <div className="max-w-[60%] truncate rounded-full border border-border bg-card/80 px-3 py-1 font-pixel text-[9px] text-foreground/70 backdrop-blur sm:text-[10px]">
           {isCouple ? "❤ COUPLE MODE" : "🎉 PARTY MODE"}
         </div>
       </header>
 
-      <div className="relative z-10 mx-auto mt-10 max-w-2xl text-center">
-        <p className="font-script text-2xl text-accent">who's playing tonight?</p>
-        <h1 className="mt-2 font-pixel text-2xl leading-tight text-foreground sm:text-3xl md:text-4xl">
+      <div className="player-setup-hero relative z-10 mx-auto max-w-2xl text-center">
+        <p className="font-script text-[clamp(1.5rem,7vw,2rem)] leading-none text-accent">who's playing tonight?</p>
+        <h1 className="mt-2 text-wrap font-pixel text-[clamp(1.8rem,10vw,2.55rem)] leading-tight text-foreground md:text-4xl">
           {isCouple ? "Enter Your Duos" : "Add Your Players"}
         </h1>
-        <p className="mt-3 text-sm text-muted-foreground md:text-base">
+        <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground md:text-base">
           {isCouple
             ? `1–4 couples (2–8 players). Each partner plays independently — couple-themed dares are tagged to your pair.`
             : `2–16 players. The more chaos, the better.`}
         </p>
       </div>
 
-      <div className="relative z-10 mx-auto mt-8 grid max-w-2xl gap-3">
+      <div className="player-setup-list relative z-10 mx-auto grid w-full max-w-2xl gap-3">
         {entries.map((value, i) => {
           const isCoupleHeader = isCouple && i % 2 === 0;
           const coupleNum = Math.floor(i / 2) + 1;
@@ -109,9 +109,9 @@ export default function PlayerSetup({ mode, onBack, onContinue }: Props) {
                 initial={{ opacity: 0, x: -12 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.04 }}
-                className="flex items-center gap-2 rounded-2xl border-2 border-border bg-card p-3 shadow-soft"
+                className="player-name-row flex w-full max-w-full items-center rounded-2xl border-2 border-border bg-card shadow-soft"
               >
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-gradient-romance font-pixel text-[10px] text-primary-foreground">
+                <span className="grid shrink-0 place-items-center rounded-full bg-gradient-romance font-pixel text-primary-foreground">
                   {isCouple ? (i % 2 === 0 ? "A" : "B") : String(i + 1).padStart(2, "0")}
                 </span>
                 <input
@@ -119,13 +119,13 @@ export default function PlayerSetup({ mode, onBack, onContinue }: Props) {
                   onChange={(e) => update(i, e.target.value)}
                   placeholder={placeholderFor(i)}
                   maxLength={20}
-                  className="min-w-0 flex-1 bg-transparent px-2 font-display text-base text-foreground placeholder:text-muted-foreground/60 focus:outline-none"
+                  className="min-w-0 flex-1 bg-transparent font-display text-[16px] leading-none text-foreground placeholder:truncate placeholder:text-muted-foreground/60 focus:outline-none"
                 />
                 {entries.length > minCount && (!isCouple || i % 2 === 0) && (
                   <button
                     onClick={() => remove(i)}
                     aria-label="Remove"
-                    className="grid h-9 w-9 place-items-center rounded-full text-lg text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+                    className="grid shrink-0 place-items-center rounded-full text-lg text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
                   >
                     ×
                   </button>
@@ -145,15 +145,15 @@ export default function PlayerSetup({ mode, onBack, onContinue }: Props) {
         )}
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-20 bg-gradient-to-t from-background via-background/95 to-transparent px-6 pb-6 pt-10">
+      <div className="fixed inset-x-0 bottom-0 z-20 bg-gradient-to-t from-background via-background/95 to-transparent px-5 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-10 sm:px-6">
         <div className="mx-auto flex max-w-2xl items-center justify-between gap-3">
-          <p className="font-pixel text-[9px] text-muted-foreground">
+          <p className="shrink-0 font-pixel text-[9px] text-muted-foreground">
             {entries.filter((e) => e.trim()).length}/{entries.length} READY
           </p>
           <button
             disabled={!allFilled}
             onClick={submit}
-            className="inline-flex items-center gap-2 rounded-full bg-gradient-romance px-7 py-3 font-pixel text-[11px] text-primary-foreground shadow-soft transition-all enabled:hover:scale-105 enabled:hover:shadow-glow disabled:cursor-not-allowed disabled:opacity-40"
+            className="inline-flex min-w-0 items-center gap-2 rounded-full bg-gradient-romance px-6 py-3 font-pixel text-[10px] text-primary-foreground shadow-soft transition-all enabled:hover:scale-105 enabled:hover:shadow-glow disabled:cursor-not-allowed disabled:opacity-40 sm:px-7 sm:text-[11px]"
           >
             Continue →
           </button>

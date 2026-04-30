@@ -14,7 +14,11 @@ serve(async (req) => {
   }
 
   try {
-    const { amount, currency = 'INR' } = await req.json()
+    const { amount, currency = 'INR', userId } = await req.json()
+
+    if (!userId) {
+      console.error("userId missing in request");
+    }
 
     const auth = btoa(`${RAZORPAY_KEY_ID}:${RAZORPAY_KEY_SECRET}`)
     
@@ -27,17 +31,22 @@ serve(async (req) => {
       body: JSON.stringify({
         amount: amount, // in paise
         currency: currency,
-        receipt: `receipt_${Math.random().toString(36).substring(7)}`
+        receipt: `receipt_${Math.random().toString(36).substring(7)}`,
+        notes: {
+          user_id: userId
+        }
       })
     })
 
     const order = await response.json()
+    console.log("Created order:", order.id, "for user:", userId);
 
     return new Response(JSON.stringify(order), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 200,
     })
   } catch (error) {
+    console.error("Order creation error:", error.message);
     return new Response(JSON.stringify({ error: error.message }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 400,

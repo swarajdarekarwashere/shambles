@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useGame } from "@/state/GameContext";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -12,6 +13,7 @@ interface PaywallModalProps {
 
 export default function PaywallModal({ isOpen, userId }: PaywallModalProps) {
   const [loading, setLoading] = useState(false);
+  const { refreshStats, setShowPaywall } = useGame();
 
   useEffect(() => {
     // Load Razorpay Script
@@ -34,7 +36,10 @@ export default function PaywallModal({ isOpen, userId }: PaywallModalProps) {
     try {
       // 1. Create order via Supabase Edge Function
       const { data, error } = await supabase.functions.invoke("create-razorpay-order", {
-        body: { amount: 3000 }, // ₹30 in paise
+        body: { 
+          amount: 3000, 
+          userId: userId // Pass the userId here!
+        },
       });
 
       if (error) throw error;
@@ -52,8 +57,13 @@ export default function PaywallModal({ isOpen, userId }: PaywallModalProps) {
             setLoading(false);
           }
         },
-        handler: function (response: any) {
+        handler: async function (response: any) {
           toast.success("Payment successful! Unlocking your games...");
+          
+          // Fallback: Manually refresh stats to check for the new pass
+          // and close the modal immediately for better UX
+          await refreshStats();
+          setShowPaywall(false);
           setLoading(false);
         },
         notes: {
