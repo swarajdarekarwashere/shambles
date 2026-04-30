@@ -138,7 +138,7 @@ export default function GameDiscovery({ mode, onBack, onPickGame }: Props) {
         {/* Back button */}
         <button
           onClick={onBack}
-          className="absolute left-4 top-4 z-40 rounded-full border border-border bg-card/80 px-4 py-2 font-pixel text-[10px] text-foreground/70 backdrop-blur transition-all hover:scale-105 hover:text-foreground"
+          className="absolute left-3 top-4 z-40 rounded-full border border-border bg-card/80 px-3 py-2 font-pixel text-[9px] text-foreground/70 backdrop-blur transition-all hover:scale-105 hover:text-foreground sm:left-4 sm:px-4 sm:text-[10px]"
         >
           ← Modes
         </button>
@@ -153,8 +153,8 @@ export default function GameDiscovery({ mode, onBack, onPickGame }: Props) {
         </div>
 
         {/* Section label */}
-        <div className="absolute right-4 top-4 z-30">
-          <div className="rounded-full border border-border bg-card/80 px-4 py-1.5 font-pixel text-[9px] text-foreground/70 backdrop-blur">
+        <div className="absolute right-3 top-4 z-30 sm:right-4">
+          <div className="rounded-full border border-border bg-card/80 px-3 py-1.5 font-pixel text-[8px] text-foreground/70 backdrop-blur sm:px-4 sm:text-[9px]">
             ✦ {current.num} / {String(games.length).padStart(2, "0")} ✦ {mode === "couple" ? "COUPLE" : "PARTY"}
           </div>
         </div>
@@ -182,7 +182,7 @@ export default function GameDiscovery({ mode, onBack, onPickGame }: Props) {
         </div>
 
         {/* Layout: mobile stacked, desktop split */}
-        <div className="relative z-10 mx-auto grid h-full max-w-7xl grid-rows-[52%_48%] gap-0 px-6 pb-20 pt-16 md:grid-cols-2 md:grid-rows-1 md:items-stretch md:gap-8 md:px-12 md:pb-6 md:pt-20">
+        <div className="discovery-mobile-layout relative z-10 mx-auto grid h-full max-w-7xl px-6 md:grid-cols-2 md:grid-rows-1 md:items-stretch md:gap-8 md:px-12 md:pb-6 md:pt-20">
           {/* Canvas */}
           <div className="relative flex h-full min-h-0 items-center justify-center md:min-h-[70vh]">
             <div className="relative h-full w-full max-w-md">
@@ -200,7 +200,7 @@ export default function GameDiscovery({ mode, onBack, onPickGame }: Props) {
                     width={1024}
                     height={1024}
                     loading={i === 0 ? "eager" : "lazy"}
-                    className="pixelated max-h-[48dvh] w-[96%] object-contain animate-float drop-shadow-[0_12px_24px_hsl(348_70%_60%/0.35)] sm:max-h-[52dvh] sm:w-full md:max-h-[70vh]"
+                    className="discovery-game-art pixelated object-contain animate-float drop-shadow-[0_12px_24px_hsl(348_70%_60%/0.35)] md:max-h-[70vh] md:w-full"
                   />
                 </div>
               ))}
@@ -208,34 +208,34 @@ export default function GameDiscovery({ mode, onBack, onPickGame }: Props) {
           </div>
 
           {/* Text panel */}
-          <div className="relative flex h-full flex-col items-center justify-start text-center md:items-start md:justify-center md:text-left">
+          <div className="relative flex h-full min-h-0 flex-col items-center justify-start text-center md:items-start md:justify-center md:text-left">
             {games.map((g, i) => (
               <div
                 key={g.id}
                 ref={(el) => (textRefs.current[i] = el)}
-                className={`absolute inset-x-0 flex flex-col items-center md:items-start ${
+                className={`discovery-copy absolute inset-x-0 flex flex-col items-center md:items-start ${
                   i === activeIdx ? "pointer-events-auto" : "pointer-events-none"
                 }`}
               >
                 <span
-                  className={`font-pixel text-[10px] ${
+                  className={`discovery-kicker font-pixel ${
                     g.accent === "accent" ? "text-accent" : "text-primary"
                   }`}
                 >
                   {mode === "couple" ? "❤ COUPLE GAME" : "🎉 PARTY GAME"} · {g.num}
                 </span>
-                <h2 className="mt-2 font-serifd text-4xl leading-[1.05] text-foreground sm:text-5xl md:mt-3 md:text-6xl md:leading-[1.05]">
+                <h2 className="discovery-title font-serifd leading-[1.05] text-foreground md:text-6xl md:leading-[1.05]">
                   {g.title}
                 </h2>
-                <p className="mt-1 font-script text-4xl text-accent md:mt-2 md:text-5xl">
+                <p className="discovery-tagline font-script text-accent md:text-5xl">
                   {g.tagline}
                 </p>
-                <p className="mt-2 max-w-md font-serifi text-base leading-relaxed text-muted-foreground md:mt-3 md:text-lg">
+                <p className="discovery-description max-w-md font-serifi leading-relaxed text-muted-foreground md:text-lg">
                   {g.description}
                 </p>
                 <button
                   onClick={() => onPickGame(g.id)}
-                  className={`group mt-4 inline-flex items-center gap-2 rounded-full px-6 py-3 font-pixel text-[11px] shadow-soft transition-all hover:scale-105 hover:shadow-glow md:mt-5 ${
+                  className={`discovery-cta group inline-flex items-center gap-2 rounded-full font-pixel shadow-soft transition-all hover:scale-105 hover:shadow-glow md:mt-5 md:px-6 md:py-3 md:text-[11px] ${
                     g.accent === "accent"
                       ? "bg-accent text-accent-foreground"
                       : "bg-primary text-primary-foreground"
@@ -255,7 +255,7 @@ export default function GameDiscovery({ mode, onBack, onPickGame }: Props) {
         </div>
 
         {/* Game dot indicators */}
-        <div className="absolute bottom-6 left-1/2 z-30 flex -translate-x-1/2 gap-2">
+        <div className="discovery-dots absolute left-1/2 z-30 flex -translate-x-1/2 gap-2">
           {games.map((g, i) => (
             <div
               key={g.id}

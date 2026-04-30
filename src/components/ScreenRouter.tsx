@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useGame } from "@/state/GameContext";
 import Landing from "@/components/Landing";
@@ -13,8 +12,6 @@ import ShotsAndLadders from "@/components/games/ShotsAndLadders";
 import IntimacyCards from "@/components/games/IntimacyCards";
 import WinnerScreen from "@/components/WinnerScreen";
 import Scoreboard from "@/components/Scoreboard";
-import AuthModal from "@/components/AuthModal";
-import PaywallModal from "@/components/PaywallModal";
 
 const variants = {
   initial: { opacity: 0, y: 30, scale: 0.98 },
@@ -23,16 +20,17 @@ const variants = {
 };
 
 export default function ScreenRouter() {
-  const { screen, go, user, sessionCount, hasActivePass, recordSession, players } = useGame();
-  const [showAuth, setShowAuth] = useState(false);
-  const [showPaywall, setShowPaywall] = useState(false);
-
-  // Close paywall automatically if pass becomes active
-  useEffect(() => {
-    if (hasActivePass) {
-      setShowPaywall(false);
-    }
-  }, [hasActivePass]);
+  const { 
+    screen, 
+    go, 
+    user, 
+    sessionCount, 
+    hasActivePass, 
+    recordSession, 
+    players,
+    setShowAuth,
+    setShowPaywall 
+  } = useGame();
 
   const handlePickGame = (gameId: string) => {
     if (!user) {
@@ -131,17 +129,19 @@ export default function ScreenRouter() {
     screen.name === "game" || screen.name === "discovery";
 
   const isDiscovery = screen.name === "discovery";
+  // Stable key for transition
+  const transitionKey = screen.name === 'game' ? `game-${(screen as any).gameId}` : screen.name;
 
   return (
     <main className="relative w-full">
       {isDiscovery ? (
-        <div key={JSON.stringify(screen)} className="w-full">
+        <div key="discovery-screen" className="w-full">
           {renderScreen()}
         </div>
       ) : (
         <AnimatePresence mode="wait">
           <motion.div
-            key={JSON.stringify(screen)}
+            key={transitionKey}
             variants={variants}
             initial="initial"
             animate="animate"
@@ -154,9 +154,6 @@ export default function ScreenRouter() {
         </AnimatePresence>
       )}
       {showHud && <Scoreboard />}
-
-      <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} />
-      {user && <PaywallModal isOpen={showPaywall} userId={user.id} />}
     </main>
   );
 }

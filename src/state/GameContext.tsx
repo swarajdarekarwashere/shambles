@@ -25,6 +25,10 @@ type Ctx = {
   sessionCount: number;
   hasActivePass: boolean;
   isLoadingStats: boolean;
+  showAuth: boolean;
+  showPaywall: boolean;
+  setShowAuth: (v: boolean) => void;
+  setShowPaywall: (v: boolean) => void;
   go: (s: Screen) => void;
   setPlayersFromNames: (names: string[], opts?: { couples?: boolean }) => void;
   addScore: (playerId: string, delta: number) => void;
@@ -58,6 +62,15 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const [sessionCount, setSessionCount] = useState(0);
   const [hasActivePass, setHasActivePass] = useState(false);
   const [isLoadingStats, setIsLoadingStats] = useState(true);
+  const [showAuth, setShowAuth] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
+
+  // Close paywall automatically if pass becomes active
+  useEffect(() => {
+    if (hasActivePass) {
+      setShowPaywall(false);
+    }
+  }, [hasActivePass]);
 
   // Auth Listener
   useEffect(() => {
@@ -211,6 +224,10 @@ export function GameProvider({ children }: { children: ReactNode }) {
       sessionCount,
       hasActivePass,
       isLoadingStats,
+      showAuth,
+      showPaywall,
+      setShowAuth,
+      setShowPaywall,
       go, 
       setPlayersFromNames, 
       addScore, 
@@ -219,7 +236,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       recordSession,
       refreshStats
     }),
-    [screen, players, user, sessionCount, hasActivePass, isLoadingStats, go, setPlayersFromNames, addScore, resetScores, resetAll, recordSession, refreshStats]
+    [screen, players, user, sessionCount, hasActivePass, isLoadingStats, showAuth, showPaywall, go, setPlayersFromNames, addScore, resetScores, resetAll, recordSession, refreshStats]
   );
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

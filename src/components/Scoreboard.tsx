@@ -11,7 +11,7 @@ export default function Scoreboard() {
   const sorted = [...players].sort((a, b) => b.score - a.score);
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-3 z-40 flex justify-center px-3">
+    <div className="pointer-events-none fixed inset-x-0 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-40 flex justify-center px-3">
       <motion.div
         layout
         className="pointer-events-auto w-full max-w-md overflow-hidden rounded-2xl border border-border bg-card/95 shadow-card backdrop-blur"
@@ -20,9 +20,9 @@ export default function Scoreboard() {
           onClick={() => setOpen((o) => !o)}
           className="flex w-full items-center justify-between gap-3 px-4 py-2.5"
         >
-          <div className="flex items-center gap-2">
-            <span className="font-pixel text-[9px] text-muted-foreground">SCORES</span>
-            <span className="font-pixel text-[10px] text-primary">
+          <div className="flex min-w-0 items-center gap-2">
+            <span className="shrink-0 font-pixel text-[9px] text-muted-foreground">SCORES</span>
+            <span className="truncate font-pixel text-[10px] text-primary">
               {sorted[0]?.name} · {sorted[0]?.score}
             </span>
           </div>
