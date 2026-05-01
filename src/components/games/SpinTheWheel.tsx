@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useGame } from "@/state/GameContext";
+import bgWheel from "@/assets/wheel-bg.jpg";
 import wheelImg from "@/assets/wheel-spin.png";
 import pointerImg from "@/assets/wheel-pointer.png";
 
@@ -82,6 +83,14 @@ export default function SpinTheWheel({ onExit, onFinish }: Props) {
           : "bg-[radial-gradient(circle_at_50%_18%,#fff7ed,#ffe4e6_45%,#dff7fb_100%)] text-rose-950"
       }`}
     >
+      <img
+        src={bgWheel}
+        alt=""
+        loading="lazy"
+        className={`pointer-events-none absolute inset-0 h-full w-full object-cover ${
+          isAdult ? "opacity-45 mix-blend-screen" : "opacity-20"
+        }`}
+      />
       <div
         className={`pointer-events-none absolute inset-0 ${
           isAdult
@@ -154,16 +163,18 @@ export default function SpinTheWheel({ onExit, onFinish }: Props) {
             draggable={false}
           />
 
-          <motion.img
-            src={pointerImg}
-            alt=""
-            aria-hidden
-            animate={spinning ? { rotate: [-8, 8, -6, 6, -3, 3, 0] } : { rotate: 0 }}
-            transition={{ duration: 0.6, repeat: spinning ? Infinity : 0, ease: "easeInOut" }}
-            style={{ transformOrigin: "50% 12%" }}
-            className="pointer-events-none absolute left-1/2 top-[-14%] z-20 h-[42%] w-auto -translate-x-1/2 drop-shadow-[0_6px_10px_rgba(0,0,0,0.5)]"
-            draggable={false}
-          />
+          <div className="pointer-events-none absolute left-1/2 top-[-14%] z-20 h-[42%] w-auto -translate-x-1/2">
+            <motion.img
+              src={pointerImg}
+              alt=""
+              aria-hidden
+              animate={spinning ? { rotate: [-8, 8, -6, 6, -3, 3, 0] } : { rotate: 0 }}
+              transition={{ duration: 0.6, repeat: spinning ? Infinity : 0, ease: "easeInOut" }}
+              style={{ transformOrigin: "50% 12%" }}
+              className="h-full w-auto drop-shadow-[0_6px_10px_rgba(0,0,0,0.5)]"
+              draggable={false}
+            />
+          </div>
         </div>
       </div>
 
