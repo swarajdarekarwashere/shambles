@@ -10,6 +10,8 @@ export type TileType =
   | "drink";
 
 export type Tile = {
+  x: number;
+  y: number;
   type: TileType;
   prompt: string;
   altDrink?: string;
@@ -77,10 +79,64 @@ export const TILE_STYLE: Record<
   },
 };
 
-// 28 tiles for a 8x6 perimeter (8+6+8+6 = 28 with shared corners → tweak)
-// Actually a perimeter of W cols × H rows where W=8,H=6: 2*(W-1)+2*(H-1) = 2*7+2*5 = 24 tiles
-// We'll use 24 tiles total.
-export const BOARD: Tile[] = [
+const TILE_POINTS: Array<Pick<Tile, "x" | "y">> = [
+  { x: 9.0, y: 7.8 },
+  { x: 8.9, y: 15.3 },
+  { x: 25.6, y: 15.4 },
+  { x: 33.6, y: 15.4 },
+  { x: 41.8, y: 15.4 },
+  { x: 49.9, y: 15.4 },
+  { x: 58.1, y: 15.4 },
+  { x: 66.2, y: 15.4 },
+  { x: 74.4, y: 15.4 },
+  { x: 82.6, y: 15.4 },
+  { x: 90.8, y: 15.4 },
+  { x: 90.8, y: 25.5 },
+  { x: 90.8, y: 35.6 },
+  { x: 82.5, y: 35.6 },
+  { x: 74.3, y: 35.6 },
+  { x: 17.2, y: 25.5 },
+  { x: 8.9, y: 25.5 },
+  { x: 57.9, y: 35.6 },
+  { x: 66.1, y: 35.6 },
+  { x: 22.4, y: 45.4 },
+  { x: 30.7, y: 45.4 },
+  { x: 38.9, y: 45.4 },
+  { x: 47.2, y: 45.4 },
+  { x: 55.4, y: 45.4 },
+  { x: 14.2, y: 53.4 },
+  { x: 14.2, y: 64.8 },
+  { x: 22.5, y: 64.8 },
+  { x: 30.7, y: 64.8 },
+  { x: 39.0, y: 64.8 },
+  { x: 47.2, y: 64.8 },
+  { x: 55.4, y: 64.8 },
+  { x: 63.7, y: 64.8 },
+  { x: 71.9, y: 64.8 },
+  { x: 80.2, y: 64.8 },
+  { x: 88.4, y: 64.8 },
+  { x: 88.4, y: 76.2 },
+  { x: 8.4, y: 88.8 },
+  { x: 14.4, y: 88.8 },
+  { x: 22.6, y: 88.8 },
+  { x: 30.9, y: 88.8 },
+  { x: 39.1, y: 88.8 },
+  { x: 47.3, y: 88.8 },
+  { x: 55.6, y: 88.8 },
+  { x: 63.8, y: 88.8 },
+  { x: 72.0, y: 88.8 },
+  { x: 80.3, y: 88.8 },
+  { x: 88.5, y: 88.8 },
+];
+
+function attachTilePoints(tiles: Array<Omit<Tile, "x" | "y">>): Tile[] {
+  return tiles.map((tile, index) => ({
+    ...TILE_POINTS[index],
+    ...tile,
+  }));
+}
+
+export const BOARD: Tile[] = attachTilePoints([
   { type: "start", prompt: "Start Here", emoji: "🚀" },
   { type: "light", prompt: "Share Your Favorite Memory Together", emoji: "💭", altDrink: "or take a sip" },
   { type: "couple", prompt: "Remove One Item — Shoes & Accessories Count", emoji: "👟", altDrink: "or take a shot" },
@@ -128,9 +184,9 @@ export const BOARD: Tile[] = [
   { type: "couple", prompt: "Lingering Kiss on the Cheek", emoji: "💋", altDrink: "or drink" },
   { type: "wild", prompt: "Spin Around Four Times Then Walk Straight", emoji: "🌀", altDrink: "or drink" },
   { type: "drink", prompt: "Take a Sip — You're Almost There", emoji: "🍷" },
-];
+]);
 
-export const ADULT_BOARD: Tile[] = [
+export const ADULT_BOARD: Tile[] = attachTilePoints([
   { type: "start", prompt: "Start Here", emoji: "🚀" },
   { type: "light", prompt: "Share Your Favorite Memory Together", emoji: "💭", altDrink: "or take a sip" },
   { type: "couple", prompt: "Remove One Article of Clothing", emoji: "👗", altDrink: "or take a shot" },
@@ -178,4 +234,4 @@ export const ADULT_BOARD: Tile[] = [
   { type: "couple", prompt: "Lingering Kiss 💋", emoji: "💋", altDrink: "or drink" },
   { type: "wild", prompt: "Spin Around Four Times", emoji: "🌀", altDrink: "or drink" },
   { type: "drink", prompt: "Take a Sip — You're Almost There", emoji: "🍷" },
-];
+]);

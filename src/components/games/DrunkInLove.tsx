@@ -12,49 +12,6 @@ interface Props {
   onFinish: () => void;
 }
 
-type Point = {
-  x: number;
-  y: number;
-};
-
-const TRACK: Point[] = [
-  { x: 7.8, y: 10.8 },
-  { x: 9.6, y: 22.4 },
-  { x: 9.4, y: 34.1 },
-  { x: 25.9, y: 34.1 },
-  { x: 37.2, y: 20.1 },
-  { x: 53.7, y: 20.1 },
-  { x: 70.0, y: 20.1 },
-  { x: 94.1, y: 20.1 },
-  { x: 94.1, y: 48.7 },
-  { x: 78.1, y: 48.7 },
-  { x: 62.0, y: 48.7 },
-  { x: 56.2, y: 62.9 },
-  { x: 48.0, y: 62.9 },
-  { x: 31.7, y: 62.9 },
-  { x: 11.3, y: 77.1 },
-  { x: 10.7, y: 78.6 },
-  { x: 18.8, y: 78.6 },
-  { x: 35.0, y: 78.6 },
-  { x: 50.9, y: 78.6 },
-  { x: 66.8, y: 78.6 },
-  { x: 82.8, y: 78.6 },
-  { x: 94.0, y: 91.2 },
-  { x: 69.0, y: 91.2 },
-  { x: 7.9, y: 91.2 },
-];
-
-function buildTiles(board: typeof BOARD) {
-  const out = [...board];
-  while (out.length > TRACK.length) out.splice(out.length - 2, 1);
-  while (out.length < TRACK.length) {
-    out.push({ type: "light", prompt: "Take a sip and stay sweet", emoji: "🍷" });
-  }
-  out[out.length - 1] = board[board.length - 1];
-  out[0] = board[0];
-  return out;
-}
-
 function rollDie() {
   return Math.floor(Math.random() * 6) + 1;
 }
@@ -64,7 +21,7 @@ export default function DrunkInLove({ mode, onExit, onFinish }: Props) {
   const isAdult = tone === "adult";
   const boardImage = isAdult ? adultBoardImage : lightBoardImage;
   const tiles = useMemo(
-    () => buildTiles(isAdult ? ADULT_BOARD : BOARD),
+    () => (isAdult ? ADULT_BOARD : BOARD),
     [isAdult]
   );
 
@@ -208,7 +165,7 @@ export default function DrunkInLove({ mode, onExit, onFinish }: Props) {
             <div className="pointer-events-none absolute inset-0">
               {Object.entries(tileGroups).map(([tileStr, ids]) => {
                 const index = Number(tileStr);
-                const point = TRACK[index] ?? TRACK[0];
+                const tile = tiles[index] ?? tiles[0];
 
                 return ids.map((id, tokenIndex) => {
                   const player = players.find((entry) => entry.id === id)!;
@@ -223,8 +180,8 @@ export default function DrunkInLove({ mode, onExit, onFinish }: Props) {
                       layoutId={`drunk-in-love-token-${player.id}`}
                       initial={false}
                       animate={{
-                        left: `calc(${point.x}% + ${dx}%)`,
-                        top: `calc(${point.y}% + ${dy}%)`,
+                        left: `calc(${tile.x}% + ${dx}%)`,
+                        top: `calc(${tile.y}% + ${dy}%)`,
                       }}
                       transition={{ type: "spring", stiffness: 200, damping: 20 }}
                       className="absolute grid h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-2 border-white shadow-[0_0_12px_rgba(0,0,0,0.3)] sm:h-4 sm:w-4 md:h-5 md:w-5"
