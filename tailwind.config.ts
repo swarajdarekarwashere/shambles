@@ -88,12 +88,30 @@ export default {
           "0%": { opacity: "0", transform: "scale(0.85)" },
           "100%": { opacity: "1", transform: "scale(1)" },
         },
+        shake: {
+          "10%, 90%": { transform: "translate3d(-1px, 0, 0)" },
+          "20%, 80%": { transform: "translate3d(2px, 0, 0)" },
+          "30%, 50%, 70%": { transform: "translate3d(-4px, 0, 0)" },
+          "40%, 60%": { transform: "translate3d(4px, 0, 0)" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
+        "pulse-glow": {
+          "0%, 100%": { opacity: "0.4", scale: "1" },
+          "50%": { opacity: "0.7", scale: "1.05" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in-up": "fade-in-up 0.6s cubic-bezier(0.22, 1, 0.36, 1)",
         "scale-in": "scale-in 0.5s cubic-bezier(0.22, 1, 0.36, 1)",
+        shake: "shake 0.82s cubic-bezier(.36,.07,.19,.97) both",
+        float: "float 3s ease-in-out infinite",
+        "spin-slow": "spin 8s linear infinite",
+        "pulse-glow": "pulse-glow 4s ease-in-out infinite",
       },
       fontFamily: {
         pixel: ['"Press Start 2P"', 'monospace'],
