@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState,useEffect } from "react";
 import { motion, AnimatePresence, PanInfo } from "framer-motion";
 import { useGame } from "@/state/GameContext";
 import bgLetter from "@/assets/bg-loveletter.jpg";
@@ -70,9 +70,14 @@ interface Props {
 }
 
 export default function SpicyStarters({ onExit, onFinish }: Props) {
-  const { players, addScore, tone } = useGame();
+  const { players, addScore, tone, gameState, setGameState } = useGame();
   const [filter, setFilter] = useState<Level | "all">("all");
-  const [idx, setIdx] = useState(0);
+  const [idx, setIdx] = useState(gameState?.idx ?? 0);
+
+  // Sync with GameContext for persistence
+  useEffect(() => {
+    setGameState({ idx });
+  }, [idx, setGameState]);
 
   // 1. Group players into Couples
   const couples = useMemo(() => {

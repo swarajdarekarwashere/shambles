@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState ,useEffect} from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useGame } from "@/state/GameContext";
 import board from "@/assets/lets-get-wasted.webp";
@@ -427,16 +427,21 @@ function intenseMessage(tile: Tile) {
 }
 
 export default function LetsGetWasted({ onExit, onFinish }: Props) {
-  const { players, addScore, tone } = useGame();
+  const { players, addScore, tone, gameState, setGameState } = useGame();
   const isAdult = tone === "adult";
   const [pos, setPos] = useState<Record<string, number>>(() =>
-    Object.fromEntries(players.map((p) => [p.id, 0]))
+    gameState?.pos ?? Object.fromEntries(players.map((p) => [p.id, 0]))
   );
-  const [turnIdx, setTurnIdx] = useState(0);
+  const [turnIdx, setTurnIdx] = useState(gameState?.turnIdx ?? 0);
   const [die, setDie] = useState<number | null>(null);
   const [rolling, setRolling] = useState(false);
   const [event, setEvent] = useState<{ tile: Tile; playerId: string } | null>(null);
   const [extraRoll, setExtraRoll] = useState(false);
+
+  // Sync with GameContext for persistence
+  useEffect(() => {
+    setGameState({ pos, turnIdx });
+  }, [pos, turnIdx, setGameState]);
 
   const current = players[turnIdx % players.length];
 

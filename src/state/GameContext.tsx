@@ -17,6 +17,7 @@ type Persisted = {
   screen: Screen;
   players: Player[];
   tone?: Tone;
+  gameState?: any;
 };
 
 type Ctx = {
@@ -30,9 +31,11 @@ type Ctx = {
   showAuth: boolean;
   showPaywall: boolean;
   tone: Tone;
+  gameState: any;
   setShowAuth: (v: boolean) => void;
   setShowPaywall: (v: boolean) => void;
   setTone: (tone: Tone) => void;
+  setGameState: (state: any) => void;
   toggleTone: () => void;
   go: (s: Screen) => void;
   setPlayersFromNames: (names: string[], opts?: { couples?: boolean }) => void;
@@ -72,6 +75,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const [showAuth, setShowAuth] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
   const [tone, setTone] = useState<Tone>(initial?.tone ?? "normal");
+  const [gameState, setGameState] = useState<any>(initial?.gameState ?? null);
 
   // Close paywall automatically if pass becomes active
   useEffect(() => {
@@ -169,13 +173,20 @@ export function GameProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ screen, players, tone }));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ screen, players, tone, gameState }));
     } catch {
       /* ignore */
     }
-  }, [screen, players, tone]);
+  }, [screen, players, tone, gameState]);
 
-  const go = useCallback((s: Screen) => setScreen(s), []);
+  const go = useCallback((s: Screen) => {
+    setScreen(s);
+    // If moving AWAY from a game (to landing/discovery/setup), clear game state
+    if (s.name !== 'game') {
+      setGameState(null);
+    }
+  }, []);
+
   const toggleTone = useCallback(
     () => setTone((current) => (current === "normal" ? "adult" : "normal")),
     []
@@ -210,6 +221,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const resetAll = useCallback(() => {
     setPlayers([]);
     setScreen({ name: "landing" });
+    setGameState(null);
   }, []);
 
   const recordSession = useCallback(async (gameId: string, mode: Mode, playersCount: number) => {
@@ -250,9 +262,11 @@ export function GameProvider({ children }: { children: ReactNode }) {
       showAuth,
       showPaywall,
       tone,
+      gameState,
       setShowAuth,
       setShowPaywall,
       setTone,
+      setGameState,
       toggleTone,
       go, 
       setPlayersFromNames, 
@@ -263,7 +277,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       refreshStats,
       logout
     }),
-    [screen, players, user, sessionCount, hasActivePass, passExpiry, isLoadingStats, showAuth, showPaywall, tone, go, setPlayersFromNames, addScore, resetScores, resetAll, recordSession, refreshStats, toggleTone, logout]
+    [screen, players, user, sessionCount, hasActivePass, passExpiry, isLoadingStats, showAuth, showPaywall, tone, gameState, go, setPlayersFromNames, addScore, resetScores, resetAll, recordSession, refreshStats, toggleTone, logout]
   );
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

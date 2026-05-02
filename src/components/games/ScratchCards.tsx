@@ -37,14 +37,19 @@ const PROMPTS_ADULT: typeof PROMPTS_NORMAL = [
 ];
 
 export default function ScratchCards({ onExit, onFinish }: Props) {
-  const { players, addScore, tone } = useGame();
+  const { players, addScore, tone, gameState, setGameState } = useGame();
   const prompts = tone === "adult" ? PROMPTS_ADULT : PROMPTS_NORMAL;
-  const [turnIdx, setTurnIdx] = useState(0);
-  const [cardIdx, setCardIdx] = useState(0);
+  const [turnIdx, setTurnIdx] = useState(gameState?.turnIdx ?? 0);
+  const [cardIdx, setCardIdx] = useState(gameState?.cardIdx ?? 0);
   const [revealed, setRevealed] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const drawing = useRef(false);
   const cleared = useRef(0);
+
+  // Sync with GameContext for persistence
+  useEffect(() => {
+    setGameState({ turnIdx, cardIdx });
+  }, [turnIdx, cardIdx, setGameState]);
 
   const current = players[turnIdx % players.length];
   const card = prompts[cardIdx % prompts.length];

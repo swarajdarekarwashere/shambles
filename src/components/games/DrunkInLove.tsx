@@ -50,7 +50,7 @@ function getDrinkLabel(tile: Tile): string {
 // ---------------------------------------------------------------------------
 
 export default function DrunkInLove({ mode, onExit, onFinish }: Props) {
-  const { players, addScore, tone } = useGame();
+  const { players, addScore, tone, gameState, setGameState } = useGame();
   const isAdult = tone === "adult";
   const boardImage = isAdult ? adultBoardImage : lightBoardImage;
   const tiles = useMemo(() => (isAdult ? ADULT_BOARD : BOARD), [isAdult]);
@@ -58,14 +58,21 @@ export default function DrunkInLove({ mode, onExit, onFinish }: Props) {
   // Index of the FINISH tile — always the last tile in the array
   const FINISH_INDEX = tiles.length - 1;
 
-  // ── State ────────────────────────────────────────────────────────────────
+  // ── State (Initialized from gameState if persisting) ──────────────────────
   const [positions, setPositions] = useState<Record<string, number>>(() =>
-    Object.fromEntries(players.map((p) => [p.id, 0]))
+    gameState?.positions ?? Object.fromEntries(players.map((p) => [p.id, 0]))
   );
-  const [skipNext, setSkipNext] = useState<Record<string, boolean>>({});
-  const [turnIdx, setTurnIdx] = useState(0);
+  const [skipNext, setSkipNext] = useState<Record<string, boolean>>(
+    gameState?.skipNext ?? {}
+  );
+  const [turnIdx, setTurnIdx] = useState(gameState?.turnIdx ?? 0);
   const [die, setDie] = useState<number | null>(null);
   const [rolling, setRolling] = useState(false);
+
+  // Sync with GameContext for persistence
+  useEffect(() => {
+    setGameState({ positions, skipNext, turnIdx });
+  }, [positions, skipNext, turnIdx, setGameState]);
 
   /**
    * activeTile: the tile index whose card is currently being displayed.

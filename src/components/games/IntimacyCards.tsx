@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo,useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useGame } from "@/state/GameContext";
 import envelopeArt from "@/assets/game-intimacy-art.png";
@@ -23,9 +23,14 @@ const ENVELOPES = [
 ];
 
 export default function IntimacyCards({ onExit, onFinish }: Props) {
-  const { players, addScore } = useGame();
-  const [idx, setIdx] = useState(0);
+  const { players, addScore, gameState, setGameState } = useGame();
+  const [idx, setIdx] = useState(gameState?.idx ?? 0);
   const [opened, setOpened] = useState(false);
+
+  // Sync with GameContext for persistence
+  useEffect(() => {
+    setGameState({ idx });
+  }, [idx, setGameState]);
 
   const envelope = ENVELOPES[idx % ENVELOPES.length];
   
