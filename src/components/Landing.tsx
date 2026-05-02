@@ -1,6 +1,9 @@
 import heroCouple from "@/assets/hero-couple.png";
 import heroParty from "@/assets/hero-party.png";
 import { Mode } from "@/lib/gameTypes";
+import Profile from "@/components/Profile";
+import LegalModals from "@/components/LegalModals";
+import { useState } from "react";
 
 interface LandingProps {
   onPickMode: (mode: Mode) => void;
@@ -45,6 +48,8 @@ const Sparkles = () => (
 );
 
 export default function Landing({ onPickMode }: LandingProps) {
+  const [legalType, setLegalType] = useState<"terms" | "privacy" | "refund" | null>(null);
+
   return (
     <section className="mobile-scroll-page relative min-h-dvh w-full bg-gradient-cream pb-[calc(2rem_+_env(safe-area-inset-bottom))]">
       <Sparkles />
@@ -53,10 +58,15 @@ export default function Landing({ onPickMode }: LandingProps) {
       <div className="pointer-events-none absolute -right-20 bottom-20 h-72 w-72 rounded-full bg-glow blur-2xl" />
 
       {/* Top brand */}
-      <header className="relative z-10 flex items-center justify-between px-6 pt-6 md:px-12">
-        <div className="font-pixel text-xs text-accent md:text-sm">T&C ♥</div>
-        <div className="rounded-full border border-border bg-card/70 px-3 py-1 font-pixel text-[10px] text-foreground/70 backdrop-blur">
-          18+ ONLY
+      <header className="relative z-50 flex items-center justify-between px-6 pt-6 md:px-12">
+        <div className="flex-1 font-pixel text-xs text-accent md:text-sm">T&C ♥</div>
+        <div className="flex-1 flex justify-center">
+          <Profile />
+        </div>
+        <div className="flex-1 flex justify-end">
+          <div className="rounded-full border border-border bg-card/70 px-3 py-1 font-pixel text-[10px] text-foreground/70 backdrop-blur">
+            18+ ONLY
+          </div>
         </div>
       </header>
 
@@ -136,6 +146,34 @@ export default function Landing({ onPickMode }: LandingProps) {
         <p className="mt-14 font-script text-xl text-muted-foreground">
           pick a side · the night begins
         </p>
+
+        {/* Footer */}
+        <footer className="mt-20 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 opacity-60 transition-opacity hover:opacity-100 pb-4">
+          <button 
+            onClick={() => setLegalType("terms")}
+            className="text-[10px] font-pixel tracking-wider hover:text-primary"
+          >
+            Terms & Conditions
+          </button>
+          <button 
+            onClick={() => setLegalType("privacy")}
+            className="text-[10px] font-pixel tracking-wider hover:text-primary"
+          >
+            Privacy Policy
+          </button>
+          <button 
+            onClick={() => setLegalType("refund")}
+            className="text-[10px] font-pixel tracking-wider hover:text-primary"
+          >
+            Cancellations & Refund
+          </button>
+        </footer>
+
+        <LegalModals 
+          type={legalType} 
+          isOpen={!!legalType} 
+          onClose={() => setLegalType(null)} 
+        />
       </div>
     </section>
   );

@@ -11,6 +11,7 @@ import gameWasted from "@/assets/lets-get-wasted.webp";
 import { COUPLE_GAMES, Mode, PARTY_GAMES } from "@/lib/gameTypes";
 import { useGame } from "@/state/GameContext";
 import { Switch } from "@/components/ui/switch";
+import Profile from "@/components/Profile";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -149,82 +150,72 @@ export default function GameDiscovery({ mode, onBack, onPickGame }: Props) {
     >
       {/* Sticky viewport */}
       <div className="sticky top-0 h-dvh w-full overflow-hidden">
-        {/* Back button */}
-        <button
-          onClick={onBack}
-          className={`absolute left-3 top-4 z-40 rounded-full border px-3 py-2 font-pixel text-[9px] backdrop-blur transition-all hover:scale-105 sm:left-4 sm:px-4 sm:text-[10px] ${
-            isAdult
-              ? "border-white/15 bg-white/10 text-white/75 hover:text-white"
-              : "border-border bg-card/80 text-foreground/70 hover:text-foreground"
-          }`}
-        >
-          ← Modes
-        </button>
+        {/* Top Header Layer */}
+        <header className="absolute inset-x-0 top-4 z-[60] flex items-center justify-between px-3 sm:px-6">
+          {/* Back button */}
+          <div className="flex-1">
+            <button
+              onClick={onBack}
+              className={`rounded-full border px-3 py-2 font-pixel text-[9px] backdrop-blur transition-all hover:scale-105 sm:text-[10px] ${
+                isAdult
+                  ? "border-white/15 bg-white/10 text-white/75 hover:text-white"
+                  : "border-border bg-card/80 text-foreground/70 hover:text-foreground"
+              }`}
+            >
+              ← Modes
+            </button>
+          </div>
+
+          {/* Profile - Center */}
+          <div className="flex-1 flex justify-center">
+            <Profile />
+          </div>
+
+          {/* Tone Toggle - Right */}
+          <div className="flex-1 flex justify-end">
+            <div
+              className={`flex items-center gap-2 rounded-full border shadow-soft backdrop-blur transition-all hover:scale-[1.02] ${
+                isAdult
+                  ? "border-rose-300/40 bg-black/35 text-white"
+                  : "border-border bg-card/85 text-foreground"
+              } px-2 py-1.5 sm:px-4 sm:py-2`}
+            >
+              <span className="hidden font-pixel text-[9px] uppercase tracking-wider lg:block">
+                {isAdult ? "spice it up 🔥" : "stay Playful ✨"}
+              </span>
+              <span className="font-pixel text-[7px] uppercase tracking-wider lg:hidden">
+                {isAdult ? "18+" : "Light"}
+              </span>
+              <Switch
+                checked={isAdult}
+                onCheckedChange={toggleTone}
+                className={`transition-colors ${
+                  isAdult 
+                    ? "data-[state=checked]:bg-rose-500 border-rose-400/50" 
+                    : "data-[state=unchecked]:bg-secondary"
+                } h-5 w-9 sm:h-6 sm:w-11 [&>span]:h-4 [&>span]:w-4 sm:[&>span]:h-5 sm:[&>span]:w-5`}
+              />
+            </div>
+          </div>
+        </header>
 
         {/* Top progress bar */}
-        <div className="absolute left-0 right-0 top-0 z-30 h-1 bg-secondary">
+        <div className="absolute left-0 right-0 top-0 z-30 h-1 bg-secondary/50">
           <div
             ref={progressBarRef}
-            className="h-full origin-left bg-gradient-romance"
+            className="h-full origin-left bg-gradient-romance shadow-[0_0_8px_rgba(239,77,112,0.5)]"
             style={{ transform: "scaleX(0)" }}
           />
         </div>
 
-        {/* Section label */}
-        <div className="absolute right-3 top-4 z-30 hidden sm:block sm:right-4">
-          <div className={`rounded-full border px-3 py-1.5 font-pixel text-[8px] backdrop-blur sm:px-4 sm:text-[9px] ${
+        {/* Section label (Desktop only, moved down slightly) */}
+        <div className="absolute right-6 top-20 z-30 hidden lg:block">
+          <div className={`rounded-full border px-4 py-1.5 font-pixel text-[9px] backdrop-blur ${
             isAdult
               ? "border-white/15 bg-white/10 text-white/75"
               : "border-border bg-card/80 text-foreground/70"
           }`}>
             ✦ {current.num} / {String(games.length).padStart(2, "0")} ✦ {mode === "couple" ? "COUPLE" : "PARTY"}
-          </div>
-        </div>
-
-        <div className="absolute right-3 top-4 z-40 sm:hidden">
-          <div
-            className={`flex items-center gap-2 rounded-full border px-2 py-1 shadow-soft backdrop-blur ${
-              isAdult
-                ? "border-rose-300/40 bg-black/35 text-white"
-                : "border-border bg-card/85 text-foreground"
-            }`}
-          >
-            <span className="font-pixel text-[7px] uppercase tracking-wider">
-              {isAdult ? "18+" : "Light"}
-            </span>
-            <Switch
-              checked={isAdult}
-              onCheckedChange={toggleTone}
-              className={`h-5 w-9 transition-colors [&>span]:h-4 [&>span]:w-4 ${
-                isAdult
-                  ? "data-[state=checked]:bg-rose-500 border-rose-400/50"
-                  : "data-[state=unchecked]:bg-secondary"
-              }`}
-            />
-          </div>
-        </div>
-
-        {/* Tone Toggle */}
-        <div className="absolute left-1/2 top-4 z-40 hidden -translate-x-1/2 sm:block">
-          <div
-            className={`flex min-w-[14.5rem] items-center justify-between gap-3 rounded-full border px-4 py-2 shadow-soft backdrop-blur transition-all hover:scale-[1.02] sm:min-w-[16rem] ${
-              isAdult
-                ? "border-rose-300/40 bg-black/35 text-white"
-                : "border-border bg-card/85 text-foreground"
-            }`}
-          >
-            <span className="font-pixel text-[8px] sm:text-[9px] uppercase tracking-wider">
-              {isAdult ? "spice it up " : "stay Playful "}
-            </span>
-            <Switch
-              checked={isAdult}
-              onCheckedChange={toggleTone}
-              className={`transition-colors ${
-                isAdult 
-                  ? "data-[state=checked]:bg-rose-500 border-rose-400/50" 
-                  : "data-[state=unchecked]:bg-secondary"
-              }`}
-            />
           </div>
         </div>
 
@@ -340,7 +331,7 @@ export default function GameDiscovery({ mode, onBack, onPickGame }: Props) {
         </div>
 
         {/* Game dot indicators */}
-        <div className="discovery-dots absolute left-1/2 z-30 flex -translate-x-1/2 gap-2">
+        <div className="discovery-dots absolute left-1/2 bottom-8 z-30 flex -translate-x-1/2 gap-2">
           {games.map((g, i) => (
             <div
               key={g.id}

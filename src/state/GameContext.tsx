@@ -25,6 +25,7 @@ type Ctx = {
   user: User | null;
   sessionCount: number;
   hasActivePass: boolean;
+  passExpiry: Date | null;
   isLoadingStats: boolean;
   showAuth: boolean;
   showPaywall: boolean;
@@ -40,6 +41,7 @@ type Ctx = {
   resetAll: () => void;
   recordSession: (gameId: string, mode: Mode, playersCount: number) => Promise<void>;
   refreshStats: () => Promise<void>;
+  logout: () => Promise<void>;
 };
 
 const GameContext = createContext<Ctx | null>(null);
@@ -65,6 +67,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [sessionCount, setSessionCount] = useState(0);
   const [hasActivePass, setHasActivePass] = useState(false);
+  const [passExpiry, setPassExpiry] = useState<Date | null>(null);
   const [isLoadingStats, setIsLoadingStats] = useState(true);
   const [showAuth, setShowAuth] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
@@ -95,6 +98,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     if (!user) {
       setSessionCount(0);
       setHasActivePass(false);
+      setPassExpiry(null);
       setIsLoadingStats(false);
       return;
     }
@@ -117,9 +121,12 @@ export function GameProvider({ children }: { children: ReactNode }) {
         .eq('user_id', user.id)
         .eq('status', 'active')
         .gt('expires_at', new Date().toISOString())
+        .order('expires_at', { ascending: false })
         .limit(1);
 
-      setHasActivePass((passes && passes.length > 0) || false);
+      const active = (passes && passes.length > 0) || false;
+      setHasActivePass(active);
+      setPassExpiry(active ? new Date(passes![0].expires_at) : null);
     } catch (error) {
       console.error("Error fetching stats:", error);
     } finally {
@@ -147,8 +154,9 @@ export function GameProvider({ children }: { children: ReactNode }) {
         },
         (payload) => {
           const newPass = payload.new as { status?: string; expires_at?: string };
-          if (newPass.status === 'active' && new Date(newPass.expires_at) > new Date()) {
+          if (newPass.status === 'active' && new Date(newPass.expires_at!) > new Date()) {
             setHasActivePass(true);
+            setPassExpiry(new Date(newPass.expires_at!));
           }
         }
       )
@@ -225,6 +233,11 @@ export function GameProvider({ children }: { children: ReactNode }) {
     }
   }, [user, sessionCount]);
 
+  const logout = useCallback(async () => {
+    await supabase.auth.signOut();
+    resetAll();
+  }, [resetAll]);
+
   const value = useMemo(
     () => ({ 
       screen, 
@@ -232,6 +245,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       user,
       sessionCount,
       hasActivePass,
+      passExpiry,
       isLoadingStats,
       showAuth,
       showPaywall,
@@ -246,9 +260,10 @@ export function GameProvider({ children }: { children: ReactNode }) {
       resetScores, 
       resetAll,
       recordSession,
-      refreshStats
+      refreshStats,
+      logout
     }),
-    [screen, players, user, sessionCount, hasActivePass, isLoadingStats, showAuth, showPaywall, tone, go, setPlayersFromNames, addScore, resetScores, resetAll, recordSession, refreshStats, toggleTone]
+    [screen, players, user, sessionCount, hasActivePass, passExpiry, isLoadingStats, showAuth, showPaywall, tone, go, setPlayersFromNames, addScore, resetScores, resetAll, recordSession, refreshStats, toggleTone, logout]
   );
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
