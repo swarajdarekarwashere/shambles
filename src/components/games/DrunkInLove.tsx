@@ -197,8 +197,9 @@ export default function DrunkInLove({ mode, onExit, onFinish }: Props) {
       setActiveTile(null);
       setTurnIdx((v) => v + 1);
     } else if (effect?.kind === "back") {
-      // Move token backwards visibly — handled by useEffect above
-      const backTo = Math.max(0, (positions[currentPlayer.id] ?? 0) - effect.n);
+      // Move back from the exact tile whose card is open, then store that as
+      // the player's next starting position.
+      const backTo = Math.max(0, activeTile - effect.n);
       setActiveTile(null);
       // Small delay so the modal closes before token moves
       window.setTimeout(() => setPendingBack({ playerId: currentPlayer.id, to: backTo }), 150);

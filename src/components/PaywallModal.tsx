@@ -13,10 +13,36 @@ interface PaywallModalProps {
 
 export default function PaywallModal({ isOpen, userId }: PaywallModalProps) {
   const [loading, setLoading] = useState(false);
+  const [pricing, setPricing] = useState({
+    amount: 3000,
+    currency: 'INR',
+    display: '₹30',
+    symbol: '₹'
+  });
   const { refreshStats, setShowPaywall } = useGame();
 
   useEffect(() => {
-    // Load Razorpay Script
+    // 1. Detect Location & Pricing
+    const detectPricing = async () => {
+      try {
+        const res = await fetch('https://ipapi.co/json/');
+        const data = await res.json();
+        
+        if (data.country === 'US') {
+          setPricing({ amount: 200, currency: 'USD', display: '$2', symbol: '$' });
+        } else if (data.country === 'GB') {
+          setPricing({ amount: 200, currency: 'GBP', display: '£2', symbol: '£' });
+        } else {
+          setPricing({ amount: 3000, currency: 'INR', display: '₹30', symbol: '₹' });
+        }
+      } catch (err) {
+        console.error("Location detection failed, defaulting to INR", err);
+      }
+    };
+    
+    if (isOpen) detectPricing();
+
+    // 2. Load Razorpay Script
     const script = document.createElement("script");
     script.src = "https://checkout.razorpay.com/v1/checkout.js";
     script.async = true;
@@ -27,7 +53,7 @@ export default function PaywallModal({ isOpen, userId }: PaywallModalProps) {
         document.body.removeChild(script);
       }
     };
-  }, []);
+  }, [isOpen]);
 
   const handlePayment = async () => {
     if (loading) return;
@@ -37,8 +63,9 @@ export default function PaywallModal({ isOpen, userId }: PaywallModalProps) {
       // 1. Create order via Supabase Edge Function
       const { data, error } = await supabase.functions.invoke("create-razorpay-order", {
         body: { 
-          amount: 3000, 
-          userId: userId // Pass the userId here!
+          amount: pricing.amount, 
+          currency: pricing.currency,
+          userId: userId 
         },
       });
 
@@ -59,9 +86,6 @@ export default function PaywallModal({ isOpen, userId }: PaywallModalProps) {
         },
         handler: async function (response: any) {
           toast.success("Payment successful! Unlocking your games...");
-          
-          // Fallback: Manually refresh stats to check for the new pass
-          // and close the modal immediately for better UX
           await refreshStats();
           setShowPaywall(false);
           setLoading(false);
@@ -111,13 +135,13 @@ export default function PaywallModal({ isOpen, userId }: PaywallModalProps) {
                 You're on a roll! 🔥
               </h2>
               <p className="text-lg text-muted-foreground font-medium">
-                Get unlimited access to ALL games for just <span className="text-primary font-bold">₹30</span>
+                Get unlimited access to ALL games for just <span className="text-primary font-bold">{pricing.display}</span>
               </p>
             </div>
 
             <div className="py-8 space-y-8">
               <div className="bg-secondary/20 p-8 rounded-3xl border-2 border-dashed border-primary/30 flex flex-col items-center gap-2">
-                <span className="text-5xl font-bold text-primary">₹30</span>
+                <span className="text-5xl font-bold text-primary">{pricing.display}</span>
                 <span className="text-sm font-semibold text-muted-foreground bg-primary/10 px-4 py-1 rounded-full uppercase tracking-wider">Valid for 24 Hours</span>
               </div>
 

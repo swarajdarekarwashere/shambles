@@ -20,23 +20,22 @@ const BOARD_49: BoardCfg = {
   src: board49,
   size: 7,
   total: 49,
-  gridLeft: 0.01, gridRight: 0.99, gridTop: 0.215, gridBottom: 0.915,
+  gridLeft: 0.02, gridRight: 0.98, gridTop: 0.195, gridBottom: 0.92,
   jumps: {
+    2:  { to: 15, kind: "ladder", msg: "Ladder up! Climb to 15 🪜" },
     4:  { to: 18, kind: "ladder", msg: "Ladder up! Climb to 18 🪜" },
-    8:  { to: 36, kind: "ladder", msg: "Left column ladder! Soar to 36 🪜" },
-    9:  { to: 16, kind: "ladder", msg: "Sneaky climb to 16 ✨" },
-    29: { to: 15, kind: "shot",   msg: "Snake bite! Slide to 15 🐍" },
-    32: { to: 11, kind: "shot",   msg: "Slipped all the way down to 11 🥃" },
+    28: { to: 42, kind: "ladder", msg: "Left column ladder! Soar to 42 🪜" },
+    29: { to: 1,  kind: "shot",   msg: "Snake bite! Slide to 1 🐍" },
     47: { to: 25, kind: "shot",   msg: "So close! Down to 25 🐍" },
   },
 };
 
-// Boustrophedon: tile 1 at bottom-right, going LEFT; row above goes RIGHT, etc.
+// The artwork numbers every row right-to-left: 1, 8, 15, ... are in the rightmost column.
 function tileCenterPercent(tileIdx0: number, cfg: BoardCfg) {
   const N = cfg.size;
   const fromBottom = Math.floor(tileIdx0 / N);
   const within = tileIdx0 % N;
-  const col = fromBottom % 2 === 0 ? N - 1 - within : within;
+  const col = N - 1 - within;
   const row = N - 1 - fromBottom;
   const cellW = (cfg.gridRight - cfg.gridLeft) / N;
   const cellH = (cfg.gridBottom - cfg.gridTop) / N;
@@ -114,7 +113,8 @@ export default function ShotsAndLadders({ onExit, onFinish }: Props) {
   const closeEvent = () => {
     if (!pendingJump) return;
     const { playerId, to, kind } = pendingJump;
-    setPos((p) => ({ ...p, [playerId]: to - 1 }));
+    const destination = Math.max(0, Math.min(to - 1, cfg.total - 1));
+    setPos((p) => ({ ...p, [playerId]: destination }));
     if (kind === "ladder") addScore(playerId, 1);
     setPendingJump(null);
     setTurnIdx((t) => t + 1);

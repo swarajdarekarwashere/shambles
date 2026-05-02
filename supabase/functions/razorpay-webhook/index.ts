@@ -46,9 +46,10 @@ serve(async (req) => {
     const orderId = payment.order_id
     const paymentId = payment.id
     const amount = payment.amount
+    const currency = payment.currency // Extract currency!
     const userId = payment.notes?.user_id
 
-    console.log("Verified event:", event, "Order:", orderId, "User:", userId);
+    console.log("Verified event:", event, "Order:", orderId, "User:", userId, "Currency:", currency);
 
     const supabase = createClient(SUPABASE_URL!, SUPABASE_SERVICE_ROLE_KEY!)
 
@@ -59,6 +60,7 @@ serve(async (req) => {
       razorpay_payment_id: paymentId,
       user_id: userId,
       payload: payload,
+      currency: currency, // Log currency!
     })
 
     if (logError) console.error("Error logging webhook:", logError);
@@ -80,6 +82,7 @@ serve(async (req) => {
         razorpay_order_id: orderId,
         razorpay_payment_id: paymentId,
         amount_paid: amount,
+        currency: currency, // Save currency!
         expires_at: expiresAt.toISOString(),
         status: 'active'
       })
@@ -88,6 +91,12 @@ serve(async (req) => {
         console.error("Error creating day pass:", passError);
         return new Response(JSON.stringify({ error: 'Failed to create pass' }), { status: 500 })
       }
+
+      // 4. Mark webhook as processed
+      await supabase
+        .from('razorpay_webhooks')
+        .update({ processed: true })
+        .eq('razorpay_payment_id', paymentId);
     }
 
     return new Response(JSON.stringify({ received: true }), { status: 200 })
