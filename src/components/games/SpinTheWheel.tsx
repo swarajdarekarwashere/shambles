@@ -2,7 +2,7 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useGame } from "@/state/GameContext";
 import bgWheel from "@/assets/wheel-bg.jpg";
-import wheelImg from "@/assets/wheel-spin.png";
+import wheelImg from "@/assets/wheel-spin.webp";
 import pointerImg from "@/assets/wheel-pointer.png";
 
 interface Props {
