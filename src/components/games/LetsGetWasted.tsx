@@ -158,7 +158,7 @@ const TILES: Tile[] = [
     label: "Give 5 to Someone",
     kind: "bonus",
     score: 1,
-    message: "Assign 5 sips, split across players however you want. Gain 1 point."
+    message: "Assign 5 sips, Drink It quick. Gain 1 point."
   },
 
   // ─── ROW 3: Third row, LEFT → RIGHT ───
@@ -198,7 +198,7 @@ const TILES: Tile[] = [
     x: 60.3, y: 49.2,
     label: "Post a Story",
     kind: "truth",
-    message: "Post something embarrassing to your Instagram/WhatsApp story right now, OR tell the group a story worth posting."
+    message: "Post something embarrassing to your Instagram/WhatsApp story right now"
   },
   {
     x: 70.5, y: 49.2,
@@ -264,7 +264,7 @@ const TILES: Tile[] = [
     x: 40.0, y: 64.2,
     label: "Spin the Bottle",
     kind: "truth",
-    message: "Spin the bottle (use any bottle nearby). Whoever it lands on must ask you a question — you MUST answer honestly."
+    message: "Spin the bottle (use any bottle nearby). Whoever it lands on must ask you a question — you MUST answer honestly.and both drink"
   },
   {
     x: 29.8, y: 64.2,
@@ -295,13 +295,13 @@ const TILES: Tile[] = [
 
   // ─── ROW 5: Fifth row, LEFT → RIGHT ───
   {
-    x: 9.7, y: 79.0,
+    x: 9.7, y: 76.8,
     label: "Slap the butt",
     kind: "truth",
     message: "slap the butt of the person to your right . and share your 1 glass sip with them "
   },
   {
-    x: 20.1, y: 78.8,
+    x: 20.1, y: 76.8,
     label: "Selfie",
     kind: "bonus",
     score: 1,
@@ -454,11 +454,28 @@ export default function LetsGetWasted({ onExit, onFinish }: Props) {
     gameState?.finishedOrder ?? []
   );
 
+  // Juice State
+  const [isShaking, setIsShaking] = useState(false);
+  const [flashColor, setFlashColor] = useState<string | null>(null);
+  const [showBurst, setShowBurst] = useState(false);
+
   const finishedIds = useMemo(() => new Set(finishedOrder), [finishedOrder]);
+
+  const tileGroups = useMemo(() => {
+    const groups: Record<number, string[]> = {};
+    Object.entries(pos).forEach(([playerId, tileIndex]) => {
+      if (!groups[tileIndex]) groups[tileIndex] = [];
+      groups[tileIndex].push(playerId);
+    });
+    return groups;
+  }, [pos]);
 
   const findNextTurnIdx = (from: number, finished = finishedOrder) => {
     if (!players.length) return from;
     const finishedSet = new Set(finished);
+    // If all are finished, just return base
+    if (finishedSet.size >= players.length) return from % players.length;
+
     for (let offset = 0; offset < players.length; offset++) {
       const idx = (from + offset) % players.length;
       if (!finishedSet.has(players[idx].id)) return idx;
@@ -473,14 +490,19 @@ export default function LetsGetWasted({ onExit, onFinish }: Props) {
 
   const current = players[findNextTurnIdx(turnIdx)];
 
-  const tileGroups = useMemo(() => {
-    const map: Record<number, string[]> = {};
-    for (const p of players) {
-      const t = pos[p.id] ?? 0;
-      (map[t] ||= []).push(p.id);
+  const triggerJuice = (kind: TileKind) => {
+    if (kind === "drink" || kind === "penalty") {
+      setIsShaking(true);
+      setFlashColor("rgba(244, 63, 94, 0.3)"); // rose-500
+      setTimeout(() => {
+        setIsShaking(false);
+        setFlashColor(null);
+      }, 600);
+    } else if (kind === "bonus" || kind === "safe") {
+      setFlashColor("rgba(34, 211, 238, 0.2)"); // cyan-400
+      setTimeout(() => setFlashColor(null), 500);
     }
-    return map;
-  }, [players, pos]);
+  };
 
   const roll = () => {
     if (rolling || event || !current || finishedIds.has(current.id)) return;
@@ -507,21 +529,27 @@ export default function LetsGetWasted({ onExit, onFinish }: Props) {
 
     window.setTimeout(() => {
       const tile = TILES[target];
+      triggerJuice(tile.kind);
+
       if (target === FINISH_INDEX) {
         const alreadyFinished = finishedOrder.includes(current.id);
         const finishRank = alreadyFinished ? finishedOrder.indexOf(current.id) + 1 : finishedOrder.length + 1;
         const finishScore = Math.max(1, players.length - finishRank + 1);
+        
         if (!alreadyFinished) {
-          addScore(current.id, finishScore - current.score);
+          addScore(current.id, finishScore);
           setFinishedOrder((order) => [...order, current.id]);
+          setShowBurst(true);
+          setTimeout(() => setShowBurst(false), 2000);
         }
         setEvent({ tile, playerId: current.id, finishRank, finishScore });
         return;
       }
+      
       if (tile.score) addScore(current.id, tile.score);
       setExtraRoll(tile.label === "Roll Again");
       setEvent({ tile, playerId: current.id });
-    }, 350);
+    }, 450);
   };
 
   const closeEvent = () => {
@@ -532,8 +560,7 @@ export default function LetsGetWasted({ onExit, onFinish }: Props) {
     if (tile.moveTo !== undefined) {
       window.setTimeout(() => {
         const from = pos[playerId] ?? 0;
-        const destination =
-          tile.moveTo! < 0 ? from + tile.moveTo! : tile.moveTo!;
+        const destination = tile.moveTo! < 0 ? from + tile.moveTo! : tile.moveTo!;
         const clamped = Math.max(0, Math.min(destination, FINISH_INDEX));
         setPos((p) => ({ ...p, [playerId]: clamped }));
         setTurnIdx((t) => findNextTurnIdx(t + 1));
@@ -542,12 +569,11 @@ export default function LetsGetWasted({ onExit, onFinish }: Props) {
     }
 
     if (pos[playerId] === FINISH_INDEX) {
-      const allFinished =
-        finishedOrder.length >= players.length ||
-        (event.finishRank ?? 0) >= players.length;
-      if (allFinished) {
+      // Check if EVERYONE has finished
+      if (finishedOrder.length >= players.length) {
         window.setTimeout(onFinish, 300);
       } else {
+        // Continue game for those remaining
         setTurnIdx((t) => findNextTurnIdx(t + 1));
       }
       return;
@@ -562,11 +588,46 @@ export default function LetsGetWasted({ onExit, onFinish }: Props) {
   };
 
   return (
-    <section className={`lets-get-wasted-screen relative h-dvh w-full overflow-hidden px-3 ${
+    <section className={`lets-get-wasted-screen relative h-dvh w-full overflow-hidden px-3 transition-all ${
       isAdult
         ? "bg-[radial-gradient(circle_at_50%_0%,#3b061d,#150612_48%,#07030b_100%)]"
         : "bg-[radial-gradient(circle_at_50%_0%,#fef3c7,#fbcfe8_42%,#bae6fd_100%)]"
-    }`}>
+    } ${isShaking ? "animate-shake" : ""}`}>
+
+      {/* Flash Layer */}
+      <AnimatePresence>
+        {flashColor && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{ backgroundColor: flashColor }}
+            className="pointer-events-none absolute inset-0 z-[60] mix-blend-overlay"
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Victory Burst Confetti */}
+      <AnimatePresence>
+        {showBurst && (
+          <div className="pointer-events-none absolute inset-0 z-[100] flex items-center justify-center">
+             {[...Array(30)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ scale: 0, x: 0, y: 0 }}
+                  animate={{ 
+                    scale: [1, 0], 
+                    x: (Math.random() - 0.5) * 600, 
+                    y: (Math.random() - 0.5) * 600,
+                    rotate: 720
+                  }}
+                  transition={{ duration: 1.5, ease: "easeOut" }}
+                  className={`absolute h-4 w-4 rounded-full ${["bg-yellow-400", "bg-rose-400", "bg-cyan-400", "bg-purple-400"][i % 4]}`}
+                />
+              ))}
+          </div>
+        )}
+      </AnimatePresence>
       <header className="lets-get-wasted-header relative z-10 mx-auto flex max-w-4xl items-center justify-between">
         <button
           onClick={onExit}
