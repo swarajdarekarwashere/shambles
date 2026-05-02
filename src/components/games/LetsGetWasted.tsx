@@ -21,6 +21,13 @@ type Tile = {
   adultMessage?: string;
 };
 
+type TileEvent = {
+  tile: Tile;
+  playerId: string;
+  finishRank?: number;
+  finishScore?: number;
+};
+
 const TILES: Tile[] = [
   // ─── ROW 1: Top row, LEFT → RIGHT ───
   {
@@ -203,7 +210,7 @@ const TILES: Tile[] = [
     x: 81.0, y: 49.2,
     label: "Only Blondes Drink",
     kind: "group",
-    message: "Only blonde players drink. If no blondes present, the current player drinks instead."
+    message: "Only blonde players drink. If no blondes present, the one who the group thinks is the most gay drinks."
   },
   {
     x: 91.6, y: 49.2,
@@ -288,10 +295,10 @@ const TILES: Tile[] = [
 
   // ─── ROW 5: Fifth row, LEFT → RIGHT ───
   {
-    x: 8.7, y: 78.8,
-    label: "Welcome to Tipsyland",
-    kind: "drink",
-    message: "You've entered Tipsyland. Take 2 sips to honor the territory."
+    x: 9.7, y: 79.0,
+    label: "Slap the butt",
+    kind: "truth",
+    message: "slap the butt of the person to your right . and share your 1 glass sip with them "
   },
   {
     x: 20.1, y: 78.8,
@@ -359,8 +366,7 @@ const TILES: Tile[] = [
     x: 91.3, y: 94.0,
     label: "Never Have I Ever",
     kind: "truth",
-    score: 5,
-    message: "Final tile! Share one legendary Never Have I Ever. Everyone who has done it drinks. You gain 5 points for making it this far."
+    message: "Share one legendary Never Have I Ever. Everyone who has done it drinks."
   },
   {
     x: 81.4, y: 94.0,
@@ -401,6 +407,12 @@ const TILES: Tile[] = [
     kind: "truth",
     message: "State one completely wrong 'fact' as confidently as possible. The group votes if you sold it — if yes, someone else drinks. If no, you drink 2."
   },
+  {
+    x: 11.0, y: 91.0,
+    label: "Welcome to Tipsyland",
+    kind: "bonus",
+    message: "You made it to Tipsyland. Lock in your arrival place and wait for the rest of the crew."
+  },
 ];
 
 const KIND_COPY: Record<TileKind, { title: string; accent: string }> = {
@@ -429,21 +441,37 @@ function intenseMessage(tile: Tile) {
 export default function LetsGetWasted({ onExit, onFinish }: Props) {
   const { players, addScore, tone, gameState, setGameState } = useGame();
   const isAdult = tone === "adult";
+  const FINISH_INDEX = TILES.length - 1;
   const [pos, setPos] = useState<Record<string, number>>(() =>
     gameState?.pos ?? Object.fromEntries(players.map((p) => [p.id, 0]))
   );
   const [turnIdx, setTurnIdx] = useState(gameState?.turnIdx ?? 0);
   const [die, setDie] = useState<number | null>(null);
   const [rolling, setRolling] = useState(false);
-  const [event, setEvent] = useState<{ tile: Tile; playerId: string } | null>(null);
+  const [event, setEvent] = useState<TileEvent | null>(null);
   const [extraRoll, setExtraRoll] = useState(false);
+  const [finishedOrder, setFinishedOrder] = useState<string[]>(() =>
+    gameState?.finishedOrder ?? []
+  );
+
+  const finishedIds = useMemo(() => new Set(finishedOrder), [finishedOrder]);
+
+  const findNextTurnIdx = (from: number, finished = finishedOrder) => {
+    if (!players.length) return from;
+    const finishedSet = new Set(finished);
+    for (let offset = 0; offset < players.length; offset++) {
+      const idx = (from + offset) % players.length;
+      if (!finishedSet.has(players[idx].id)) return idx;
+    }
+    return from % players.length;
+  };
 
   // Sync with GameContext for persistence
   useEffect(() => {
-    setGameState({ pos, turnIdx });
-  }, [pos, turnIdx, setGameState]);
+    setGameState({ pos, turnIdx, finishedOrder });
+  }, [pos, turnIdx, finishedOrder, setGameState]);
 
-  const current = players[turnIdx % players.length];
+  const current = players[findNextTurnIdx(turnIdx)];
 
   const tileGroups = useMemo(() => {
     const map: Record<number, string[]> = {};
@@ -455,7 +483,7 @@ export default function LetsGetWasted({ onExit, onFinish }: Props) {
   }, [players, pos]);
 
   const roll = () => {
-    if (rolling || event || !current) return;
+    if (rolling || event || !current || finishedIds.has(current.id)) return;
     setRolling(true);
     let n = 0;
     const timer = window.setInterval(() => {
@@ -473,18 +501,25 @@ export default function LetsGetWasted({ onExit, onFinish }: Props) {
   const move = (steps: number) => {
     if (!current) return;
     const cur = pos[current.id] ?? 0;
-    const target = Math.min(cur + steps, TILES.length - 1);
+    const target = Math.min(cur + steps, FINISH_INDEX);
     setPos((p) => ({ ...p, [current.id]: target }));
     setRolling(false);
 
     window.setTimeout(() => {
       const tile = TILES[target];
-      if (tile.score) addScore(current.id, tile.score);
-      if (target === TILES.length - 1) {
-        setEvent({ tile, playerId: current.id });
+      if (target === FINISH_INDEX) {
+        const alreadyFinished = finishedOrder.includes(current.id);
+        const finishRank = alreadyFinished ? finishedOrder.indexOf(current.id) + 1 : finishedOrder.length + 1;
+        const finishScore = Math.max(1, players.length - finishRank + 1);
+        if (!alreadyFinished) {
+          addScore(current.id, finishScore - current.score);
+          setFinishedOrder((order) => [...order, current.id]);
+        }
+        setEvent({ tile, playerId: current.id, finishRank, finishScore });
         return;
       }
-      setExtraRoll(tile.label === "Roll again");
+      if (tile.score) addScore(current.id, tile.score);
+      setExtraRoll(tile.label === "Roll Again");
       setEvent({ tile, playerId: current.id });
     }, 350);
   };
@@ -496,14 +531,25 @@ export default function LetsGetWasted({ onExit, onFinish }: Props) {
 
     if (tile.moveTo !== undefined) {
       window.setTimeout(() => {
-        setPos((p) => ({ ...p, [playerId]: tile.moveTo! }));
-        setTurnIdx((t) => t + 1);
+        const from = pos[playerId] ?? 0;
+        const destination =
+          tile.moveTo! < 0 ? from + tile.moveTo! : tile.moveTo!;
+        const clamped = Math.max(0, Math.min(destination, FINISH_INDEX));
+        setPos((p) => ({ ...p, [playerId]: clamped }));
+        setTurnIdx((t) => findNextTurnIdx(t + 1));
       }, 150);
       return;
     }
 
-    if (pos[playerId] === TILES.length - 1) {
-      window.setTimeout(onFinish, 300);
+    if (pos[playerId] === FINISH_INDEX) {
+      const allFinished =
+        finishedOrder.length >= players.length ||
+        (event.finishRank ?? 0) >= players.length;
+      if (allFinished) {
+        window.setTimeout(onFinish, 300);
+      } else {
+        setTurnIdx((t) => findNextTurnIdx(t + 1));
+      }
       return;
     }
 
@@ -512,7 +558,7 @@ export default function LetsGetWasted({ onExit, onFinish }: Props) {
       return;
     }
 
-    setTurnIdx((t) => t + 1);
+    setTurnIdx((t) => findNextTurnIdx(t + 1));
   };
 
   return (
@@ -645,6 +691,11 @@ export default function LetsGetWasted({ onExit, onFinish }: Props) {
               {event.tile.score && (
                 <p className="mt-3 font-pixel text-[10px] text-emerald-700">
                   +{event.tile.score} point{event.tile.score > 1 ? "s" : ""}
+                </p>
+              )}
+              {event.finishRank && event.finishScore && (
+                <p className="mt-3 font-pixel text-[10px] text-emerald-700">
+                  #{event.finishRank} to Tipsyland · {event.finishScore} finish point{event.finishScore > 1 ? "s" : ""}
                 </p>
               )}
               <button

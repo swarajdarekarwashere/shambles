@@ -201,7 +201,10 @@ export default function SpinTheWheel({ onExit, onFinish }: Props) {
     const categoryIdx = Math.floor(Math.random() * categories.length);
     const taskIdx = Math.floor(Math.random() * categories[categoryIdx].tasks.length);
     
-    const base = (360 - categoryIdx * slice) % 360;
+    // Add random offset within the 45-degree slice (5 to 40 degrees)
+    // to avoid landing exactly on the partition lines
+    const randomOffset = 5 + Math.random() * (slice - 10);
+    const base = (360 - (categoryIdx * slice) - randomOffset) % 360;
     const target = rotation + 360 * 6 + (base - (rotation % 360));
     
     setSpinning(true);
