@@ -74,6 +74,31 @@ export default function SpicyStarters({ onExit, onFinish }: Props) {
   const [filter, setFilter] = useState<Level | "all">("all");
   const [idx, setIdx] = useState(0);
 
+  // 1. Group players into Couples
+  const couples = useMemo(() => {
+    const map: Record<number, string[]> = {};
+    players.forEach((p) => {
+      if (p.coupleId !== undefined) {
+        (map[p.coupleId] ||= []).push(p.id);
+      }
+    });
+    return Object.values(map).filter(ids => ids.length === 2);
+  }, [players]);
+
+  // 2. Determine who is in the spotlight for this specific card index
+  const activeCoupleIdx = idx % Math.max(1, couples.length);
+  const activeCoupleIds = couples[activeCoupleIdx] || [];
+  
+  // To alternate actors, we use the pass count / couples.length
+  const roundNum = Math.floor(idx / Math.max(1, couples.length));
+  const actorIdx = roundNum % 2; // alternates 0, 1, 0, 1
+  
+  const actorId = activeCoupleIds[actorIdx];
+  const partnerId = activeCoupleIds[1 - actorIdx];
+
+  const actor = players.find(p => p.id === actorId);
+  const partner = players.find(p => p.id === partnerId);
+
   const cards = useMemo(
     () => {
       const deck = tone === "adult" ? DECK_ADULT : DECK_NORMAL;
@@ -90,13 +115,15 @@ export default function SpicyStarters({ onExit, onFinish }: Props) {
   const handleSwipe = (_: unknown, info: PanInfo) => {
     if (Math.abs(info.offset.x) < 100) return;
     if (info.offset.x > 0) {
-      // Agree — score everyone (mutual)
-      players.forEach((p) => addScore(p.id, 1));
+      // In Spotlight mode, the couple doing the task gets the points
+      activeCoupleIds.forEach(id => addScore(id, 1));
     }
     setTimeout(next, 200);
   };
 
   if (!card) {
+    // ... (rest of empty deck UI)
+    // ... (rest of the empty deck UI)
     return (
       <section className="relative min-h-dvh w-full bg-gradient-cream px-6 pb-28 pt-6">
         <button
@@ -179,6 +206,24 @@ export default function SpicyStarters({ onExit, onFinish }: Props) {
         ))}
       </div>
 
+      {/* Couple Spotlight Header */}
+      {actor && partner && (
+        <div className="relative z-10 mx-auto mt-4 flex flex-col items-center justify-center gap-1">
+          <div className="flex items-center gap-2">
+            <span 
+              className="h-2 w-2 rounded-full ring-2 ring-white/50" 
+              style={{ background: actor.color }} 
+            />
+            <span className="font-pixel text-[9px] uppercase tracking-[0.2em] text-foreground opacity-80">
+              {actor.name}'s turn (with {partner.name})
+            </span>
+          </div>
+          <p className="font-script text-2xl text-accent opacity-80">
+            Couple Spotlight
+          </p>
+        </div>
+      )}
+
       {/* Card stack */}
       <div className="relative z-10 mx-auto mt-6 h-[58dvh] w-full max-w-sm">
         {/* Background card hints */}
@@ -189,7 +234,7 @@ export default function SpicyStarters({ onExit, onFinish }: Props) {
           <div className="absolute inset-x-4 top-2 h-full -rotate-[2deg] rounded-3xl bg-card shadow-card" />
         )}
 
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
           <motion.div
             key={card.id}
             drag="x"
@@ -206,9 +251,23 @@ export default function SpicyStarters({ onExit, onFinish }: Props) {
             <span className={`relative rounded-sm px-3 py-1 font-pixel text-[9px] tracking-widest ${LEVEL_META[card.level].chip}`}>
               {LEVEL_META[card.level].tag}
             </span>
-            <p className="text-center font-serifd text-3xl leading-tight md:text-4xl">
-              {card.prompt}
-            </p>
+            
+            <div className="space-y-4">
+               {actor && partner && (
+                 <p className="font-script text-2xl opacity-60 text-center">
+                   {actor.name},
+                 </p>
+               )}
+              <p className="text-center font-serifd text-3xl leading-tight md:text-4xl">
+                {card.prompt}
+              </p>
+              {actor && partner && (
+                 <p className="font-script text-xl opacity-40 text-center">
+                   ...tell {partner.name}
+                 </p>
+               )}
+            </div>
+
             <div className="flex w-full items-center justify-between font-serifi text-xs opacity-80">
               <span>← skip</span>
               <span className="font-script text-2xl leading-none">swipe</span>
@@ -228,12 +287,12 @@ export default function SpicyStarters({ onExit, onFinish }: Props) {
         </button>
         <button
           onClick={() => {
-            players.forEach((p) => addScore(p.id, 1));
+            activeCoupleIds.forEach(id => addScore(id, 1));
             next();
           }}
           className="rounded-full bg-gradient-romance px-6 py-3 font-pixel text-[10px] text-primary-foreground shadow-glow"
         >
-          We Agree +1
+          {actor ? `${actor.name} did it! +1` : "We Agree +1"}
         </button>
         <button
           onClick={onFinish}

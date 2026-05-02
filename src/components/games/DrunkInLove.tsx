@@ -109,12 +109,25 @@ export default function DrunkInLove({ mode, onExit, onFinish }: Props) {
   useEffect(() => {
     if (!pendingBack) return;
     const { playerId, to } = pendingBack;
+    
     setPositions((s) => ({ ...s, [playerId]: to }));
     setPendingBack(null);
-    // Advance turn after a brief moment so the player can see the token move back
-    const t = window.setTimeout(() => setTurnIdx((v) => v + 1), 700);
+
+    const newTile = tiles[to];
+    
+    // After moving back, check if the new position has a task
+    const t = window.setTimeout(() => {
+      if (newTile.effect?.kind === "safe" || to === 0) {
+        // If safe or start, just end the turn
+        setTurnIdx((v) => v + 1);
+      } else {
+        // Otherwise, make them do the task at the new position!
+        setActiveTile(to);
+      }
+    }, 850); 
+
     return () => window.clearTimeout(t);
-  }, [pendingBack]);
+  }, [pendingBack, tiles]);
 
   // ── Roll logic ───────────────────────────────────────────────────────────
   const handleRoll = () => {

@@ -28,24 +28,45 @@ export default function IntimacyCards({ onExit, onFinish }: Props) {
   const [opened, setOpened] = useState(false);
 
   const envelope = ENVELOPES[idx % ENVELOPES.length];
-  // Couple naming: pair players with same coupleId
-  const couples: { ids: string[]; label: string }[] = [];
-  const seen = new Set<number>();
-  players.forEach((p) => {
-    if (p.coupleId == null || seen.has(p.coupleId)) return;
-    seen.add(p.coupleId);
-    const partners = players.filter((x) => x.coupleId === p.coupleId);
-    couples.push({ ids: partners.map((x) => x.id), label: partners.map((x) => x.name).join(" & ") });
-  });
-  const coupleIdx = idx % Math.max(1, couples.length);
-  const activeCouple = couples[coupleIdx];
+  
+  // 1. Group players into Couples
+  const couples = useMemo(() => {
+    const map: Record<number, string[]> = {};
+    players.forEach((p) => {
+      if (p.coupleId !== undefined) {
+        (map[p.coupleId] ||= []).push(p.id);
+      }
+    });
+    return Object.values(map).filter(ids => ids.length === 2);
+  }, [players]);
+
+  // 2. Determine who is in the spotlight for this specific envelope index
+  const activeCoupleIdx = idx % Math.max(1, couples.length);
+  const activeCoupleIds = couples[activeCoupleIdx] || [];
+  
+  // To alternate actors, we use the pass count / couples.length
+  const roundNum = Math.floor(idx / Math.max(1, couples.length));
+  const actorIdx = roundNum % 2; // alternates 0, 1, 0, 1
+  
+  const actorId = activeCoupleIds[actorIdx];
+  const partnerId = activeCoupleIds[1 - actorIdx];
+
+  const actor = players.find(p => p.id === actorId);
+  const partner = players.find(p => p.id === partnerId);
 
   const score = (did: boolean) => {
-    if (did && activeCouple) activeCouple.ids.forEach((id) => addScore(id, 2));
+    if (did) {
+      // In Spotlight mode, the couple doing the task gets the points
+      activeCoupleIds.forEach(id => addScore(id, 2));
+    }
+
     setOpened(false);
     const next = idx + 1;
     setIdx(next);
-    if (next >= Math.max(couples.length, 1) * 3) {
+
+    // End game logic: Each couple gets 2 turns (1 as actor each)
+    const totalRounds = Math.max(couples.length, 1) * 2;
+    if (next >= totalRounds) {
       setTimeout(onFinish, 250);
     }
   };
@@ -69,9 +90,10 @@ export default function IntimacyCards({ onExit, onFinish }: Props) {
         <p className="-mt-1 font-serifi text-[11px] tracking-[0.4em] text-pink-100/60">— for your eyes only —</p>
       </div>
 
-      {activeCouple && (
-        <div className="relative z-10 mx-auto mt-2 flex max-w-md items-center justify-center gap-2">
-          <p className="font-script text-4xl text-pink-100">for {activeCouple.label}</p>
+      {actor && partner && (
+        <div className="relative z-10 mx-auto mt-2 flex flex-col items-center justify-center">
+          <p className="font-script text-3xl text-pink-100">{actor.name},</p>
+          <p className="font-pixel text-[8px] uppercase tracking-widest text-pink-200/60">surprise {partner.name}</p>
         </div>
       )}
 
@@ -116,7 +138,9 @@ export default function IntimacyCards({ onExit, onFinish }: Props) {
             className="game-bottom-controls fixed inset-x-0 z-30 flex justify-center gap-2 px-4"
           >
             <button onClick={() => score(false)} className="rounded-full border-2 border-white/30 bg-white/10 px-5 py-3 font-pixel text-[10px] text-white/80 backdrop-blur">Maybe Later</button>
-            <button onClick={() => score(true)} className="rounded-full bg-gradient-romance px-5 py-3 font-pixel text-[10px] text-primary-foreground shadow-glow">We Did It +2</button>
+            <button onClick={() => score(true)} className="rounded-full bg-gradient-romance px-5 py-3 font-pixel text-[10px] text-primary-foreground shadow-glow">
+              {actor ? `${actor.name} did it! +2` : "We Did It +2"}
+            </button>
           </motion.div>
         )}
       </AnimatePresence>

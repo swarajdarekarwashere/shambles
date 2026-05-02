@@ -13,6 +13,8 @@ import LetsGetWasted from "@/components/games/LetsGetWasted";
 import IntimacyCards from "@/components/games/IntimacyCards";
 import WinnerScreen from "@/components/WinnerScreen";
 import Scoreboard from "@/components/Scoreboard";
+import GameRulesModal from "@/components/GameRulesModal";
+import { PARTY_GAMES, COUPLE_GAMES, GameMeta } from "@/lib/gameTypes";
 
 const variants = {
   initial: { opacity: 0, y: 30, scale: 0.98 },
@@ -33,6 +35,8 @@ export default function ScreenRouter() {
     setShowPaywall 
   } = useGame();
 
+  const [pendingGame, setPendingGame] = useState<{ id: string; mode: string } | null>(null);
+
   const handlePickGame = (gameId: string) => {
     if (!user) {
       setShowAuth(true);
@@ -40,11 +44,20 @@ export default function ScreenRouter() {
     }
 
     if (screen.name === "discovery") {
-      if (sessionCount === 0 || hasActivePass) {
-        go({ name: "game", mode: screen.mode, gameId });
-      } else {
-        setShowPaywall(true);
-      }
+      setPendingGame({ id: gameId, mode: screen.mode });
+    }
+  };
+
+  const startPendingGame = () => {
+    if (!pendingGame) return;
+    
+    const { id, mode } = pendingGame;
+    setPendingGame(null);
+
+    if (sessionCount === 0 || hasActivePass) {
+      go({ name: "game", mode: mode as any, gameId: id });
+    } else {
+      setShowPaywall(true);
     }
   };
 
@@ -135,6 +148,14 @@ export default function ScreenRouter() {
   // Stable key for transition
   const transitionKey = screen.name === 'game' ? `game-${screen.gameId}` : screen.name;
 
+  // Find the metadata for the game about to start
+  const selectedGameMeta = useMemo(() => {
+    if (!pendingGame) return null;
+    const all = [...PARTY_GAMES, ...COUPLE_GAMES];
+    // Find the one that matches both ID and Mode (if specific) or just ID
+    return all.find(g => g.id === pendingGame.id && (g.mode === pendingGame.mode || g.mode === 'both'));
+  }, [pendingGame]);
+
   return (
     <main className="relative w-full">
       {isDiscovery ? (
@@ -157,6 +178,13 @@ export default function ScreenRouter() {
         </AnimatePresence>
       )}
       {showHud && <Scoreboard />}
+
+      <GameRulesModal 
+        game={selectedGameMeta || null}
+        isOpen={!!pendingGame}
+        onClose={() => setPendingGame(null)}
+        onStart={startPendingGame}
+      />
     </main>
   );
 }
