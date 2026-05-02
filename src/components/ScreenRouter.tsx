@@ -1,3 +1,4 @@
+import { useState, useMemo, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useGame } from "@/state/GameContext";
 import Landing from "@/components/Landing";

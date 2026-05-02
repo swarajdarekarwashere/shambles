@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useGame } from "@/state/GameContext";
 import envelopeArt from "@/assets/game-intimacy-art.png";
