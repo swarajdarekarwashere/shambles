@@ -13,7 +13,6 @@ type BoardCfg = {
   src: string;
   size: number;
   total: number;
-  // fractional bounding box of the playable grid within the image
   gridLeft: number; gridRight: number; gridTop: number; gridBottom: number;
   jumps: Record<number, { to: number; kind: "ladder" | "shot"; msg: string }>;
 };
@@ -24,12 +23,17 @@ const BOARD_49: BoardCfg = {
   total: 49,
   gridLeft: 0.01, gridRight: 0.99, gridTop: 0.215, gridBottom: 0.915,
   jumps: {
-    4: { to: 18, kind: "ladder", msg: "Ladder up! Climb to 18 🪜" },
-    9: { to: 16, kind: "ladder", msg: "Sneaky climb to 16 ✨" },
-    14: { to: 21, kind: "ladder", msg: "Up the ladder to 21 🪜" },
-    22: { to: 15, kind: "shot", msg: "Snake bite! Slide to 15 🐍" },
-    32: { to: 26, kind: "shot", msg: "Slipped down to 26 🥃" },
-    47: { to: 39, kind: "shot", msg: "So close! Down to 39 🐍" },
+    // FIX #3: was 14→21 (wrong — tile 14 is a TAKE A SHOT dot, not a ladder base)
+    //         corrected to 8→36 (left column ladder confirmed by image)
+    4:  { to: 18, kind: "ladder", msg: "Ladder up! Climb to 18 🪜" },
+    8:  { to: 36, kind: "ladder", msg: "Left column ladder! Soar to 36 🪜" },
+    9:  { to: 16, kind: "ladder", msg: "Sneaky climb to 16 ✨" },
+    // FIX #4: was 22→15 (tile 22 is empty); snake head confirmed at tile 29
+    29: { to: 15, kind: "shot",   msg: "Snake bite! Slide to 15 🐍" },
+    // FIX #5: was 32→26 (too short, tile 26 is still snake body); tail at 11
+    32: { to: 11, kind: "shot",   msg: "Slipped all the way down to 11 🥃" },
+    // FIX #6: was 47→39 (too short); snake body passes through 25-26, tail at 25
+    47: { to: 25, kind: "shot",   msg: "So close! Down to 25 🐍" },
   },
 };
 
@@ -39,22 +43,21 @@ const BOARD_25: BoardCfg = {
   total: 25,
   gridLeft: 0.02, gridRight: 0.98, gridTop: 0.18, gridBottom: 0.92,
   jumps: {
-    5: { to: 11, kind: "ladder", msg: "Ladder up to 11 🪜" },
+    // FIX #1: was 5→11 (fabricated — tile 5 is empty); corrected to 9→16 (confirmed)
+    9:  { to: 16, kind: "ladder", msg: "Ladder up to 16 🪜" },
     16: { to: 21, kind: "ladder", msg: "Climb to 21 ✨" },
-    12: { to: 2, kind: "shot", msg: "Snake bite! Slide to 2 🐍" },
-    19: { to: 8, kind: "shot", msg: "Down to 8, take a sip 🥃" },
+    12: { to: 2,  kind: "shot",   msg: "Snake bite! Slide to 2 🐍" },
+    19: { to: 8,  kind: "shot",   msg: "Down to 8, take a sip 🥃" },
   },
 };
 
 // Boustrophedon: tile 1 at bottom-right, going LEFT; row above goes RIGHT, etc.
 function tileCenterPercent(tileIdx0: number, cfg: BoardCfg) {
   const N = cfg.size;
-  const fromBottom = Math.floor(tileIdx0 / N); // 0 = bottom row
+  const fromBottom = Math.floor(tileIdx0 / N);
   const within = tileIdx0 % N;
-  // bottom row (fromBottom even): goes right→left, so col = N-1-within
-  // next row (fromBottom odd): goes left→right, so col = within
   const col = fromBottom % 2 === 0 ? N - 1 - within : within;
-  const row = N - 1 - fromBottom; // 0 = top row
+  const row = N - 1 - fromBottom;
   const cellW = (cfg.gridRight - cfg.gridLeft) / N;
   const cellH = (cfg.gridBottom - cfg.gridTop) / N;
   const x = cfg.gridLeft + (col + 0.5) * cellW;
@@ -85,12 +88,28 @@ export default function ShotsAndLadders({ onExit, onFinish }: Props) {
   const [turnIdx, setTurnIdx] = useState(0);
   const [die, setDie] = useState<number | null>(null);
   const [rolling, setRolling] = useState(false);
-  const [event, setEvent] = useState<{ msg: string; kind: string } | null>(null);
+
+  // FIX #7: pendingJump stores the resolved jump so the position update
+  // happens inside closeEvent() instead of a fire-and-forget setTimeout.
+  const [pendingJump, setPendingJump] = useState<{
+    playerId: string;
+    to: number;
+    kind: "ladder" | "shot";
+    msg: string;
+  } | null>(null);
+
+  // FIX #8: reset all positions when the board changes (e.g. screen resize mid-game)
+  useEffect(() => {
+    setPos(Object.fromEntries(players.map((p) => [p.id, 0])));
+    setTurnIdx(0);
+    setDie(null);
+    setPendingJump(null);
+  }, [cfg.total]); // cfg.total changes between 25 and 49
 
   const current = players[turnIdx % players.length];
 
   const roll = () => {
-    if (rolling || event || !current) return;
+    if (rolling || pendingJump || !current) return;
     setRolling(true);
     let n = 0;
     const t = setInterval(() => {
@@ -109,6 +128,8 @@ export default function ShotsAndLadders({ onExit, onFinish }: Props) {
     if (!current) return;
     const cur = pos[current.id] ?? 0;
     const target = Math.min(cur + steps, cfg.total - 1);
+
+    // Move token to the landed tile immediately so the player sees it
     setPos((p) => ({ ...p, [current.id]: target }));
     setRolling(false);
 
@@ -117,27 +138,34 @@ export default function ShotsAndLadders({ onExit, onFinish }: Props) {
       setTimeout(onFinish, 900);
       return;
     }
+
     setTimeout(() => {
       const tileNumber = target + 1;
       const jump = cfg.jumps[tileNumber];
       if (jump) {
-        setEvent({ msg: jump.msg, kind: jump.kind });
-        setTimeout(() => {
-          setPos((p) => ({ ...p, [current.id]: jump.to - 1 }));
-          if (jump.kind === "ladder") addScore(current.id, 1);
-        }, 600);
+        // FIX #7: store the jump; actual position update deferred to closeEvent
+        setPendingJump({
+          playerId: current.id,
+          to: jump.to,
+          kind: jump.kind,
+          msg: jump.msg,
+        });
       } else {
         setTurnIdx((t) => t + 1);
       }
     }, 350);
   };
 
+  // FIX #7: position update + score happen here, only when the player taps Continue
   const closeEvent = () => {
-    setEvent(null);
+    if (!pendingJump) return;
+    const { playerId, to, kind } = pendingJump;
+    setPos((p) => ({ ...p, [playerId]: to - 1 }));
+    if (kind === "ladder") addScore(playerId, 1);
+    setPendingJump(null);
     setTurnIdx((t) => t + 1);
   };
 
-  // Group players that share a tile so tokens don't overlap
   const tileGroups = useMemo(() => {
     const map: Record<number, string[]> = {};
     for (const p of players) {
@@ -230,7 +258,7 @@ export default function ShotsAndLadders({ onExit, onFinish }: Props) {
       <div className="game-bottom-controls fixed inset-x-0 z-30 flex justify-center px-4">
         <button
           onClick={roll}
-          disabled={rolling || !!event}
+          disabled={rolling || !!pendingJump}
           className="flex items-center gap-3 rounded-full bg-gradient-romance px-6 py-3 font-pixel text-[11px] text-primary-foreground shadow-glow enabled:hover:scale-105 disabled:opacity-50"
         >
           <motion.span
@@ -244,14 +272,15 @@ export default function ShotsAndLadders({ onExit, onFinish }: Props) {
         </button>
       </div>
 
+      {/* FIX #9: backdrop click removed — only the Continue button closes the modal */}
       <AnimatePresence>
-        {event && (
+        {pendingJump && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-6 backdrop-blur-sm"
-            onClick={closeEvent}
+            // No onClick here — accidental taps no longer silently advance the turn
           >
             <motion.div
               initial={{ scale: 0.7 }}
@@ -259,13 +288,16 @@ export default function ShotsAndLadders({ onExit, onFinish }: Props) {
               className="w-full max-w-xs rounded-3xl border-[3px] border-pink-300 bg-gradient-to-b from-white to-pink-50 p-6 text-center shadow-2xl"
             >
               <div className="text-6xl drop-shadow-[0_2px_8px_rgba(255,90,150,0.5)]">
-                {event.kind === "ladder" ? "🪜" : "🥃"}
+                {pendingJump.kind === "ladder" ? "🪜" : "🥃"}
               </div>
-              <p className="mt-3 font-pixel text-base text-pink-900">{event.msg}</p>
+              <p className="mt-3 font-pixel text-base text-pink-900">{pendingJump.msg}</p>
               <p className="mt-1 font-script text-3xl text-pink-600">
-                {event.kind === "ladder" ? "lucky you" : "ouch, take a sip"}
+                {pendingJump.kind === "ladder" ? "lucky you" : "ouch, take a sip"}
               </p>
-              <button className="mt-5 w-full rounded-full bg-gradient-romance py-2.5 font-pixel text-[10px] text-primary-foreground shadow-glow">
+              <button
+                onClick={closeEvent}
+                className="mt-5 w-full rounded-full bg-gradient-romance py-2.5 font-pixel text-[10px] text-primary-foreground shadow-glow"
+              >
                 Continue →
               </button>
             </motion.div>
