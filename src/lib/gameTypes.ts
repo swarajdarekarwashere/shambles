@@ -39,7 +39,7 @@ export const PARTY_GAMES: GameMeta[] = [
     tagline: "Roll, dare, drink, repeat 🎲",
     description:
       "The flagship board. Roll the dice, land a tile, do the deed — or take a sip. First to the END heart wins the night.",
-    rules: "Roll the dice, move your heart. Every tile is a challenge or a drink. First to reach the end wins! Oh, and if you're sent back... well, consider it a second chance to have fun.",
+    rules: "DISCLAIMER: This board is known to cause extreme fun. Roll the dice and follow the tile's command. First one to reach the END heart wins the crown! If you're sent back, don't complain—just drink and enjoy the second chance!",
     cta: "Start Board",
     accent: "accent",
     playable: true,
@@ -52,7 +52,7 @@ export const PARTY_GAMES: GameMeta[] = [
     tagline: "Your turn… don't mess this up 😏",
     description:
       "A glowing wheel of dares. One spin, zero mercy. Land it, do it, score it.",
-    rules: "One big wheel, zero mercy. Tap to spin, wait for the click-clack to stop, and do whatever the needle points to. Points for the brave, sips for the rest.",
+    rules: "WARNING: This wheel has a mind of its own. One tap, one spin, and no take-backs. Complete the dares to stack up points—the person with the highest score at the end of the round wins the night!",
     cta: "Spin Now",
     accent: "accent",
     playable: true,
@@ -65,7 +65,7 @@ export const PARTY_GAMES: GameMeta[] = [
     tagline: "What's hiding under the gloss?",
     description:
       "Stacks of cheeky pixel cards. Scratch with your finger, reveal a dare or a question.",
-    rules: "Nothing beats the mystery of a scratchie. Swipe your finger over the card to reveal your task. Some are light, some are bold. Do it to earn your points.",
+    rules: "NOTICE: What's under the pink layer stays in the room. Swipe to reveal your fate. Complete tasks for +1 point—the most points after 3 rounds wins the game. Scratch responsibly!",
     cta: "Scratch Now",
     accent: "primary",
     playable: true,
@@ -78,7 +78,7 @@ export const PARTY_GAMES: GameMeta[] = [
     tagline: "Ladders go up. Shots go down.",
     description:
       "Roll the dice, climb the board, and pray you don't slide into the spicy tile.",
-    rules: "Ladders help you climb, shots bring you... well, down. Roll the dice and climb to the top. If you land on a drink tile, you know the drill!",
+    rules: "SAFETY ADVICE: Ladders take you higher, but the shots go down smooth. Race to the very top—the first person to reach the finish line wins it all. If you land on a drink tile, you know the drill!",
     cta: "Roll Dice",
     accent: "accent",
     playable: true,
@@ -91,7 +91,7 @@ export const PARTY_GAMES: GameMeta[] = [
     tagline: "A messy board for brave friends",
     description:
       "Roll across the hand-drawn drinking board, land on sips, dares, group shots, safe spaces, and sneaky go-back tiles.",
-    rules: "Our hand-drawn masterpiece of chaos. Every step is a gamble—group shots, safe zones, and sneaky go-back tiles. Don’t say we didn’t warn you!",
+    rules: "FINAL WARNING: You are entering the zone of total chaos. First person to navigate the mess and reach the final tile wins the title of Champion. Follow the board's command and try to stay standing!",
     cta: "Start Board",
     accent: "primary",
     playable: true,
@@ -107,7 +107,7 @@ export const COUPLE_GAMES: GameMeta[] = [
     tagline: "Roll, dare, drink, repeat 🎲",
     description:
       "The flagship board for duos. Tease, dare, and out-flirt the other couples on the board.",
-    rules: "Standard board game vibes, but intimate. Roll, move, and do what the tile says. First couple to the end heart gets bragging rights for the night.",
+    rules: "COUPLE'S ADVISORY: A classic race with a spicy twist. Roll, move, and do what the tile says. The first couple to land on the END heart gets the victory and bragging rights for the rest of the night.",
     cta: "Start Board",
     accent: "accent",
     playable: true,
@@ -120,7 +120,7 @@ export const COUPLE_GAMES: GameMeta[] = [
     tagline: "Things just got interesting 🔥",
     description:
       "Swipeable card deck. Light, romantic, or bold — both of you tap agree, both of you score.",
-    rules: "Think of this as Tinder, but for deep conversations. We'll spotlight one person to act and the other to receive. Swipe right to agree, left to skip. Easy vibes.",
+    rules: "HEADS UP: This is basically Tinder, but for deep conversations. We'll spotlight actors to complete tasks. The couple with the most points at the end of the deck takes the win. Easy vibes.",
     cta: "Start Swiping",
     accent: "primary",
     playable: true,
@@ -133,7 +133,7 @@ export const COUPLE_GAMES: GameMeta[] = [
     tagline: "Sealed with a kiss 💌",
     description:
       "Candlelit pixel envelopes. Scratch them open for soft, romantic suggestions only the two of you will see.",
-    rules: "Purely about the connection. Open a sealed envelope to reveal a romantic gesture. One of you leads, both of you enjoy the moment.",
+    rules: "FOR YOUR EYES ONLY: It's all about the connection here. Open envelopes to reveal romantic gestures. The couple that completes the most gestures wins (though let's be honest, you both win here).",
     cta: "Open Envelope",
     accent: "primary",
     playable: true,
