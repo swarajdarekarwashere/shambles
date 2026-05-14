@@ -65,7 +65,7 @@ export default function Landing({ onPickMode }: LandingProps) {
         </div>
         <div className="flex-1 flex justify-end">
           <div className="rounded-full border border-border bg-card/70 px-3 py-1 font-pixel text-[10px] text-foreground/70 backdrop-blur">
-            18+ ONLY
+            litt le playground 
           </div>
         </div>
       </header>
