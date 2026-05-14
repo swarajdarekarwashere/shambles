@@ -35,15 +35,15 @@ export const PARTY_GAMES: GameMeta[] = [
     id: "drunk-in-love",
     num: "01",
     mode: "both",
-    title: "Drunk In Love",
-    tagline: "Roll, dare, drink, repeat 🎲",
+    title: "Lost In Love",
+    tagline: "Roll, dare, vibe, repeat 🎲",
     description:
-      "The flagship board. Roll the dice, land a tile, do the deed — or take a sip. First to the END heart wins the night.",
+      "The flagship board. Roll the dice, land a tile, do the deed, or take a penalty. First to the END heart wins the night.",
     rules: [
       "DISCLAIMER: This board is known to cause extreme fun.",
       "Roll the dice and follow the tile's command.",
       "First one to reach the END heart wins the crown!",
-      "If you're sent back, don't complain—just drink and enjoy the second chance!"
+      "If you're sent back, don't complain—take your penalty and enjoy the second chance!"
     ],
     cta: "Start Board",
     accent: "accent",
@@ -53,8 +53,8 @@ export const PARTY_GAMES: GameMeta[] = [
     id: "wheel",
     num: "02",
     mode: "party",
-    title: "Spin the Wheel",
-    tagline: "Your turn… don't mess this up 😏",
+    title: "Spin & Dare",
+    tagline: "play with your loved one's😏",
     description:
       "A glowing wheel of dares. One spin, zero mercy. Land it, do it, score it.",
     rules: [
@@ -63,7 +63,7 @@ export const PARTY_GAMES: GameMeta[] = [
       "Complete the dares to stack up points.",
       "Highest score at the end of the round wins the night!"
     ],
-    cta: "Spin Now",
+    cta: "Let's Play",
     accent: "accent",
     playable: true,
   },
@@ -89,14 +89,14 @@ export const PARTY_GAMES: GameMeta[] = [
     id: "dice",
     num: "04",
     mode: "party",
-    title: "Shots & Ladders",
-    tagline: "Ladders go up. Shots go down.",
+    title: "Thrills & Ladders",
+    tagline: "Ladders go up. Dares go sideways. 🎲",
     description:
       "Roll the dice, climb the board, and pray you don't slide into the spicy tile.",
     rules: [
-      "SAFETY ADVICE: Ladders take you higher, but the shots go down smooth.",
+      "SAFETY ADVICE: Ladders take you higher, but the dares hit different.",
       "Race to the very top—first person to reach the finish line wins.",
-      "If you land on a drink tile, you know the drill!",
+      "If you land on a dare tile, you know what to do!",
       "Don't fall off the snakes!"
     ],
     cta: "Roll Dice",
@@ -107,15 +107,15 @@ export const PARTY_GAMES: GameMeta[] = [
     id: "lets-get-wasted",
     num: "05",
     mode: "party",
-    title: "Let's Get Wasted",
+    title: "Let's Go Crazy",
     tagline: "A messy board for brave friends",
     description:
-      "Roll across the hand-drawn drinking board, land on sips, dares, group shots, safe spaces, and sneaky go-back tiles.",
+      "Roll across the hand-drawn chaos board, land on penalties, dares, group challenges, safe spaces, and sneaky go-back tiles.",
     rules: [
       "FINAL WARNING: You are entering the zone of total chaos.",
       "First person to reach the final tile wins the title of Champion.",
       "Follow the board's command and try to stay standing!",
-      "Group shots are mandatory. No exceptions."
+      "Group challenges are mandatory. No exceptions."
     ],
     cta: "Start Board",
     accent: "primary",
@@ -128,8 +128,8 @@ export const COUPLE_GAMES: GameMeta[] = [
     id: "drunk-in-love",
     num: "01",
     mode: "both",
-    title: "Drunk In Love",
-    tagline: "Roll, dare, drink, repeat 🎲",
+    title: "Lost In Love",
+    tagline: "Roll, dare, vibe, repeat 🎲",
     description:
       "The flagship board for duos. Tease, dare, and out-flirt the other couples on the board.",
     rules: [

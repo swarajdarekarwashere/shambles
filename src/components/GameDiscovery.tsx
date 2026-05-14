@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import gameWheel from "@/assets/game-wheel-art.png";
+import gameWheel from "@/assets/game-wheel.png";
 import gameScratch from "@/assets/game-scratch-art.png";
 import gameDice from "@/assets/game-ladders-art.png";
 import gameCouple from "@/assets/game-couple.png";
