@@ -2,8 +2,7 @@ import heroCouple from "@/assets/hero-couple.png";
 import heroParty from "@/assets/hero-party.png";
 import { Mode } from "@/lib/gameTypes";
 import Profile from "@/components/Profile";
-import LegalModals from "@/components/LegalModals";
-import { useState } from "react";
+import { Link } from "react-router-dom";
 
 interface LandingProps {
   onPickMode: (mode: Mode) => void;
@@ -48,7 +47,6 @@ const Sparkles = () => (
 );
 
 export default function Landing({ onPickMode }: LandingProps) {
-  const [legalType, setLegalType] = useState<"terms" | "privacy" | "refund" | null>(null);
 
   return (
     <section className="mobile-scroll-page relative min-h-dvh w-full bg-gradient-cream pb-[calc(2rem_+_env(safe-area-inset-bottom))]">
@@ -149,31 +147,25 @@ export default function Landing({ onPickMode }: LandingProps) {
 
         {/* Footer */}
         <footer className="mt-20 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 opacity-60 transition-opacity hover:opacity-100 pb-4">
-          <button 
-            onClick={() => setLegalType("terms")}
+          <Link
+            to="/terms"
             className="text-[10px] font-pixel tracking-wider hover:text-primary"
           >
             Terms & Conditions
-          </button>
-          <button 
-            onClick={() => setLegalType("privacy")}
+          </Link>
+          <Link
+            to="/privacy"
             className="text-[10px] font-pixel tracking-wider hover:text-primary"
           >
             Privacy Policy
-          </button>
-          <button 
-            onClick={() => setLegalType("refund")}
+          </Link>
+          <Link
+            to="/refund"
             className="text-[10px] font-pixel tracking-wider hover:text-primary"
           >
             Cancellations & Refund
-          </button>
+          </Link>
         </footer>
-
-        <LegalModals 
-          type={legalType} 
-          isOpen={!!legalType} 
-          onClose={() => setLegalType(null)} 
-        />
       </div>
     </section>
   );

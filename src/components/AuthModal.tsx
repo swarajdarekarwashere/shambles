@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 import {
   Dialog,
@@ -12,20 +13,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import LegalModals from "./LegalModals";
-
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
 export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
   const [agreed, setAgreed] = useState(false);
-  const [legalType, setLegalType] = useState<"terms" | "privacy" | "refund" | null>(null);
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -117,7 +116,10 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                     I have read and agree to the{" "}
                     <button 
                       type="button" 
-                      onClick={() => setLegalType("terms")}
+                      onClick={() => {
+                        onClose();
+                        navigate("/terms");
+                      }}
                       className="text-primary hover:underline font-bold"
                     >
                       Terms & Conditions
@@ -125,7 +127,10 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                     ,{" "}
                     <button 
                       type="button" 
-                      onClick={() => setLegalType("privacy")}
+                      onClick={() => {
+                        onClose();
+                        navigate("/privacy");
+                      }}
                       className="text-primary hover:underline font-bold"
                     >
                       Privacy Policy
@@ -133,7 +138,10 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                     , and{" "}
                     <button 
                       type="button" 
-                      onClick={() => setLegalType("refund")}
+                      onClick={() => {
+                        onClose();
+                        navigate("/refund");
+                      }}
                       className="text-primary hover:underline font-bold"
                     >
                       Cancellations & Refund
@@ -167,11 +175,6 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         </DialogContent>
       </Dialog>
 
-      <LegalModals 
-        type={legalType} 
-        isOpen={!!legalType} 
-        onClose={() => setLegalType(null)} 
-      />
     </>
   );
 }
