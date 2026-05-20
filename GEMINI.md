@@ -1,6 +1,6 @@
-# Playful Pair - Project Overview
+# Turn on - Project Overview
 
-Playful Pair is a vibrant, interactive web application featuring a collection of party and couple games. It's built with a modern tech stack focused on high-quality animations, responsiveness, and a "playful" aesthetic.
+Turn on is a vibrant, interactive web application featuring a collection of party and couple games. It's built with a modern tech stack focused on high-quality animations, responsiveness, and a "playful" aesthetic.
 
 ## Tech Stack
 

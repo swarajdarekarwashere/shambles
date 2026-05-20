@@ -72,7 +72,7 @@ export default function PaywallModal({ isOpen, userId }: PaywallModalProps) {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount: data.amount,
         currency: data.currency,
-        name: "Playful Pair",
+        name: "Turn On",
         description: "24-Hour Day Pass",
         order_id: data.id,
         modal: {
