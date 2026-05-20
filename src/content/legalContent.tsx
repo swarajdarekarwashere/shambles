@@ -201,7 +201,7 @@ export const legalContent: Record<LegalType, { title: string; text: ReactNode }>
         <LegalSection title="Support details">
           <LegalList
             items={[
-              <>Phone: <strong>9877814977</strong></>,
+              <>Phone: <strong>+91 9877814978</strong></>,
               <>Support email: <strong>fugazeeshet@gmail.com</strong></>,
               <>Operating address: <strong>Mumbai, Maharashtra</strong></>,
             ]}
