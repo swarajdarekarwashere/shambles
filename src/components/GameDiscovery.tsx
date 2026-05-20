@@ -12,6 +12,7 @@ import { COUPLE_GAMES, Mode, PARTY_GAMES } from "@/lib/gameTypes";
 import { useGame } from "@/state/GameContext";
 import { Switch } from "@/components/ui/switch";
 import Profile from "@/components/Profile";
+import { COMPLIANCE_REVIEW_MODE, isReviewHiddenGame } from "@/config/compliance";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -36,10 +37,18 @@ export default function GameDiscovery({ mode, onBack, onPickGame }: Props) {
   const isAdult = tone === "adult";
   const games = useMemo(
     () =>
-      (mode === "couple" ? COUPLE_GAMES : PARTY_GAMES).map((g) => ({
-        ...g,
-        image: IMAGE_MAP[g.id],
-      })),
+      (mode === "couple" ? COUPLE_GAMES : PARTY_GAMES)
+        .filter((g) => {
+          // Review-only filter: remove this guard after compliance clears.
+          if (COMPLIANCE_REVIEW_MODE && isReviewHiddenGame(g.id)) return false;
+          return true;
+        })
+        .map((g, idx) => ({
+          ...g,
+          image: IMAGE_MAP[g.id],
+          // displayNum reflects position in the filtered list (1-based)
+          displayNum: idx + 1,
+        })),
     [mode]
   );
 
@@ -173,6 +182,7 @@ export default function GameDiscovery({ mode, onBack, onPickGame }: Props) {
 
           {/* Tone Toggle - Right */}
           <div className="flex-1 flex justify-end">
+            {!COMPLIANCE_REVIEW_MODE && (
             <div
               className={`flex items-center gap-2 rounded-full border shadow-soft backdrop-blur transition-all hover:scale-[1.02] ${
                 isAdult
@@ -196,6 +206,7 @@ export default function GameDiscovery({ mode, onBack, onPickGame }: Props) {
                 } h-5 w-9 sm:h-6 sm:w-11 [&>span]:h-4 [&>span]:w-4 sm:[&>span]:h-5 sm:[&>span]:w-5`}
               />
             </div>
+            )}
           </div>
         </header>
 
@@ -215,7 +226,8 @@ export default function GameDiscovery({ mode, onBack, onPickGame }: Props) {
               ? "border-white/15 bg-white/10 text-white/75"
               : "border-border bg-card/80 text-foreground/70"
           }`}>
-            ✦ {current.num} / {String(games.length).padStart(2, "0")} ✦ {mode === "couple" ? "COUPLE" : "PARTY"}
+            {/* Desktop label: use computed display number from filtered list */}
+            ✦ {String(current.displayNum ?? activeIdx + 1).padStart(2, "0")} / {String(games.length).padStart(2, "0")} ✦ {mode === "couple" ? "COUPLE" : "PARTY"}
           </div>
         </div>
 
@@ -292,7 +304,7 @@ export default function GameDiscovery({ mode, onBack, onPickGame }: Props) {
                     isAdult ? "text-rose-200" : g.accent === "accent" ? "text-accent" : "text-primary"
                   }`}
                 >
-                  {mode === "couple" ? "❤ COUPLE GAME" : "🎉 PARTY GAME"} · {g.num}
+                  {mode === "couple" ? "❤ COUPLE GAME" : "🎉 PARTY GAME"} · {String(g.displayNum).padStart(2, "0")}
                 </span>
                 <h2 className={`discovery-title font-serifd leading-[1.05] md:text-6xl md:leading-[1.05] ${
                   isAdult ? "text-white" : "text-foreground"

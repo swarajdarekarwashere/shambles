@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-export type LegalType = "terms" | "privacy" | "refund";
+export type LegalType = "terms" | "privacy" | "refund" | "contact";
 
 const LegalShell = ({ children }: { children: ReactNode }) => (
   <div className="space-y-6 text-[15px] leading-7 text-foreground/80">{children}</div>
@@ -67,7 +67,7 @@ export const legalContent: Record<LegalType, { title: string; text: ReactNode }>
             items={[
               <>A Day Pass gives one account access to eligible premium content for 24 hours from activation.</>,
               <>Day Pass access is personal, non-transferable, and not a subscription.</>,
-              <>We may update, improve, or rotate game content and features from time to time.</>,
+              <>We may update, improve, rotate, or temporarily limit specific games and features from time to time.</>,
             ]}
           />
         </LegalSection>
@@ -108,7 +108,7 @@ export const legalContent: Record<LegalType, { title: string; text: ReactNode }>
       <LegalShell>
         <LegalIntro>
           We collect only the information needed to run the platform, unlock paid access, and improve
-          gameplay.
+          gameplay for our digital entertainment service.
         </LegalIntro>
 
         <LegalSection title="1. Information we collect">
@@ -160,7 +160,7 @@ export const legalContent: Record<LegalType, { title: string; text: ReactNode }>
           <h3 className="mt-3 font-serif-d text-4xl text-foreground sm:text-5xl">Refunds</h3>
           <p className="mt-4 text-lg font-semibold text-foreground">Refunds are generally not applicable once access is granted.</p>
           <p className="mt-3 text-sm leading-7 text-foreground/75 sm:text-base">
-            A Day Pass is a low-cost digital access product that becomes available immediately after successful
+            A Day Pass is a low-cost digital access purchase that becomes available immediately after successful
             payment, so completed purchases are treated as final.
           </p>
         </div>
@@ -183,6 +183,42 @@ export const legalContent: Record<LegalType, { title: string; text: ReactNode }>
           <LegalNote>
             Payment processing is handled through Razorpay, so transaction verification may depend on payment
             provider records.
+          </LegalNote>
+        </LegalSection>
+      </LegalShell>
+    ),
+  },
+  contact: {
+    title: "Contact Us",
+    text: (
+      <LegalShell>
+        <LegalIntro>
+          Playful Pair is a digital entertainment project designed for lightweight social play, couple
+          activities, and premium 24-hour access to selected game experiences. If you need help with
+          account access, payments, or general support, please reach out using the details below.
+        </LegalIntro>
+
+        <LegalSection title="Support details">
+          <LegalList
+            items={[
+              <>Phone: <strong>9877814977</strong></>,
+              <>Support email: <strong>fugazeeshet@gmail.com</strong></>,
+              <>Operating address: <strong>Mumbai, Maharashtra</strong></>,
+            ]}
+          />
+        </LegalSection>
+
+        <LegalSection title="How we can help">
+          <LegalList
+            items={[
+              <>Questions about account sign-in or Day Pass access.</>,
+              <>Payment-related issues such as duplicate charges or failed access activation.</>,
+              <>General support, platform feedback, and compliance-related inquiries.</>,
+            ]}
+          />
+          <LegalNote>
+            For faster resolution, please include the email address used on your account and a short
+            description of the issue when contacting support.
           </LegalNote>
         </LegalSection>
       </LegalShell>

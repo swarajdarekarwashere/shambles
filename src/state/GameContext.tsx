@@ -9,6 +9,7 @@ import {
 } from "react";
 import { Mode, Player, PLAYER_COLORS, Screen, Tone } from "@/lib/gameTypes";
 import { supabase } from "@/lib/supabase";
+import { COMPLIANCE_REVIEW_MODE, isReviewHiddenGame } from "@/config/compliance";
 import { User } from "@supabase/supabase-js";
 
 const STORAGE_KEY = "tc-game-state-v1";
@@ -65,7 +66,11 @@ function load(): Persisted | null {
 
 export function GameProvider({ children }: { children: ReactNode }) {
   const initial = load();
-  const [screen, setScreen] = useState<Screen>(initial?.screen ?? { name: "landing" });
+  const safeInitialScreen =
+    initial?.screen?.name === "game" && isReviewHiddenGame(initial.screen.gameId)
+      ? { name: "landing" as const }
+      : (initial?.screen ?? { name: "landing" });
+  const [screen, setScreen] = useState<Screen>(safeInitialScreen);
   const [players, setPlayers] = useState<Player[]>(initial?.players ?? []);
   const [user, setUser] = useState<User | null>(null);
   const [sessionCount, setSessionCount] = useState(0);
@@ -74,8 +79,22 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const [isLoadingStats, setIsLoadingStats] = useState(true);
   const [showAuth, setShowAuth] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
-  const [tone, setTone] = useState<Tone>(initial?.tone ?? "normal");
+  const [tone, setTone] = useState<Tone>(
+    COMPLIANCE_REVIEW_MODE ? "normal" : (initial?.tone ?? "normal")
+  );
   const [gameState, setGameState] = useState<any>(initial?.gameState ?? null);
+
+  useEffect(() => {
+    if (!COMPLIANCE_REVIEW_MODE) return;
+
+    setTone("normal");
+    setScreen((current) => {
+      if (current.name === "game" && isReviewHiddenGame(current.gameId)) {
+        return { name: "discovery", mode: current.mode };
+      }
+      return current;
+    });
+  }, []);
 
   // Close paywall automatically if pass becomes active
   useEffect(() => {
@@ -188,7 +207,14 @@ export function GameProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const toggleTone = useCallback(
-    () => setTone((current) => (current === "normal" ? "adult" : "normal")),
+    () => {
+      if (COMPLIANCE_REVIEW_MODE) {
+        setTone("normal");
+        return;
+      }
+
+      setTone((current) => (current === "normal" ? "adult" : "normal"));
+    },
     []
   );
 

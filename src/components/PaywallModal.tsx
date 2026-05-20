@@ -15,34 +15,32 @@ export default function PaywallModal({ isOpen, userId }: PaywallModalProps) {
   const [loading, setLoading] = useState(false);
   const [pricing, setPricing] = useState({
     amount: 3000,
-    currency: 'INR',
-    display: '₹30',
-    symbol: '₹'
+    currency: "INR",
+    display: "Rs. 30",
+    symbol: "Rs.",
   });
   const { refreshStats, setShowPaywall } = useGame();
 
   useEffect(() => {
-    // 1. Detect Location & Pricing
     const detectPricing = async () => {
       try {
-        const res = await fetch('https://ipapi.co/json/');
+        const res = await fetch("https://ipapi.co/json/");
         const data = await res.json();
-        
-        if (data.country === 'US') {
-          setPricing({ amount: 200, currency: 'USD', display: '$2', symbol: '$' });
-        } else if (data.country === 'GB') {
-          setPricing({ amount: 200, currency: 'GBP', display: '£2', symbol: '£' });
+
+        if (data.country === "US") {
+          setPricing({ amount: 200, currency: "USD", display: "$2", symbol: "$" });
+        } else if (data.country === "GB") {
+          setPricing({ amount: 200, currency: "GBP", display: "GBP 2", symbol: "GBP" });
         } else {
-          setPricing({ amount: 3000, currency: 'INR', display: '₹30', symbol: '₹' });
+          setPricing({ amount: 3000, currency: "INR", display: "Rs. 30", symbol: "Rs." });
         }
       } catch (err) {
         console.error("Location detection failed, defaulting to INR", err);
       }
     };
-    
+
     if (isOpen) detectPricing();
 
-    // 2. Load Razorpay Script
     const script = document.createElement("script");
     script.src = "https://checkout.razorpay.com/v1/checkout.js";
     script.async = true;
@@ -58,20 +56,18 @@ export default function PaywallModal({ isOpen, userId }: PaywallModalProps) {
   const handlePayment = async () => {
     if (loading) return;
     setLoading(true);
-    
+
     try {
-      // 1. Create order via Supabase Edge Function
       const { data, error } = await supabase.functions.invoke("create-razorpay-order", {
-        body: { 
-          amount: pricing.amount, 
+        body: {
+          amount: pricing.amount,
           currency: pricing.currency,
-          userId: userId 
+          userId,
         },
       });
 
       if (error) throw error;
 
-      // 2. Open Razorpay Checkout
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount: data.amount,
@@ -80,11 +76,11 @@ export default function PaywallModal({ isOpen, userId }: PaywallModalProps) {
         description: "24-Hour Day Pass",
         order_id: data.id,
         modal: {
-          ondismiss: function() {
+          ondismiss() {
             setLoading(false);
-          }
+          },
         },
-        handler: async function (response: any) {
+        handler: async function () {
           toast.success("Payment successful! Unlocking your games...");
           await refreshStats();
           setShowPaywall(false);
@@ -110,7 +106,6 @@ export default function PaywallModal({ isOpen, userId }: PaywallModalProps) {
     <AnimatePresence>
       {isOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto p-4 py-[calc(1rem_+_env(safe-area-inset-top))]">
-          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -118,7 +113,6 @@ export default function PaywallModal({ isOpen, userId }: PaywallModalProps) {
             className="absolute inset-0 bg-background/80 backdrop-blur-xl"
           />
 
-          {/* Modal Content */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -126,41 +120,42 @@ export default function PaywallModal({ isOpen, userId }: PaywallModalProps) {
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
             className="relative max-h-[calc(100dvh_-_2rem_-_env(safe-area-inset-top)_-_env(safe-area-inset-bottom))] w-full max-w-[425px] overflow-y-auto overflow-x-hidden rounded-[2rem] border-4 border-primary bg-background p-6 shadow-2xl sm:p-8"
           >
-            <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-primary p-4 rounded-full shadow-lg z-10">
-              <Lock className="w-8 h-8 text-white" />
+            <div className="absolute -top-6 left-1/2 z-10 rounded-full bg-primary p-4 shadow-lg -translate-x-1/2">
+              <Lock className="h-8 w-8 text-white" />
             </div>
 
-            <div className="text-center pt-8 space-y-2">
-              <h2 className="text-3xl font-display font-bold text-foreground">
-                You're on a roll! 🔥
-              </h2>
-              <p className="text-lg text-muted-foreground font-medium">
-                Get unlimited access to ALL games for just <span className="text-primary font-bold">{pricing.display}</span>
+            <div className="space-y-2 pt-8 text-center">
+              <h2 className="text-3xl font-display font-bold text-foreground">You&apos;re on a roll!</h2>
+              <p className="text-lg font-medium text-muted-foreground">
+                Get 24-hour access to all eligible premium games for just{" "}
+                <span className="font-bold text-primary">{pricing.display}</span>
               </p>
             </div>
 
-            <div className="py-8 space-y-8">
-              <div className="bg-secondary/20 p-8 rounded-3xl border-2 border-dashed border-primary/30 flex flex-col items-center gap-2">
+            <div className="space-y-8 py-8">
+              <div className="flex flex-col items-center gap-2 rounded-3xl border-2 border-dashed border-primary/30 bg-secondary/20 p-8">
                 <span className="text-5xl font-bold text-primary">{pricing.display}</span>
-                <span className="text-sm font-semibold text-muted-foreground bg-primary/10 px-4 py-1 rounded-full uppercase tracking-wider">Valid for 24 Hours</span>
+                <span className="rounded-full bg-primary/10 px-4 py-1 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                  Valid for 24 Hours
+                </span>
               </div>
 
               <ul className="space-y-4 text-sm font-semibold">
                 <li className="flex items-center gap-3">
-                  <div className="bg-primary/10 p-1.5 rounded-full">
-                    <Sparkles className="w-4 h-4 text-primary" />
+                  <div className="rounded-full bg-primary/10 p-1.5">
+                    <Sparkles className="h-4 w-4 text-primary" />
                   </div>
-                  <span>Unlock all Premium Party Games</span>
+                  <span>Unlock all eligible premium party games</span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <div className="bg-primary/10 p-1.5 rounded-full">
-                    <Sparkles className="w-4 h-4 text-primary" />
+                  <div className="rounded-full bg-primary/10 p-1.5">
+                    <Sparkles className="h-4 w-4 text-primary" />
                   </div>
-                  <span>Full access to Couple's Intimacy Mode</span>
+                  <span>Full access to eligible couple games</span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <div className="bg-primary/10 p-1.5 rounded-full">
-                    <Sparkles className="w-4 h-4 text-primary" />
+                  <div className="rounded-full bg-primary/10 p-1.5">
+                    <Sparkles className="h-4 w-4 text-primary" />
                   </div>
                   <span>One-time payment. No subscription.</span>
                 </li>
@@ -170,12 +165,12 @@ export default function PaywallModal({ isOpen, userId }: PaywallModalProps) {
                 <Button
                   onClick={handlePayment}
                   disabled={loading}
-                  className="w-full h-16 text-xl font-bold shadow-xl transition-all hover:scale-[1.03] active:scale-[0.98] bg-primary hover:bg-primary/90 rounded-2xl"
+                  className="h-16 w-full rounded-2xl bg-primary text-xl font-bold shadow-xl transition-all hover:scale-[1.03] hover:bg-primary/90 active:scale-[0.98]"
                 >
-                  {loading ? "Initializing..." : "Unlock Everything →"}
+                  {loading ? "Initializing..." : "Get Day Pass ->"}
                 </Button>
 
-                <p className="text-[10px] text-center text-muted-foreground uppercase tracking-[0.2em] font-black opacity-60">
+                <p className="text-center text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground opacity-60">
                   Secure Payment via Razorpay
                 </p>
               </div>
@@ -186,4 +181,3 @@ export default function PaywallModal({ isOpen, userId }: PaywallModalProps) {
     </AnimatePresence>
   );
 }
-

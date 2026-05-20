@@ -148,6 +148,12 @@ export default function Landing({ onPickMode }: LandingProps) {
         {/* Footer */}
         <footer className="mt-20 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 opacity-60 transition-opacity hover:opacity-100 pb-4">
           <Link
+            to="/contact"
+            className="text-[10px] font-pixel tracking-wider hover:text-primary"
+          >
+            Contact Us
+          </Link>
+          <Link
             to="/terms"
             className="text-[10px] font-pixel tracking-wider hover:text-primary"
           >

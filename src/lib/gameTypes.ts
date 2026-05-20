@@ -24,7 +24,7 @@ export type GameMeta = {
   title: string;
   tagline: string;
   description: string;
-  rules: string[]; // Updated: Array of casual rules for bullet points
+  rules: string[];
   cta: string;
   accent: "primary" | "accent";
   playable: boolean;
@@ -36,14 +36,14 @@ export const PARTY_GAMES: GameMeta[] = [
     num: "01",
     mode: "both",
     title: "Lost In Love",
-    tagline: "Roll, dare, vibe, repeat 🎲",
+    tagline: "Roll, dare, vibe, repeat",
     description:
       "The flagship board. Roll the dice, land a tile, do the deed, or take a penalty. First to the END heart wins the night.",
     rules: [
       "DISCLAIMER: This board is known to cause extreme fun.",
       "Roll the dice and follow the tile's command.",
       "First one to reach the END heart wins the crown!",
-      "If you're sent back, don't complain—take your penalty and enjoy the second chance!"
+      "If you're sent back, don't complain; take your penalty and enjoy the second chance!",
     ],
     cta: "Start Board",
     accent: "accent",
@@ -54,14 +54,14 @@ export const PARTY_GAMES: GameMeta[] = [
     num: "02",
     mode: "party",
     title: "Spin & Dare",
-    tagline: "play with your loved one's😏",
+    tagline: "Fast, funny, and full of surprises",
     description:
-      "A glowing wheel of dares. One spin, zero mercy. Land it, do it, score it.",
+      "A glowing wheel of party prompts and playful challenges. Spin, land it, do it, score it.",
     rules: [
       "WARNING: This wheel has a mind of its own.",
       "One tap, one spin, and no take-backs.",
       "Complete the dares to stack up points.",
-      "Highest score at the end of the round wins the night!"
+      "Highest score at the end of the round wins the night!",
     ],
     cta: "Let's Play",
     accent: "accent",
@@ -74,12 +74,12 @@ export const PARTY_GAMES: GameMeta[] = [
     title: "Scratch Cards",
     tagline: "What's hiding under the gloss?",
     description:
-      "Stacks of cheeky pixel cards. Scratch with your finger, reveal a dare or a question.",
+      "Stacks of pixel cards. Scratch with your finger to reveal a prompt, challenge, or question.",
     rules: [
       "NOTICE: What's under the pink layer stays in the room.",
       "Swipe your finger to reveal your fate.",
       "Complete tasks for +1 point.",
-      "Most points after 3 rounds wins the game. Scratch responsibly!"
+      "Most points after 3 rounds wins the game. Scratch responsibly!",
     ],
     cta: "Scratch Now",
     accent: "primary",
@@ -90,14 +90,14 @@ export const PARTY_GAMES: GameMeta[] = [
     num: "04",
     mode: "party",
     title: "Thrills & Ladders",
-    tagline: "Ladders go up. Dares go sideways. 🎲",
+    tagline: "Ladders go up. Challenges get lively.",
     description:
-      "Roll the dice, climb the board, and pray you don't slide into the spicy tile.",
+      "Roll the dice, climb the board, and avoid the trickier tiles on the way up.",
     rules: [
-      "SAFETY ADVICE: Ladders take you higher, but the dares hit different.",
-      "Race to the very top—first person to reach the finish line wins.",
-      "If you land on a dare tile, you know what to do!",
-      "Don't fall off the snakes!"
+      "SAFETY ADVICE: Ladders take you higher, but the surprises hit different.",
+      "Race to the very top; first person to reach the finish line wins.",
+      "If you land on a challenge tile, complete the prompt and keep moving.",
+      "Don't fall off the snakes!",
     ],
     cta: "Roll Dice",
     accent: "accent",
@@ -115,7 +115,7 @@ export const PARTY_GAMES: GameMeta[] = [
       "FINAL WARNING: You are entering the zone of total chaos.",
       "First person to reach the final tile wins the title of Champion.",
       "Follow the board's command and try to stay standing!",
-      "Group challenges are mandatory. No exceptions."
+      "Group challenges are mandatory. No exceptions.",
     ],
     cta: "Start Board",
     accent: "primary",
@@ -129,14 +129,14 @@ export const COUPLE_GAMES: GameMeta[] = [
     num: "01",
     mode: "both",
     title: "Lost In Love",
-    tagline: "Roll, dare, vibe, repeat 🎲",
+    tagline: "Roll, dare, vibe, repeat",
     description:
       "The flagship board for duos. Tease, dare, and out-flirt the other couples on the board.",
     rules: [
-      "COUPLE'S ADVISORY: A classic race with a spicy twist.",
+      "COUPLE'S ADVISORY: A classic race with a playful twist.",
       "Roll, move, and do what the tile says.",
       "First couple to land on the END heart gets the victory.",
-      "Winners get bragging rights for the rest of the night!"
+      "Winners get bragging rights for the rest of the night!",
     ],
     cta: "Start Board",
     accent: "accent",
@@ -147,14 +147,14 @@ export const COUPLE_GAMES: GameMeta[] = [
     num: "02",
     mode: "couple",
     title: "Spicy Starters",
-    tagline: "Things just got interesting 🔥",
+    tagline: "Conversation starters for two",
     description:
-      "Swipeable card deck. Light, romantic, or bold — both of you tap agree, both of you score.",
+      "A swipeable card deck with light, thoughtful, and playful prompts for two players.",
     rules: [
-      "HEADS UP: This is basically Tinder, but for deep conversations.",
-      "We'll spotlight one person to act and the other to receive.",
+      "HEADS UP: This is designed to spark conversation and connection.",
+      "We'll spotlight one person to act and the other to respond.",
       "Swipe right to agree, left to skip.",
-      "The couple with the most points at the end wins. Easy vibes."
+      "The couple with the most points at the end wins. Easy vibes.",
     ],
     cta: "Start Swiping",
     accent: "primary",
@@ -165,14 +165,14 @@ export const COUPLE_GAMES: GameMeta[] = [
     num: "03",
     mode: "couple",
     title: "Intimacy Cards",
-    tagline: "Sealed with a kiss 💌",
+    tagline: "Thoughtful prompts for two",
     description:
-      "Candlelit pixel envelopes. Scratch them open for soft, romantic suggestions only the two of you will see.",
+      "Candlelit pixel envelopes with private, connection-focused prompts for two players.",
     rules: [
       "FOR YOUR EYES ONLY: It's all about the connection here.",
-      "Open envelopes to reveal a romantic gesture.",
+      "Open envelopes to reveal a guided prompt.",
       "One of you leads, both of you enjoy the moment.",
-      "The couple that completes the most gestures wins!"
+      "The couple that completes the most gestures wins!",
     ],
     cta: "Open Envelope",
     accent: "primary",
