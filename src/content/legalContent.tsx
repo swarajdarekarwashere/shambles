@@ -96,7 +96,7 @@ export const legalContent: Record<LegalType, { title: string; text: ReactNode }>
 						<LegalList
 							items={[
 								<>Authorized representative: <strong>Mr. Sandeep Kumar</strong>, Head of Customer Relations</>,
-								<>Company: <strong>MipoeInteractive Pvt. Ltd.</strong></>,
+								<>Company: <strong>Mipoe</strong></>,
 								<>Phone: <strong>+91 9943532411</strong>, <strong>+91 8659045329</strong></>,
 								<>Support email: <strong>support@Mipoe.in</strong></>,
 								<>Registered address: <strong>Mumbai, Maharashtra, India</strong></>,
@@ -149,7 +149,7 @@ export const legalContent: Record<LegalType, { title: string; text: ReactNode }>
 						</p>
 						<LegalList
 							items={[
-								<>Data controller: <strong>turnontoday / MipoeInteractive Pvt. Ltd.</strong></>,
+								<>Data controller: <strong>turnontoday / Mipoe</strong></>,
 								<>Contact person: <strong>Mr. Sandeep Kumar</strong>, Head of Customer Relations</>,
 								<>Phone: <strong>+91 9943532411</strong>, <strong>+91 8659045329</strong></>,
 								<>Email: <strong>support@Mipoe.in</strong></>,
