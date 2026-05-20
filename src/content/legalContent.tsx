@@ -52,8 +52,8 @@ export const legalContent: Record<LegalType, { title: string; text: ReactNode }>
 				<LegalShell>
 					<LegalIntro>
 						This document is an electronic record in terms of the Information Technology Act, 2000 and rules thereunder. It is published in accordance with Rule 3(1) of the Information Technology (Intermediaries Guidelines) Rules, 2011 and governs your use of the platform at{" "}
-						<strong>https://turnontoday.vercel.app/</strong> ("Platform"), owned by{" "}
-						<strong>turnontoday</strong>, registered at Arjun Nagar Complex, C-Wing 303, Dombivli – 421201, Maharashtra. By accessing or using the Platform, you enter into a binding contract with the Platform Owner and agree to these Terms of Use.
+						<strong>https://mipoeclub.vercel.app/</strong> ("Platform"), owned by{" "}
+						<strong>mipoeclub</strong>, registered at Arjun Nagar Complex, C-Wing 303, Dombivli – 421201, Maharashtra. By accessing or using the Platform, you enter into a binding contract with the Platform Owner and agree to these Terms of Use.
 					</LegalIntro>
 
 					<LegalSection title="1. Account and registration">
@@ -112,8 +112,8 @@ export const legalContent: Record<LegalType, { title: string; text: ReactNode }>
 			text: (
 				<LegalShell>
 					<LegalIntro>
-						This Privacy Policy describes how <strong>turnontoday</strong> and its affiliates collect, use, share, and protect your personal data through the Platform at{" "}
-						<strong>https://turnontoday.vercel.app/</strong>. Your personal data will primarily be stored and processed in India. By visiting this Platform or availing any service offered on it, you expressly agree to be bound by the terms of this Privacy Policy and the applicable laws of India.
+						This Privacy Policy describes how <strong>mipoeclub</strong> and its affiliates collect, use, share, and protect your personal data through the Platform at{" "}
+						<strong>https://mipoeclub.vercel.app/</strong>. Your personal data will primarily be stored and processed in India. By visiting this Platform or availing any service offered on it, you expressly agree to be bound by the terms of this Privacy Policy and the applicable laws of India.
 					</LegalIntro>
 
 					<LegalSection title="1. Collection">
@@ -149,7 +149,7 @@ export const legalContent: Record<LegalType, { title: string; text: ReactNode }>
 						</p>
 						<LegalList
 							items={[
-								<>Data controller: <strong>turnontoday / Mipoe</strong></>,
+								<>Data controller: <strong>mipoeclub / Mipoe</strong></>,
 								<>Contact person: <strong>Mr. Sandeep Kumar</strong>, Head of Customer Relations</>,
 								<>Phone: <strong>+91 9943532411</strong>, <strong>+91 8659045329</strong></>,
 								<>Email: <strong>support@Mipoe.in</strong></>,
@@ -182,7 +182,7 @@ export const legalContent: Record<LegalType, { title: string; text: ReactNode }>
 
 					<LegalSection title="Cancellation">
 						<p>
-							Cancellations will only be considered if the request is made within <strong>1 day</strong> of placing the order. However, cancellation requests may not be entertained if the order has already been communicated to the relevant seller or merchant and they have initiated the process, or the product is already out for delivery — in such cases, you may choose to reject the product at the doorstep. turnontoday does not accept cancellation requests for perishable items such as flowers or eatables; however, a refund or replacement may be considered if the user establishes that the quality of the product delivered was not satisfactory.
+							Cancellations will only be considered if the request is made within <strong>1 day</strong> of placing the order. However, cancellation requests may not be entertained if the order has already been communicated to the relevant seller or merchant and they have initiated the process, or the product is already out for delivery — in such cases, you may choose to reject the product at the doorstep. mipoeclub does not accept cancellation requests for perishable items such as flowers or eatables; however, a refund or replacement may be considered if the user establishes that the quality of the product delivered was not satisfactory.
 						</p>
 					</LegalSection>
 
@@ -191,7 +191,7 @@ export const legalContent: Record<LegalType, { title: string; text: ReactNode }>
 							In case of receipt of damaged or defective items, please report the issue to our customer service team within <strong>1 day</strong> of receipt. The request will be entertained once the seller or merchant has checked and determined the same. If you feel the product received is not as shown on the site or as per your expectations, you must bring it to the notice of our customer service within 1 day of receiving the product; the team will then take an appropriate decision. For complaints regarding products that come with a manufacturer's warranty, please refer the issue directly to the manufacturer.
 						</p>
 						<LegalNote>
-							In case of any refunds approved by turnontoday, it will take <strong>7 days</strong> for the refund to be processed to you. Payment processing is handled by <strong>Razorpay</strong>; refund decisions may require verification from the payment provider.
+							In case of any refunds approved by mipoeclub, it will take <strong>7 days</strong> for the refund to be processed to you. Payment processing is handled by <strong>Razorpay</strong>; refund decisions may require verification from the payment provider.
 						</LegalNote>
 					</LegalSection>
 
@@ -216,7 +216,7 @@ export const legalContent: Record<LegalType, { title: string; text: ReactNode }>
 			text: (
 				<LegalShell>
 					<LegalIntro>
-						Turn on is a digital entertainment project designed for lightweight
+						mipoe club is a digital entertainment project designed for lightweight
 						social play, couple activities, and premium 24-hour access to selected
 						game experiences. If you need help with account access, payments, or
 						general support, please reach out using the details below.

@@ -1,6 +1,6 @@
-# Turn on - Project Overview
+# mipoe club - Project Overview
 
-Turn on is a vibrant, interactive web application featuring a collection of party and couple games. It's built with a modern tech stack focused on high-quality animations, responsiveness, and a "playful" aesthetic.
+mipoe club is a vibrant, interactive web application featuring a collection of party and couple games. It's built with a modern tech stack focused on high-quality animations, responsiveness, and a "playful" aesthetic.
 
 ## Tech Stack
 
