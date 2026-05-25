@@ -208,7 +208,7 @@ export default function ScratchCards({ onExit, onFinish }: Props) {
             <span className="h-3 w-3 rounded-full ring-2 ring-white animate-pulse" style={{ background: current?.color }} />
             <p className={`font-pixel text-[10px] uppercase tracking-wider ${isAdult ? "text-rose-200" : "text-pink-700"}`}>{current?.name}</p>
         </div>
-        <p className={`font-script text-4xl ${isAdult ? "text-rose-100" : "text-pink-800"} drop-shadow-sm`}>is on the spot</p>
+        <p className={`font-serif-d text-4xl ${isAdult ? "text-rose-100" : "text-pink-800"} drop-shadow-sm`}>is on the spot</p>
       </div>
 
       <div className="relative z-10 mx-auto mt-5 w-full max-w-xs perspective-1000">

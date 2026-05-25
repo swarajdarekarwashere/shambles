@@ -498,7 +498,7 @@ export default function DrunkInLove({ mode, onExit, onFinish }: Props) {
 
               {/* Alt drink option */}
               {activeTileData.altDrink && (
-                <p className="mt-2 font-script text-lg italic text-pink-300">
+                <p className="mt-2 font-serif-d text-lg italic text-pink-300">
                   {activeTileData.altDrink}
                 </p>
               )}

@@ -188,13 +188,13 @@ export default function IntimacyCards({ onExit, onFinish }: Props) {
       </header>
 
       <div className="relative z-10 mx-auto mt-2 max-w-md text-center">
-        <p className="font-script text-5xl leading-none text-pink-200 drop-shadow-[0_2px_10px_rgba(255,90,150,0.5)]">sealed with a kiss</p>
+        <p className="font-serif-d text-5xl leading-none text-pink-200 drop-shadow-[0_2px_10px_rgba(255,90,150,0.5)]">sealed with a kiss</p>
         <p className="-mt-1 font-serifi text-[11px] tracking-[0.4em] text-pink-100/60">— for your eyes only —</p>
       </div>
 
       {actor && partner && (
         <div className="relative z-10 mx-auto mt-2 flex flex-col items-center justify-center">
-          <p className="font-script text-3xl text-pink-100">{actor.name},</p>
+          <p className="font-serif-d text-3xl text-pink-100">{actor.name},</p>
           <p className="font-pixel text-[8px] uppercase tracking-widest text-pink-200/60">
             {isSingleCoupleMatch ? `face off with ${partner.name}` : `surprise ${partner.name}`}
           </p>

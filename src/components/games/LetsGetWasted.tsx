@@ -646,7 +646,7 @@ export default function LetsGetWasted({ onExit, onFinish }: Props) {
 
       <div className="lets-get-wasted-turn relative z-10 mx-auto flex max-w-4xl items-center justify-center gap-2">
         <span className="h-2.5 w-2.5 rounded-full ring-2 ring-white sm:h-3 sm:w-3" style={{ background: current?.color }} />
-        <p className={`font-script text-[clamp(2rem,8vw,3rem)] leading-none drop-shadow-sm md:text-5xl ${
+        <p className={`font-serif-d text-[clamp(2rem,8vw,3rem)] leading-none drop-shadow-sm md:text-5xl ${
           isAdult ? "text-rose-200" : "text-rose-700"
         }`}>
           {current?.name}'s roll

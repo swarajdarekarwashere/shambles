@@ -24,28 +24,28 @@ type TileChallenge = {
 };
 
 const TILE_CHALLENGES: Record<number, TileChallenge> = {
-  2: { kind: "truth-dare", title: "Truth or Dare", prompt: "Pick truth or dare. Truth: reveal the boldest first impression you had about someone here. Dare: let the room choose one flirty challenge for you.", cta: "Done ->" },
-  5: { kind: "give-drink", title: "Give a Drink", prompt: "Choose one player and make them take 2 sips. Tell the room exactly why you picked them.", cta: "Chosen ->" },
-  7: { kind: "take-drink", title: "Take a Drink", prompt: "Take 2 slow sips, then say who in the room is most likely to start the chaos tonight.", cta: "Cheers ->" },
-  9: { kind: "give-drink", title: "Give a Drink", prompt: "Give 1 sip each to two different players, or give all 2 sips to one player if the room agrees.", cta: "Done ->" },
-  10: { kind: "truth-dare", title: "Truth or Dare", prompt: "Truth: name your most embarrassing drunk moment. Dare: act out a dramatic fake confession to the player on your right.", cta: "Done ->" },
-  13: { kind: "give-drink", title: "Give a Drink", prompt: "Nominate the most suspicious player in the room to drink 2 sips.", cta: "Done ->" },
-  15: { kind: "take-drink", title: "Take a Drink", prompt: "Take a shot or 3 long sips. No negotiation.", cta: "Survived ->" },
-  17: { kind: "give-drink", title: "Give a Drink", prompt: "Pick a player to drink and give them a playful reason in one sentence.", cta: "Done ->" },
-  19: { kind: "truth-dare", title: "Truth or Dare", prompt: "Truth: which player here would be the worst influence on you? Dare: give your best 10-second seductive runway walk.", cta: "Done ->" },
-  21: { kind: "take-drink", title: "Take a Drink", prompt: "Take 2 sips and keep eye contact with another player the whole time.", cta: "Done ->" },
-  23: { kind: "truth-dare", title: "Truth or Dare", prompt: "Truth: what's one thing you hope happens before tonight ends? Dare: let another player post a harmless emoji in your recent chat draft.", cta: "Done ->" },
-  24: { kind: "take-drink", title: "Take a Drink", prompt: "Take 2 sips, then hype yourself up like you just won the night.", cta: "Done ->" },
-  26: { kind: "give-drink", title: "Give a Drink", prompt: "Give a sip to the quietest player and a sip to the loudest player.", cta: "Done ->" },
-  29: { kind: "give-drink", title: "Give a Drink", prompt: "Before the snake drags you down, choose one player to take 2 sips with you.", cta: "Done ->" },
-  31: { kind: "give-drink", title: "Give a Drink", prompt: "Hand out 3 total sips however you like. Be strategic.", cta: "Done ->" },
-  32: { kind: "truth-dare", title: "Truth or Dare", prompt: "Truth: who's the best flirt in this room? Dare: deliver your smoothest pickup line to the group.", cta: "Done ->" },
-  34: { kind: "take-drink", title: "Take a Drink", prompt: "Take 2 sips and tell everyone your current confidence level out of 10.", cta: "Done ->" },
-  36: { kind: "take-drink", title: "Take a Drink", prompt: "Finish 3 quick sips, then spin once before your turn ends.", cta: "Done ->" },
-  41: { kind: "truth-dare", title: "Truth or Dare", prompt: "Truth: what kind of chaos do you secretly enjoy in a party game? Dare: compliment every player in one very short sentence.", cta: "Done ->" },
-  44: { kind: "take-drink", title: "Take a Drink", prompt: "Take 2 sips. The next player gets to decide your toast before you drink.", cta: "Done ->" },
-  46: { kind: "truth-dare", title: "Truth or Dare", prompt: "Truth: reveal your biggest green flag in dating. Dare: recreate your best flirty smile for 10 seconds.", cta: "Done ->" },
-  48: { kind: "give-drink", title: "Give a Drink", prompt: "You're near the finish. Give 3 sips to any player who looks too comfortable.", cta: "Done ->" },
+  2: { kind: "truth-dare", title: "Truth or Dare", prompt: "Truth: Who in this room would you most want to wake up next to after a wild night out? Dare: Give the player to your left a lap dance or a 10-second neck massage. Otherwise, take 2 shots.", cta: "Done ->" },
+  5: { kind: "give-drink", title: "Body Shot", prompt: "Choose a player to let you do a body shot off them, or you both take 2 huge gulps of your drink. Tell the room the wildest place you've ever hooked up.", cta: "Chosen ->" },
+  7: { kind: "take-drink", title: "Take a Drink", prompt: "Chug for 5 seconds. Now, confess the most toxic trait you look for in a partner, or let the person opposite you write a text to your crush.", cta: "Cheers ->" },
+  9: { kind: "give-drink", title: "Give a Drink", prompt: "Nominate two players who you think would make the hottest couple to take a shot together, or take a double shot yourself.", cta: "Done ->" },
+  10: { kind: "truth-dare", title: "Truth or Dare", prompt: "Truth: What is your absolute biggest turn-on that you’d never admit to your parents? Dare: Let the player to your right write a wild status update on your social media, or take a shot.", cta: "Done ->" },
+  13: { kind: "give-drink", title: "Eye Contact", prompt: "Select the player with the best 'bedroom eyes'. Both of you must stare lock-eyed for 10 seconds. The first to look away or smile takes a full shot.", cta: "Done ->" },
+  15: { kind: "take-drink", title: "Take a Drink", prompt: "BARRICADE! Down a full shot immediately, then pick your 'partner in crime' to take one with you. If they refuse, take a triple shot.", cta: "Survived ->" },
+  17: { kind: "give-drink", title: "Give a Drink", prompt: "Whisper something incredibly provocative in the ear of the player to your left, or finish your entire drink.", cta: "Done ->" },
+  19: { kind: "truth-dare", title: "Truth or Dare", prompt: "Truth: Have you ever hooked up with a friend's ex or sibling? Dare: Let the group inspect your camera roll for 15 seconds, or take a double shot.", cta: "Done ->" },
+  21: { kind: "take-drink", title: "Take a Drink", prompt: "Sip and Strip: Take 3 big gulps, or remove one item of clothing (accessory/shoes count) and wear it on your head for the rest of the game.", cta: "Done ->" },
+  23: { kind: "truth-dare", title: "Truth or Dare", prompt: "Truth: What is the most scandalous DM you've ever sent or received? Dare: Let the player to your left sit on your lap for the next two rounds, or take 2 shots.", cta: "Done ->" },
+  24: { kind: "take-drink", title: "Take a Drink", prompt: "Waterfall! Start drinking, and everyone must drink until you stop. If you stop under 5 seconds, take an extra shot for being weak.", cta: "Done ->" },
+  26: { kind: "give-drink", title: "Give a Drink", prompt: "Rank the players in the room from 'Most likely to end up in jail' to 'Most likely to become a billionaire'. The top choice takes 2 sips, the bottom choice takes a shot.", cta: "Done ->" },
+  29: { kind: "give-drink", title: "Give a Drink", prompt: "Before the snake drags you down to tile 1, select a player to do a wild 5-second dance with you. You both take a shot.", cta: "Done ->" },
+  31: { kind: "give-drink", title: "Give a Drink", prompt: "Drill Sergeant: Assign 3 shots to the group. You can distribute them however you like, but you must take 1 shot with whoever you assign them to.", cta: "Done ->" },
+  32: { kind: "truth-dare", title: "Truth or Dare", prompt: "Truth: What is your wildest fantasy that you've actually fulfilled? Dare: Blindfold yourself and guess who in the room is kissing your cheek. If you guess wrong, take a double shot.", cta: "Done ->" },
+  34: { kind: "take-drink", title: "Take a Drink", prompt: "Confession Session: Take a double shot, or tell the room about the most inappropriate place you've ever had a romantic encounter.", cta: "Done ->" },
+  36: { kind: "take-drink", title: "Take a Drink", prompt: "Body Language: Use your hands to show the group your favorite position, or take 2 shots back-to-back.", cta: "Done ->" },
+  41: { kind: "truth-dare", title: "Truth or Dare", prompt: "Truth: Who in this room do you think is the best kisser (or would be)? Dare: Let the group text anything they want to your last active chat on WhatsApp/iMessage, or down your drink.", cta: "Done ->" },
+  44: { kind: "take-drink", title: "Take a Drink", prompt: "BDSM Lite: Let another player gentle-slap your butt, or take a shot. If you take the slap, you get to assign 2 sips.", cta: "Done ->" },
+  46: { kind: "truth-dare", title: "Truth or Dare", prompt: "Truth: What is the most illegal thing you’ve done and gotten away with? Dare: French kiss the nearest object (or willing player) for 5 seconds.", cta: "Done ->" },
+  48: { kind: "give-drink", title: "Give a Drink", prompt: "Victory lap: You're at the finish line! Choose one player to take a shot off you, or take 2 shots yourself to seal the deal.", cta: "Done ->" },
 };
 
 const BOARD_49: BoardCfg = {
@@ -191,7 +191,33 @@ export default function ShotsAndLadders({ onExit, onFinish }: Props) {
     setPos((p) => ({ ...p, [playerId]: destination }));
     if (kind === "ladder") addScore(playerId, 1);
     setPendingJump(null);
-    setTurnIdx((t) => t + 1);
+
+    const destTileNumber = to;
+    const nextChallenge = TILE_CHALLENGES[destTileNumber];
+    const nextJump = cfg.jumps[destTileNumber];
+
+    if (nextChallenge) {
+      setPendingChallenge({
+        playerId,
+        challenge: nextChallenge,
+        jump: nextJump
+          ? {
+              to: nextJump.to,
+              kind: nextJump.kind,
+              msg: nextJump.msg,
+            }
+          : undefined,
+      });
+    } else if (nextJump) {
+      setPendingJump({
+        playerId,
+        to: nextJump.to,
+        kind: nextJump.kind,
+        msg: nextJump.msg,
+      });
+    } else {
+      setTurnIdx((t) => t + 1);
+    }
   };
 
   const tileGroups = useMemo(() => {
@@ -222,7 +248,7 @@ export default function ShotsAndLadders({ onExit, onFinish }: Props) {
           className="h-2.5 w-2.5 rounded-full ring-2 ring-white sm:h-3 sm:w-3"
           style={{ background: current?.color }}
         />
-        <p className="font-script text-[clamp(2rem,8vw,3rem)] leading-none text-pink-700 drop-shadow-sm md:text-5xl">
+        <p className="font-cursivee text-[clamp(2rem,8vw,3rem)] leading-none text-pink-700 drop-shadow-sm md:text-5xl">
           {current?.name}'s roll
         </p>
       </div>
