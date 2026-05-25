@@ -23,14 +23,39 @@ type TileChallenge = {
   cta: string;
 };
 
-const TILE_CHALLENGES: Record<number, TileChallenge> = {
+const LIGHT_TILE_CHALLENGES: Record<number, TileChallenge> = {
+  2: { kind: "truth-dare", title: "Truth or Dare", prompt: "Truth: What is the most illegal thing you've done and gotten away with? Dare: Recreate your best catwalk for 10 seconds.", cta: "Done ->" },
+  5: { kind: "give-drink", title: "Give a Drink", prompt: "Pick the player who looks the most sober and make them take 3 sips. Tell the room exactly why you chose them.", cta: "Chosen ->" },
+  7: { kind: "take-drink", title: "Take a Drink", prompt: "Take 2 sips, then name the person in this room most likely to end up sleeping on the bathroom floor.", cta: "Cheers ->" },
+  9: { kind: "give-drink", title: "Give a Drink", prompt: "Group votes on who has the worst style in the room. That person takes a shot, or you take 3 sips.", cta: "Done ->" },
+  10: { kind: "truth-dare", title: "Truth or Dare", prompt: "Truth: What is the most embarrassing thing you've done at a pre-game? Dare: Do your best impression of a chicken laying an egg, or take a shot.", cta: "Done ->" },
+  13: { kind: "give-drink", title: "Give a Drink", prompt: "Pick the player who you think would make the worst president and make them take 2 sips.", cta: "Done ->" },
+  15: { kind: "take-drink", title: "Take a Drink", prompt: "Take a shot or 3 long sips. No negotiation.", cta: "Survived ->" },
+  17: { kind: "give-drink", title: "Give a Drink", prompt: "Choose a player. You two must do a rock-paper-scissors showdown; the loser takes a shot.", cta: "Done ->" },
+  19: { kind: "truth-dare", title: "Truth or Dare", prompt: "Truth: Reveal your worst drunk text or call story. Dare: Let the group inspect your phone search history for 15 seconds, or take a double shot.", cta: "Done ->" },
+  21: { kind: "take-drink", title: "Take a Drink", prompt: "Chug your drink for 5 seconds. If you stop early, tell the group your absolute biggest green flag.", cta: "Done ->" },
+  23: { kind: "truth-dare", title: "Truth or Dare", prompt: "Truth: Who in this room has the most chaotic energy? Dare: Let the player to your left draw a funny mustache on your face with a pen, or take 2 shots.", cta: "Done ->" },
+  24: { kind: "take-drink", title: "Take a Drink", prompt: "Waterfall! Start drinking, and everyone must drink until you stop. If you stop under 5 seconds, take a shot.", cta: "Done ->" },
+  26: { kind: "give-drink", title: "Give a Drink", prompt: "Give 2 sips to the quietest player and 2 sips to the loudest player.", cta: "Done ->" },
+  29: { kind: "give-drink", title: "Give a Drink", prompt: "Before the snake drags you down to tile 1, select a player to do a funny 5-second dance with you. You both take 2 sips.", cta: "Done ->" },
+  31: { kind: "give-drink", title: "Give a Drink", prompt: "Drill Sergeant: Assign 3 sips to the group. You can distribute them however you like, but you must take 1 sip with whoever you assign them to.", cta: "Done ->" },
+  32: { kind: "truth-dare", title: "Truth or Dare", prompt: "Truth: What is your go-to 'party trick' that actually works? Dare: Let the group text anything they want to your last active chat on WhatsApp/iMessage, or down your drink.", cta: "Done ->" },
+  34: { kind: "take-drink", title: "Take a Drink", prompt: "Take a double shot, or confess the most ridiculous lie you've ever told a professor or bouncer.", cta: "Done ->" },
+  36: { kind: "take-drink", title: "Take a Drink", prompt: "Finish 3 quick sips, then spin around three times before your turn ends.", cta: "Done ->" },
+  41: { kind: "truth-dare", title: "Truth or Dare", prompt: "Truth: What's the most embarrassing drunk purchase you've ever made? Dare: Call a random contact in your phone, say 'I know what you did' and immediately hang up.", cta: "Done ->" },
+  44: { kind: "take-drink", title: "Take a Drink", prompt: "Take 2 sips. The next player gets to decide your toast before you drink.", cta: "Done ->" },
+  46: { kind: "truth-dare", title: "Truth or Dare", prompt: "Truth: What was your very first impression of the person sitting opposite you? Dare: Sing the chorus of a popular pop song loudly, or take a shot.", cta: "Done ->" },
+  48: { kind: "give-drink", title: "Give a Drink", prompt: "Victory lap: You're near the finish line! Choose one player to take a shot with you to seal the deal.", cta: "Done ->" },
+};
+
+const ADULT_TILE_CHALLENGES: Record<number, TileChallenge> = {
   2: { kind: "truth-dare", title: "Truth or Dare", prompt: "Truth: Who in this room would you most want to wake up next to after a wild night out? Dare: Give the player to your left a lap dance or a 10-second neck massage. Otherwise, take 2 shots.", cta: "Done ->" },
   5: { kind: "give-drink", title: "Body Shot", prompt: "Choose a player to let you do a body shot off them, or you both take 2 huge gulps of your drink. Tell the room the wildest place you've ever hooked up.", cta: "Chosen ->" },
   7: { kind: "take-drink", title: "Take a Drink", prompt: "Chug for 5 seconds. Now, confess the most toxic trait you look for in a partner, or let the person opposite you write a text to your crush.", cta: "Cheers ->" },
   9: { kind: "give-drink", title: "Give a Drink", prompt: "Nominate two players who you think would make the hottest couple to take a shot together, or take a double shot yourself.", cta: "Done ->" },
   10: { kind: "truth-dare", title: "Truth or Dare", prompt: "Truth: What is your absolute biggest turn-on that you’d never admit to your parents? Dare: Let the player to your right write a wild status update on your social media, or take a shot.", cta: "Done ->" },
   13: { kind: "give-drink", title: "Eye Contact", prompt: "Select the player with the best 'bedroom eyes'. Both of you must stare lock-eyed for 10 seconds. The first to look away or smile takes a full shot.", cta: "Done ->" },
-  15: { kind: "take-drink", title: "Take a Drink", prompt: "BARRICADE! Down a full shot immediately, then pick your 'partner in crime' to take one with you. If they refuse, take a triple shot.", cta: "Survived ->" },
+  15: { kind: "take-drink", title: "Take a Drink", prompt: "BARRICADE! Down a full shot immediately, then pick your 'partner in crime' to take one with you. If you refuse, take a triple shot.", cta: "Survived ->" },
   17: { kind: "give-drink", title: "Give a Drink", prompt: "Whisper something incredibly provocative in the ear of the player to your left, or finish your entire drink.", cta: "Done ->" },
   19: { kind: "truth-dare", title: "Truth or Dare", prompt: "Truth: Have you ever hooked up with a friend's ex or sibling? Dare: Let the group inspect your camera roll for 15 seconds, or take a double shot.", cta: "Done ->" },
   21: { kind: "take-drink", title: "Take a Drink", prompt: "Sip and Strip: Take 3 big gulps, or remove one item of clothing (accessory/shoes count) and wear it on your head for the rest of the game.", cta: "Done ->" },
@@ -77,7 +102,9 @@ function tileCenterPercent(tileIdx0: number, cfg: BoardCfg) {
 }
 
 export default function ShotsAndLadders({ onExit, onFinish }: Props) {
-  const { players, addScore } = useGame();
+  const { players, addScore, tone } = useGame();
+  const isAdult = tone === "adult";
+  const challenges = isAdult ? ADULT_TILE_CHALLENGES : LIGHT_TILE_CHALLENGES;
   const cfg = BOARD_49;
 
   const [pos, setPos] = useState<Record<string, number>>(() =>
@@ -138,7 +165,7 @@ export default function ShotsAndLadders({ onExit, onFinish }: Props) {
     setTimeout(() => {
       const tileNumber = target + 1;
       const jump = cfg.jumps[tileNumber];
-      const challenge = TILE_CHALLENGES[tileNumber];
+      const challenge = challenges[tileNumber];
 
       if (challenge) {
         setPendingChallenge({
@@ -193,7 +220,7 @@ export default function ShotsAndLadders({ onExit, onFinish }: Props) {
     setPendingJump(null);
 
     const destTileNumber = to;
-    const nextChallenge = TILE_CHALLENGES[destTileNumber];
+    const nextChallenge = challenges[destTileNumber];
     const nextJump = cfg.jumps[destTileNumber];
 
     if (nextChallenge) {
@@ -230,16 +257,28 @@ export default function ShotsAndLadders({ onExit, onFinish }: Props) {
   }, [players, pos]);
 
   return (
-    <section className="relative min-h-dvh w-full overflow-hidden bg-[radial-gradient(circle_at_50%_0%,#ffe4ef,#fbcfe8_45%,#f9a8d4_100%)] px-3 pb-32 pt-3">
+    <section className={`relative min-h-dvh w-full overflow-hidden px-3 pb-32 pt-3 transition-colors duration-500 ${
+      isAdult
+        ? "bg-[radial-gradient(circle_at_50%_0%,#4c0519,#27000d_45%,#000000_100%)] text-white"
+        : "bg-[radial-gradient(circle_at_50%_0%,#ffe4ef,#fbcfe8_45%,#f9a8d4_100%)] text-pink-950"
+    }`}>
       <header className="relative z-10 mx-auto flex max-w-3xl items-center justify-between">
         <button
           onClick={onExit}
-          className="rounded-full border border-pink-300 bg-white/80 px-3 py-1.5 font-pixel text-[10px] text-pink-900 backdrop-blur"
+          className={`rounded-full border px-3 py-1.5 font-pixel text-[10px] backdrop-blur ${
+            isAdult
+              ? "border-white/20 bg-black/40 text-white"
+              : "border-pink-300 bg-white/80 text-pink-900"
+          }`}
         >
           ← Exit
         </button>
-        <div className="rounded-full border border-pink-300 bg-white/80 px-3 py-1 font-pixel text-[9px] tracking-widest text-pink-900 backdrop-blur">
-          {cfg.total} TILES · CLASSIC
+        <div className={`rounded-full border px-3 py-1 font-pixel text-[9px] tracking-widest backdrop-blur ${
+          isAdult
+            ? "border-pink-300/40 bg-black/40 text-pink-200 shadow-[0_0_12px_rgba(255,90,170,0.5)]"
+            : "border-pink-300 bg-white/80 text-pink-900"
+        }`}>
+          {isAdult ? "18+" : "LIGHT"} · {cfg.total} TILES
         </div>
       </header>
 
@@ -248,7 +287,9 @@ export default function ShotsAndLadders({ onExit, onFinish }: Props) {
           className="h-2.5 w-2.5 rounded-full ring-2 ring-white sm:h-3 sm:w-3"
           style={{ background: current?.color }}
         />
-        <p className="font-cursivee text-[clamp(2rem,8vw,3rem)] leading-none text-pink-700 drop-shadow-sm md:text-5xl">
+        <p className={`font-cursivee text-[clamp(2rem,8vw,3rem)] leading-none drop-shadow-sm md:text-5xl ${
+          isAdult ? "text-pink-200" : "text-pink-700"
+        }`}>
           {current?.name}'s roll
         </p>
       </div>
@@ -294,7 +335,9 @@ export default function ShotsAndLadders({ onExit, onFinish }: Props) {
         </div>
 
         {/* Legend */}
-        <div className="mx-auto mt-4 flex max-w-md flex-wrap items-center justify-center gap-x-4 gap-y-2 text-pink-900 md:gap-6">
+        <div className={`mx-auto mt-4 flex max-w-md flex-wrap items-center justify-center gap-x-4 gap-y-2 md:gap-6 ${
+          isAdult ? "text-pink-200" : "text-pink-900"
+        }`}>
           <span className="flex items-center gap-1.5 font-pixel text-[8px] sm:text-[9px]">
             <span className="inline-block h-3 w-3 rounded-full bg-pink-500 sm:h-4 sm:w-4" />
             TAKE A SHOT
@@ -343,9 +386,15 @@ export default function ShotsAndLadders({ onExit, onFinish }: Props) {
               initial={{ scale: 0.75, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.92, opacity: 0 }}
-              className="w-full max-w-sm rounded-3xl border-[3px] border-pink-300 bg-gradient-to-b from-white to-pink-50 p-6 text-center shadow-2xl"
+              className={`w-full max-w-sm rounded-3xl border-[3px] p-6 text-center shadow-2xl ${
+                isAdult
+                  ? "border-pink-300/30 bg-[#1a0d18] text-white shadow-[0_0_40px_rgba(255,80,170,0.5)]"
+                  : "border-pink-300 bg-gradient-to-b from-white to-pink-50 text-pink-900"
+              }`}
             >
-              <p className="font-pixel text-[10px] uppercase tracking-[0.24em] text-pink-500">
+              <p className={`font-pixel text-[10px] uppercase tracking-[0.24em] ${
+                isAdult ? "text-pink-400" : "text-pink-500"
+              }`}>
                 {pendingChallenge.challenge.title}
               </p>
               <div className="mt-3 text-5xl">
@@ -355,11 +404,17 @@ export default function ShotsAndLadders({ onExit, onFinish }: Props) {
                     ? "🥃"
                     : "🍻"}
               </div>
-              <p className="mt-4 font-pixel text-sm leading-6 text-pink-900">
+              <p className={`mt-4 font-pixel text-sm leading-6 ${
+                isAdult ? "text-white" : "text-pink-900"
+              }`}>
                 {pendingChallenge.challenge.prompt}
               </p>
               {pendingChallenge.jump && (
-                <p className="mt-4 rounded-2xl bg-pink-100 px-4 py-3 font-pixel text-[10px] uppercase leading-5 tracking-wide text-pink-700">
+                <p className={`mt-4 rounded-2xl px-4 py-3 font-pixel text-[10px] uppercase leading-5 tracking-wide ${
+                  isAdult
+                    ? "bg-pink-950/50 text-pink-300 border border-pink-500/20"
+                    : "bg-pink-100 text-pink-700"
+                }`}>
                   After this: {pendingChallenge.jump.msg}
                 </p>
               )}
@@ -378,18 +433,21 @@ export default function ShotsAndLadders({ onExit, onFinish }: Props) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-6 backdrop-blur-sm"
-            // No onClick here — accidental taps no longer silently advance the turn
           >
             <motion.div
               initial={{ scale: 0.7 }}
               animate={{ scale: 1 }}
-              className="w-full max-w-xs rounded-3xl border-[3px] border-pink-300 bg-gradient-to-b from-white to-pink-50 p-6 text-center shadow-2xl"
+              className={`w-full max-w-xs rounded-3xl border-[3px] p-6 text-center shadow-2xl ${
+                isAdult
+                  ? "border-pink-300/30 bg-[#1a0d18] text-white shadow-[0_0_40px_rgba(255,80,170,0.5)]"
+                  : "border-pink-300 bg-gradient-to-b from-white to-pink-50 text-pink-900"
+              }`}
             >
               <div className="text-6xl drop-shadow-[0_2px_8px_rgba(255,90,150,0.5)]">
                 {pendingJump.kind === "ladder" ? "🪜" : "🥃"}
               </div>
-              <p className="mt-3 font-pixel text-base text-pink-900">{pendingJump.msg}</p>
-              <p className="mt-1 font-script text-3xl text-pink-600">
+              <p className={`mt-3 font-pixel text-base ${isAdult ? "text-white" : "text-pink-900"}`}>{pendingJump.msg}</p>
+              <p className={`mt-1 font-script text-3xl ${isAdult ? "text-pink-400" : "text-pink-600"}`}>
                 {pendingJump.kind === "ladder" ? "lucky you" : "ouch, take a sip"}
               </p>
               <button

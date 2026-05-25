@@ -20,73 +20,73 @@ const LIGHT_CATEGORIES: DareCategory[] = [
   { 
     label: "Take a Sip", 
     tasks: [
-      "Liquid courage time. Take a sip and name the person most likely to get kicked out of a club.",
-      "Hydration check. Take a long sip and tell us the last time you felt like a total main character.",
-      "Bottoms up (partially). Take a sip and reveal your go-to 'party trick' that actually works.",
-      "Thirsty? Take a sip and point at the person who looks the most sober right now."
+      "Down 3 sips. Name the wildest outfit someone in this room has worn to a party.",
+      "Take a long gulp. Confess your most ridiculous drunk text or Snapchat story.",
+      "Take 2 sips. Point at the person who would survive the longest on a reality TV show.",
+      "Take 3 sips. Reveal your worst fashion choice from college or high school."
     ] 
   },
   { 
     label: "Pick Someone", 
     tasks: [
-      "Target locked. Pick someone to answer a 'dirty' question. Group decides if the answer is honest enough.",
-      "Selective choice. Pick someone here to do a 5-second catwalk. You drink if they refuse.",
-      "The Chosen One. Pick a player. They have to change their status/bio on a social app to whatever you want.",
-      "Partner in crime. Pick someone to take a 'tequila face' selfie with you. No tequila? Use water."
+      "Choose a player. They must let you send a random text from their phone, or they take a shot.",
+      "Pick someone to do 10 pushups. If they refuse, you both have to chug your drinks for 5 seconds.",
+      "Pick a player. You two must do a rock-paper-scissors showdown; the loser takes a shot.",
+      "Select a player. They have to give you a piggyback ride around the room, or you both drink."
     ] 
   },
   { 
     label: "Wild Card", 
     tasks: [
-      "Chaos mode. The room has 10 seconds to invent a frat-style dare for you. Do it or drink.",
-      "Improv time. Act like a local DJ for 15 seconds. If nobody laughs, take two sips.",
-      "Dealer's choice. The person to your right decides if you take a shot or reveal your search history.",
-      "Russian Roulette. Call a random contact in your phone and say 'I know what you did' then hang up."
+      "Frat Initiation! Let the group draw a funny face on your forehead with a pen, or take 2 shots.",
+      "Lyrical Genius. Freestyle rap about the person to your left for 15 seconds, or down your drink.",
+      "Phone Roulette. Go to your instagram DMs and let the player to your right send a fire emoji to your 3rd recent chat.",
+      "Drink or Dare. Do your best impression of a chicken laying an egg while screaming, or take a shot."
     ] 
   },
   { 
     label: "Kiss Dare", 
     tasks: [
-      "Don't overthink it. Give the player on your left a dramatic movie-style air-kiss and your best pickup line.",
-      "Signature move. Blow a kiss to the person you think is the best dancer in the room.",
-      "Double trouble. Give the person on your right a high-five and the person on your left a cheeky wink.",
-      "Standard procedure. Describe your 'first kiss' story using only 5 words. Group votes on how cringe it is."
+      "Give a loud kiss to the wall next to you and whisper a pickup line to it, or take 2 sips.",
+      "Blow a seductive kiss to the person opposite you and rank their styling today out of 10.",
+      "Cheeky. Give the person to your right a quick peck on the cheek, or take a full shot.",
+      "Describe your worst kiss experience in dramatic detail, or take 3 sips."
     ] 
   },
   { 
     label: "Shot Time", 
     tasks: [
-      "Down it. Take a shot, then nominate someone to reveal their most embarrassing 'drunk story'.",
-      "Power move. Take a shot and then make a new rule that everyone must follow for the next 3 rounds.",
-      "No mercy. Take a shot and then swap seats with the person you find most interesting.",
-      "Solidarity. You and the person sitting directly opposite you take a shot together."
+      "Shot time! Take a shot, then choose someone else to take one with you. Bottoms up!",
+      "Beer Pong Shot. Take a shot, then try to toss a crumpled napkin into a cup across the room. Miss = another sip.",
+      "Double Down. Take a shot, or do 20 jumping jacks while shouting 'YEAH BUDDY!'",
+      "Shot Buddies. The player directly opposite you and you must take a shot together. Cheers to chaos!"
     ] 
   },
   { 
     label: "Truth", 
     tasks: [
-      "Spill the tea. What's the most illegal thing you've ever done and gotten away with?",
-      "Deep dive. What's the most expensive thing you've ever broken while being 'not sober'?",
-      "Reality check. If you could trade lives with anyone in this room for a day, who would it be and why?",
-      "Vulnerability. What's the one thing you're most afraid of that people would find silly?"
+      "Truth: What's the most embarrassing thing you've done at a party that no one will let you live down?",
+      "Truth: Who in this room do you think would be the wildest on a Vegas trip, and why?",
+      "Truth: Have you ever ditched plans by faking being sick? Come clean with the story.",
+      "Truth: What's your hottest take about someone in this room that would cause drama if you said it out loud?"
     ] 
   },
   { 
     label: "Spin Again", 
     tasks: [
-      "Lady luck is on your side. Spin again and double the stakes for the next dare.",
-      "Second chance. Spin again, but this time, you pick who performs the task.",
-      "Free pass. Spin again. If you land on 'Take a Sip', the whole table drinks instead.",
-      "Twice as nice. Spin again. You get +2 points if you complete whatever comes next."
+      "Lucky break! Spin again and DOUBLE the drinks for whatever category you land on next.",
+      "Re-roll! Spin again, but the person to your left has to do THEIR version of whatever you land on.",
+      "Spin again! If you survive the next dare, you get to make anyone in the room take a shot.",
+      "Double Spin. Spin again. The stakes are doubled: more sips, more laughs, more chaos!"
     ] 
   },
   { 
     label: "Group Dare", 
     tasks: [
-      "Rave check! Everyone has to show their best 'dance floor move' for 5 seconds. Worst move drinks.",
-      "Flash mob. Everyone stand up and do the Macarena (or any dance) for 10 seconds. Last one to start drinks.",
-      "Static pose. Everyone must freeze for 20 seconds. The first person to move or laugh takes a penalty sip.",
-      "Toast time. Everyone raise their glass and say one thing they love about the host (or the person to their left)."
+      "Group Chug! Everyone counts down and takes a sip at the same time. Last one drinking buys the next round.",
+      "Categories! You name a topic (e.g., beer brands, excuses to skip class). Everyone must name one in order. First person who can't drink.",
+      "Never Have I Ever. Everyone puts up 3 fingers. You say 'Never Have I Ever...' Anyone who's done it drinks and puts a finger down.",
+      "Floor is Lava! The last person to get their feet off the ground finishes their drink."
     ] 
   },
 ];
@@ -95,73 +95,73 @@ const ADULT_CATEGORIES: DareCategory[] = [
   { 
     label: "Take a Sip", 
     tasks: [
-      "Sip slowly. Pick one person and tell them exactly which of their physical traits is most 'distracting' tonight.",
-      "Cool down. Take a sip and whisper your most frequent 'late night' thought to the person on your left.",
-      "Hydration with a hint. Take a sip, then describe your ideal 'after-party' in 3 words.",
-      "Tension check. Take a long sip while making unbroken eye contact with the person you find most attractive."
+      "Take a slow sip while giving a 10-second seductive look to the person you find most attractive here.",
+      "Take 3 sips. Describe the most adventurous or scandalous place you've ever hooked up.",
+      "Take a sip from the drink of the person sitting next to you (with their permission), or take a shot.",
+      "Take 2 sips. Whisper your biggest bedroom turn-off to the person on your left."
     ] 
   },
   { 
     label: "Pick Someone", 
     tasks: [
-      "Spotlight's on. Pick someone here. They get to whisper a bold dare into your ear that nobody else can hear.",
-      "Master of ceremonies. Pick someone to show you the most recent 'risky' photo they took (no pressure though).",
-      "Power dynamic. Pick a player. You get to decide where they sit for the rest of the game.",
-      "Hand-off. Pick someone to give you a 10-second hand massage. If they refuse, you both drink."
+      "Pick someone to give you a 30-second back massage. If they refuse, you both take a double shot.",
+      "Choose a player. They get to ask you any dirty question, and you must answer or strip an item of clothing.",
+      "Pick a player. You two must hold a piece of ice between your lips until it melts, or you both take 1 shot.",
+      "Pick someone to sit on your lap for the next two rounds. If they refuse, you take a shot."
     ] 
   },
   { 
     label: "Wild Card", 
     tasks: [
-      "Electric vibe. Any player can throw a spicy dare at you. If you decline, take two very long sips.",
-      "No boundaries. Let the person you find most tempting invent a dare specifically for you.",
-      "Daredevil. You have 30 seconds to send a 'Hey' text to your most recent ex, or take a full shot.",
-      "Skin deep. Show the room the most hidden tattoo or 'mark' you have on your body. If you have none, drink."
+      "Spicy Roulette. Let the group choose: either show your search history, or let the person on your right write a flirtatious DM to your crush.",
+      "Daredevil. Let the person you find most tempting write a secret dare on your arm with a pen, or take 2 shots.",
+      "Body Language. Show the group your favorite romantic position using the person to your left as a model (keep it PG-13 but suggestive), or down your drink.",
+      "Truth or Strip. Reveal the wildest dream you've had about someone in this room, or remove one accessory/shoe."
     ] 
   },
   { 
     label: "Kiss Dare", 
     tasks: [
-      "Intensity check. Blow a lingering, slow-motion kiss to the person you find most tempting in the room.",
-      "Gentle touch. Give the person on your right a soft, 5-second kiss on their hand while looking them in the eye.",
-      "Almost there. Lean in like you're going to kiss the person on your left, but stop 1 inch away for 5 seconds.",
-      "Trace it. Trace the outline of your partner's (or neighbor's) lips with your index finger. No words allowed."
+      "Kiss the person you find most attractive on the neck for 5 seconds, or take a double shot.",
+      "Blindfold kiss! Blindfold yourself, spin once, and kiss whoever is directly in front of you on the cheek or lips (consensually).",
+      "Give the person to your left a passionate 5-second kiss on their collarbone, or take a shot.",
+      "7 Seconds in Heaven. You and the person of your choice must go to a closet or separate room for 30 seconds."
     ] 
   },
   { 
     label: "Shot Time", 
     tasks: [
-      "Shot fired. Down it, then whisper a bold, unfiltered compliment to the person sitting on your right.",
-      "Heat wave. Take a shot, then describe your favorite way to be 'woken up' in the morning.",
-      "Full disclosure. Take a shot and then reveal one 'guilty pleasure' that would surprise your parents.",
-      "Double down. Take two shots (or one big one) and skip your next turn entirely."
+      "Body Shot! Take a shot off the abs, chest, or neck of the person you're most attracted to, or solo a double shot.",
+      "Take a shot, then whisper the dirtiest compliment you can think of to the person on your right.",
+      "Double down. Take two shots back-to-back, or passionately kiss the player to your left for 10 seconds.",
+      "Shot Swap. Take a shot, then have the person opposite you take a shot and kiss you with the alcohol still in their mouth."
     ] 
   },
   { 
     label: "Truth", 
     tasks: [
-      "Hot seat. Tell the table: if you had to leave with one person in this room tonight, who would it be?",
-      "Deep secret. What is one thing you've always wanted to try in the bedroom but were too shy to ask?",
-      "No filters. What is the most 'reckless' thing you've done for love or attraction?",
-      "Honesty hour. Tell us: what was your very first impression of the person sitting directly opposite you?"
+      "Truth: What's your wildest sexual fantasy that you've never told a soul?",
+      "Truth: If you could hook up with anyone in this room tonight, who and why? Be SPECIFIC about what you'd do.",
+      "Truth: Tell us your hottest one-night stand story—details matter.",
+      "Truth: What's the most scandalous or explicit thing you've ever done? DM screenshot optional."
     ] 
   },
   { 
     label: "Spin Again", 
     tasks: [
-      "Not done yet. One more spin. Let's see how much deeper this rabbit hole goes.",
-      "Fate's hand. Spin again. Whatever you land on, the person you find most attractive has to do it with you.",
-      "Double trouble. Spin again. You must complete the next two dares to get your points.",
-      "Chaos loop. Spin again. If you land on 'Truth', you have to answer TWO questions instead of one."
+      "Spin again! Whatever you land on next, you do it with the hottest person in this room—no exceptions.",
+      "Re-spin with a twist. If you survive, you get to make someone else remove an item of clothing.",
+      "Spin again. If you land on a drinking category, you can make someone drink it off your body instead.",
+      "Ultimate Spin. Spin again. Winner gets to assign the next dare to anyone—double intensity guaranteed."
     ] 
   },
   { 
     label: "Group Dare", 
     tasks: [
-      "Mischief round. Everyone drinks if they've ever sent a 'risky' text and immediately regretted it.",
-      "Connection check. Everyone must find a 'partner' and hold a 10-second stare. First to blink drinks.",
-      "Vibe check. Everyone who is wearing black underwear right now takes a celebratory sip.",
-      "Confession circle. Everyone must reveal their most 'electric' memory of a party. The best story gets a point."
+      "Sip or Strip. Everyone in the room must either take a full shot or remove one item of clothing/accessory.",
+      "Vibe check. Everyone who has ever hooked up with someone they met at a party takes a shot.",
+      "Confession circle. Everyone must reveal the youngest/oldest person they've ever kissed. Most extreme drinks.",
+      "Tension building. Everyone must close their eyes. On the count of three, point at the person you think is the best kisser. Open eyes and see who got pointed at; they take a sip."
     ] 
   },
 ];
@@ -201,10 +201,23 @@ export default function SpinTheWheel({ onExit, onFinish }: Props) {
     const categoryIdx = Math.floor(Math.random() * categories.length);
     const taskIdx = Math.floor(Math.random() * categories[categoryIdx].tasks.length);
     
-    // Add random offset within the 45-degree slice (5 to 40 degrees)
-    // to avoid landing exactly on the partition lines
-    const randomOffset = 5 + Math.random() * (slice - 10);
-    const base = (360 - (categoryIdx * slice) - randomOffset) % 360;
+    // Precise centers of each category slice on the wheel image (measured clockwise in degrees from 12 o'clock)
+    const CATEGORY_CENTERS: Record<number, number> = {
+      0: 146.25, // Take a Sip
+      1: 191.25, // Pick Someone
+      2: 236.25, // Wild Card
+      3: 281.25, // Kiss Dare
+      4: 11.25,  // Truth
+      5: 326.25, // Shot Time
+      6: 56.25,  // Spin Again
+      7: 101.25  // Group Dare
+    };
+
+    const centerAngle = CATEGORY_CENTERS[categoryIdx] ?? 0;
+    // Add random offset between -15 and 15 degrees to land naturally within the slice
+    const offset = -15 + Math.random() * 30;
+    // Add 180 degrees because the visual slices are reversed (180° offset) relative to the rotation angle
+    const base = (360 - (centerAngle + offset) + 180) % 360;
     const target = rotation + 360 * 6 + (base - (rotation % 360));
     
     setSpinning(true);
