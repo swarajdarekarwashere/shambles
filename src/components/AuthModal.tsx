@@ -43,7 +43,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           password,
         });
         if (error) throw error;
-        toast.success("Check your email for the confirmation link!");
+        toast.success("Account created!");
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email,
@@ -145,6 +145,28 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                       className="text-primary hover:underline font-bold"
                     >
                       Cancellations & Refund
+                    </button>
+                    ,{" "}
+                    <button 
+                      type="button" 
+                      onClick={() => {
+                        onClose();
+                        navigate("/age-gating");
+                      }}
+                      className="text-primary hover:underline font-bold"
+                    >
+                      21+ Access Policy
+                    </button>
+                    , and{" "}
+                    <button 
+                      type="button" 
+                      onClick={() => {
+                        onClose();
+                        navigate("/minor-safety");
+                      }}
+                      className="text-primary hover:underline font-bold"
+                    >
+                      Child Safety Policy
                     </button>
                     .
                   </label>

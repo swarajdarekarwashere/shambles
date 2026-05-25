@@ -11,6 +11,14 @@ interface PaywallModalProps {
   userId: string;
 }
 
+type RazorpayOrderResponse = {
+  id?: string;
+  amount?: number;
+  currency?: string;
+  keyId?: string;
+  key?: string;
+};
+
 export default function PaywallModal({ isOpen, userId }: PaywallModalProps) {
   const [loading, setLoading] = useState(false);
   const [pricing, setPricing] = useState({
@@ -60,7 +68,6 @@ export default function PaywallModal({ isOpen, userId }: PaywallModalProps) {
     try {
       const { data, error } = await supabase.functions.invoke("create-razorpay-order", {
         body: {
-          amount: pricing.amount,
           currency: pricing.currency,
           userId,
         },
@@ -68,13 +75,29 @@ export default function PaywallModal({ isOpen, userId }: PaywallModalProps) {
 
       if (error) throw error;
 
+      const paymentData = (data ?? {}) as RazorpayOrderResponse;
+      const checkoutKey =
+        paymentData.keyId ||
+        paymentData.key ||
+        import.meta.env.VITE_RAZORPAY_KEY_ID;
+
+      if (!paymentData.id) {
+        throw new Error("Payment order creation failed. Please try again.");
+      }
+
+      if (!checkoutKey) {
+        throw new Error(
+          "Razorpay public key is missing. Deploy the latest payment function or set VITE_RAZORPAY_KEY_ID."
+        );
+      }
+
       const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-        amount: data.amount,
-        currency: data.currency,
-        name: "mipoe club",
+        key: checkoutKey,
+        amount: paymentData.amount ?? pricing.amount,
+        currency: paymentData.currency ?? pricing.currency,
+        name: "turn on you",
         description: "24-Hour Day Pass",
-        order_id: data.id,
+        order_id: paymentData.id,
         modal: {
           ondismiss() {
             setLoading(false);

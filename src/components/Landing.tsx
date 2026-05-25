@@ -57,7 +57,7 @@ export default function Landing({ onPickMode }: LandingProps) {
 
       {/* Top brand */}
       <header className="relative z-50 flex items-center justify-between px-6 pt-6 md:px-12">
-        <div className="flex-1 font-pixel text-xs text-accent md:text-sm">T&C ♥</div>
+        <div className="flex-1 font-pixel text-xs text-accent md:text-sm">TOY♥</div>
         <div className="flex-1 flex justify-center">
           <Profile />
         </div>
@@ -71,9 +71,9 @@ export default function Landing({ onPickMode }: LandingProps) {
       <div className="relative z-10 mx-auto flex max-w-6xl flex-col items-center px-6 pt-8 text-center md:pt-14">
         <p className="mb-4 font-script text-2xl text-accent md:text-3xl">a tiny playground for two… or many</p>
         <h1 className="font-pixel text-3xl leading-[1.4] text-foreground sm:text-4xl md:text-6xl md:leading-[1.3]">
-          <span className="text-primary">Play.</span>{" "}
-          <span className="text-accent">Tease.</span>{" "}
-          <span>Connect.</span>
+          <span className="text-primary">Turn.</span>{" "}
+          <span className="text-accent">On.</span>{" "}
+          <span>You.</span>
         </h1>
         <p className="mt-6 max-w-xl text-base text-muted-foreground md:text-lg">
           Cheeky mini-games for couples & party crews. Pixel-perfect, blush-soft,
@@ -170,6 +170,18 @@ export default function Landing({ onPickMode }: LandingProps) {
             className="text-[10px] font-pixel tracking-wider hover:text-primary"
           >
             Cancellations & Refund
+          </Link>
+          <Link
+            to="/age-gating"
+            className="text-[10px] font-pixel tracking-wider hover:text-primary"
+          >
+            21+ Access Policy
+          </Link>
+          <Link
+            to="/minor-safety"
+            className="text-[10px] font-pixel tracking-wider hover:text-primary"
+          >
+            Child Safety Policy
           </Link>
         </footer>
       </div>

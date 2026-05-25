@@ -1,5 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { MemoryRouter } from 'react-router-dom';
 import ScreenRouter from '@/components/ScreenRouter';
 import { GameProvider, useGame } from '@/state/GameContext';
 import { supabase } from '@/lib/supabase';
@@ -41,9 +44,11 @@ describe('Monetization Security & Logic', () => {
     (supabase.auth.getSession as any).mockResolvedValue({ data: { session: null } });
 
     render(
-      <GameProvider>
-        <ScreenRouter />
-      </GameProvider>
+      <MemoryRouter>
+        <GameProvider>
+          <ScreenRouter />
+        </GameProvider>
+      </MemoryRouter>
     );
 
     // Navigate to discovery (this might need mocking the initial state)
@@ -60,6 +65,13 @@ describe('Monetization Security & Logic', () => {
   it('validates that Razorpay webhook secret is not exposed in frontend', () => {
     // Check that RAZORPAY_WEBHOOK_SECRET is not in import.meta.env
     expect(import.meta.env.VITE_RAZORPAY_WEBHOOK_SECRET).toBeUndefined();
+  });
+
+  it('keeps Razorpay server credentials out of frontend source files', () => {
+    const paywallSource = readFileSync(resolve(process.cwd(), 'src/components/PaywallModal.tsx'), 'utf8');
+
+    expect(paywallSource).not.toContain('RAZORPAY_KEY_SECRET');
+    expect(paywallSource).not.toContain('RAZORPAY_WEBHOOK_SECRET');
   });
 });
 

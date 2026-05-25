@@ -25,8 +25,9 @@ Add these to your `.env` file:
 ```env
 VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-VITE_RAZORPAY_KEY_ID=your_razorpay_public_key_id
 ```
+
+The frontend should not store any Razorpay secret, and it no longer needs a dedicated `VITE_RAZORPAY_KEY_ID`. The checkout key is returned by the server only at order-creation time. It is still a public key and will remain visible in the browser because Razorpay Checkout requires that, but the secret must stay only in Supabase Edge Function secrets.
 
 ## 3. Razorpay Webhook Configuration
 
