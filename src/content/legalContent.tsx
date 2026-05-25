@@ -275,9 +275,9 @@ export const legalContent: Record<LegalType, { title: string; text: ReactNode }>
 					<LegalSection title="1. Strict 21+ restriction">
 						<p>
 							The Platform is strictly limited to individuals who are at least
-							<strong> 18 years old </strong>
+							<strong> 21 years old </strong>
 							or the age of legal majority in their jurisdiction, whichever is
-							higher. If you are under 18, you are not permitted to access, browse,
+							higher. If you are under 21, you are not permitted to access, browse,
 							register for, or use the Platform in any manner.
 						</p>
 					</LegalSection>

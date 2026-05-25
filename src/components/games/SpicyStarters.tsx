@@ -177,6 +177,7 @@ export default function SpicyStarters({ onExit, onFinish }: Props) {
     });
     return Object.values(map).filter(ids => ids.length === 2);
   }, [players]);
+  const isSingleCoupleMatch = couples.length === 1;
 
   const cards = useMemo(() => {
     return filter === "all" ? shuffledDeck : shuffledDeck.filter((c) => c.level === filter);
@@ -199,6 +200,15 @@ export default function SpicyStarters({ onExit, onFinish }: Props) {
   const actor = players.find(p => p.id === actorId);
   const partner = players.find(p => p.id === partnerId);
 
+  const awardPromptPoint = () => {
+    if (isSingleCoupleMatch && actorId) {
+      addScore(actorId, 1);
+      return;
+    }
+
+    activeCoupleIds.forEach(id => addScore(id, 1));
+  };
+
   const next = () => {
     setIdx((i) => i + 1);
     x.set(0); // Reset drag value
@@ -207,7 +217,7 @@ export default function SpicyStarters({ onExit, onFinish }: Props) {
   const handleSwipe = (_: unknown, info: PanInfo) => {
     if (Math.abs(info.offset.x) < 100) return;
     if (info.offset.x > 0) {
-      activeCoupleIds.forEach(id => addScore(id, 1));
+      awardPromptPoint();
     }
     setTimeout(next, 200);
   };
@@ -289,7 +299,7 @@ export default function SpicyStarters({ onExit, onFinish }: Props) {
             </span>
           </div>
           <p className="font-script text-2xl text-accent drop-shadow-md">
-            The Spotlight
+            {isSingleCoupleMatch ? "Partner Face-Off" : "The Spotlight"}
           </p>
         </div>
       )}
@@ -399,13 +409,13 @@ export default function SpicyStarters({ onExit, onFinish }: Props) {
         </button>
         <button
           onClick={() => {
-            activeCoupleIds.forEach(id => addScore(id, 1));
+            awardPromptPoint();
             next();
           }}
           className="group flex flex-[2] max-w-[200px] flex-col items-center gap-1 rounded-2xl bg-gradient-romance py-3 font-pixel text-[10px] text-primary-foreground shadow-glow transition-all active:scale-95"
         >
           <span className="text-lg group-hover:scale-125 transition-transform">🔥</span>
-          {actor ? `${actor.name} did it! +1` : "We Agree +1"}
+          {actor ? `${actor.name} did it! +1` : "Accepted +1"}
         </button>
         <button
           onClick={onFinish}

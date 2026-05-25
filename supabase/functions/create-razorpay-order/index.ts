@@ -4,7 +4,7 @@ const RAZORPAY_KEY_ID = Deno.env.get('RAZORPAY_KEY_ID')
 const RAZORPAY_KEY_SECRET = Deno.env.get('RAZORPAY_KEY_SECRET')
 
 const PRICE_BOOK = {
-  INR: { amount: 3000, currency: 'INR' },
+  INR: { amount: 1000, currency: 'INR' },
   USD: { amount: 200, currency: 'USD' },
   GBP: { amount: 200, currency: 'GBP' },
 } as const

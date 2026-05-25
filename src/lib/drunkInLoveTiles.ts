@@ -163,108 +163,155 @@ function attachTilePoints(tiles: Array<Omit<Tile, "x" | "y">>): Tile[] {
 // LIGHT BOARD  (49 tiles, index 0-48, FINISH at index 48)
 // ---------------------------------------------------------------------------
 export const BOARD: Tile[] = attachTilePoints([
-  { type: "start",   prompt: "Start Here",                                             emoji: "🚀",  effect: { kind: "safe" } },
-  { type: "light",   prompt: "Share Your Favorite Memory Together",                    emoji: "💭",  altDrink: "or take a sip" },
-  { type: "special", prompt: "Safe Zone — Relax, Nothing Happens",                      emoji: "✨",  effect: { kind: "safe" } },
-  { type: "couple",  prompt: "Lingering Kiss on the Cheek",                             emoji: "💋",  altDrink: "or drink" },
-  { type: "drink",   prompt: "Take a Shot!",                                             emoji: "🍸",  effect: { kind: "drink" } },
-  { type: "drink",   prompt: "Take a Sip",                                               emoji: "🍷",  effect: { kind: "drink" } },
-  { type: "social",  prompt: "Truth",                                                    emoji: "🎭",  altDrink: "or drink twice" },
-  { type: "special", prompt: "Go Back 2 Spaces",                                        emoji: "↩️",  effect: { kind: "back", n: 2 } },
-  { type: "social",  prompt: "Choose Who Takes a Shot",                                 emoji: "🥃",  altDrink: "or take one yourself" },
-  { type: "couple",  prompt: "Kiss",                                                     emoji: "💋",  altDrink: "or drink" },
-  { type: "couple",  prompt: "Lingering Kiss on the Cheek",                             emoji: "💋",  altDrink: "or drink" },
-  { type: "wild",    prompt: "Spin Around Four Times Then Walk Straight",               emoji: "🌀",  altDrink: "or drink" },
-  { type: "special", prompt: "Go Back 2 Spaces",                                        emoji: "↩️",  effect: { kind: "back", n: 2 } },
-  { type: "drink",   prompt: "Take a Shot!",                                             emoji: "🍸",  effect: { kind: "drink" } },
-  { type: "social",  prompt: "Dare",                                                     emoji: "🎭",  altDrink: "or drink twice" },
-  { type: "drink",   prompt: "Take a Sip",                                               emoji: "🍷",  effect: { kind: "drink" } },
-  { type: "drink",   prompt: "Take a Shot!",                                             emoji: "🍸",  effect: { kind: "drink" } },
-  { type: "special", prompt: "Safe Zone — Relax, Nothing Happens",                      emoji: "✨",  effect: { kind: "safe" } },
-  { type: "couple",  prompt: "Remove One Item — Shoes & Accessories Count",             emoji: "👟",  altDrink: "or take a shot" },
-  { type: "social",  prompt: "Truth or Dare",                                           emoji: "🎭",  altDrink: "or drink twice" },
-  { type: "couple",  prompt: "Lingering Kiss on the Cheek",                             emoji: "💋",  altDrink: "or drink" },
-  { type: "drink",   prompt: "Both Players Take a Shot",                                emoji: "🥂",  effect: { kind: "both" } },
-  { type: "drink",   prompt: "Take a Shot!",                                             emoji: "🍸",  effect: { kind: "drink" } },
-  { type: "special", prompt: "Safe Zone — Relax, Nothing Happens",                      emoji: "✨",  effect: { kind: "safe" } },
-  { type: "drink",   prompt: "Take a Sip",                                               emoji: "🍷",  effect: { kind: "drink" } },
-  { type: "social",  prompt: "Truth or Dare",                                           emoji: "🎭",  altDrink: "or drink twice" },
-  { type: "wild",    prompt: "Reveal a Secret You've Never Told Anyone",                emoji: "🤫",  altDrink: "or drink twice" },
-  { type: "couple",  prompt: "Lingering Kiss on the Cheek",                             emoji: "💋",  altDrink: "or drink" },
-  { type: "special", prompt: "Safe Zone — Relax, Nothing Happens",                      emoji: "✨",  effect: { kind: "safe" } },
-  { type: "social",  prompt: "Choose Who Takes a Shot",                                 emoji: "🥃",  altDrink: "or take one yourself" },
-  { type: "couple",  prompt: "Give a Shoulder Massage for 30 Seconds",                  emoji: "🙌",  altDrink: "or drink twice" },
-  { type: "wild",    prompt: "Pick Someone's Hand and Kiss It",                         emoji: "👄",  altDrink: "or drink twice" },
-  { type: "drink",   prompt: "Take a Shot!",                                             emoji: "🍸",  effect: { kind: "drink" } },
-  { type: "social",  prompt: "Truth or Dare",                                           emoji: "🎭",  altDrink: "or drink twice" },
-  { type: "couple",  prompt: "Remove One Item — Shoes & Accessories Count",             emoji: "👟",  altDrink: "or take a shot" },
-  { type: "special", prompt: "Safe Zone — Relax, Nothing Happens",                      emoji: "✨",  effect: { kind: "safe" } },
-  { type: "drink",   prompt: "Take a Shot!",                                             emoji: "🍸",  effect: { kind: "drink" } },
-  { type: "wild",    prompt: "Reveal a Secret You've Kept All Night",                   emoji: "🤫",  altDrink: "or drink twice" },
-  { type: "drink",   prompt: "Take a Sip — You're Almost There!",                       emoji: "🍷",  effect: { kind: "drink" } },
-  { type: "wild",    prompt: "Spin Around Four Times Then Walk Straight",               emoji: "🌀",  altDrink: "or drink" },
-  { type: "couple",  prompt: "Lingering Kiss on the Cheek",                             emoji: "💋",  altDrink: "or drink" },
-  { type: "wild",    prompt: "Give Someone a 10-Second Shoulder Dance",                 emoji: "💃",  altDrink: "or drink twice" },
-  { type: "social",  prompt: "Choose Who Takes a Shot",                                 emoji: "🥃",  altDrink: "or take one yourself" },
-  { type: "special", prompt: "Go Back 2 Spaces",                                        emoji: "↩️",  effect: { kind: "back", n: 2 } },
-  { type: "social",  prompt: "Truth or Dare",                                           emoji: "🎭",  altDrink: "or drink twice" },
-  { type: "couple",  prompt: "Remove One Item — Shoes & Accessories Count",             emoji: "👟",  altDrink: "or take a shot" },
-  { type: "couple",  prompt: "Give a Shoulder Massage for 30 Seconds",                  emoji: "🙌",  altDrink: "or drink twice" },
-  { type: "drink",   prompt: "Take a Sip",                                               emoji: "🍷",  effect: { kind: "drink" } },
-  { type: "end",     prompt: "FINISH — Claim the Crown!",                               emoji: "🏁",  effect: { kind: "safe" } },
-]);
+  { type: "start",   prompt: "START", emoji: "🚀", effect: { kind: "safe" } },
 
+  { type: "light",   prompt: "Take a Group Selfie", emoji: "📸", altDrink: "Closest duo in the selfie must recreate their favorite late-night mistake." },
+
+  { type: "special", prompt: "Safe Zone", emoji: "✨", effect: { kind: "safe" } },
+
+  { type: "drink",   prompt: "Drink If You're Single", emoji: "🥂", altDrink: "Take an extra sip if you text ‘you up?’ after midnight." },
+
+  { type: "drink",   prompt: "Take a Shot!", emoji: "🍸", effect: { kind: "drink" } },
+
+  { type: "wild",    prompt: "Share a Wild Story", emoji: "🔥", altDrink: "Tell the one story your friends threaten to expose every party." },
+
+  { type: "drink",   prompt: "Group Shot! Everyone Drinks", emoji: "🥃", effect: { kind: "both" } },
+
+  { type: "social",  prompt: "Truth or Shot", emoji: "🎭", altDrink: "Answer brutally honestly or take two shots back-to-back." },
+
+  { type: "social",  prompt: "Never Have I Ever", emoji: "😈", altDrink: "Expose your most questionable decision this semester." },
+
+  { type: "drink",   prompt: "Do a Body Shot", emoji: "🍹", altDrink: "Chooser picks the body spot. No complaints allowed." },
+
+  { type: "wild",    prompt: "Dance Challenge", emoji: "💃", altDrink: "Give your hottest 15-second club performance to absolutely nobody’s comfort." },
+
+  { type: "couple",  prompt: "Kiss the Person to Your Left", emoji: "💋", altDrink: "Make it convincing enough for the room to cheer." },
+
+  { type: "special", prompt: "Rules of the Game", emoji: "📜", effect: { kind: "safe" } },
+
+  { type: "drink",   prompt: "Take a Shot!", emoji: "🍸", effect: { kind: "drink" } },
+
+  { type: "wild",    prompt: "Strip a Dare! All Remove 1 Article of Clothing", emoji: "🔥", altDrink: "Anyone refusing must finish their drink immediately." },
+
+  { type: "wild",    prompt: "Confession Time", emoji: "🤫", altDrink: "Confess your drunkest hookup story or drink for 5 seconds straight." },
+
+  { type: "drink",   prompt: "Take a Shot!", emoji: "🍸", effect: { kind: "drink" } },
+
+  { type: "special", prompt: "Safe Zone", emoji: "✨", effect: { kind: "safe" } },
+
+  { type: "drink",   prompt: "Drink 2 Sips", emoji: "🍷", effect: { kind: "drink" } },
+
+  { type: "social",  prompt: "Would You Rather?", emoji: "😏", altDrink: "Someone else creates the two worst possible options for you." },
+
+  { type: "wild",    prompt: "Sing a Dirty Song", emoji: "🎤", altDrink: "Maintain eye contact with someone the entire performance." },
+
+  { type: "drink",   prompt: "Take a Shot!", emoji: "🍸", effect: { kind: "drink" } },
+
+  { type: "social",  prompt: "Thumb Master (Thumb War)", emoji: "👑", altDrink: "Last person to copy your thumb move drinks double." },
+
+  { type: "wild",    prompt: "Lap Dance Contest", emoji: "💃", altDrink: "Winner chosen by loudest screams from the room." },
+
+  { type: "social",  prompt: "Imitate a Celebrity", emoji: "🎬", altDrink: "Do it seductively or dramatically — no in-between." },
+
+  { type: "wild",    prompt: "Group Dare", emoji: "😈", altDrink: "The room creates one chaotic dare for a chosen victim." },
+
+  { type: "drink",   prompt: "Cheers! Everyone Drinks", emoji: "🍻", effect: { kind: "both" } },
+
+  { type: "wild",    prompt: "Spin Again", emoji: "🍻", altDrink: "This doesn't mean , you get to spin another dice ,Drink a shot and spin 5 times(life is unfair)." },
+
+  { type: "drink",   prompt: "Shotgun a Beer", emoji: "🍺", effect: { kind: "drink" } },
+
+  { type: "special", prompt: "Safe Zone", emoji: "✨", effect: { kind: "safe" } },
+
+  { type: "drink",   prompt: "Finish Your Drink", emoji: "🍻", effect: { kind: "drink" } },
+
+  { type: "social",  prompt: "Truth or Dare", emoji: "🎭", altDrink: "No soft dares allowed — the room decides your fate." },
+
+  { type: "wild",    prompt: "Do 20 Squats", emoji: "🏋️", altDrink: "Everyone rates your squat form out loud." },
+
+  { type: "drink",   prompt: "Take a Shot!", emoji: "🍸", effect: { kind: "drink" } },
+
+  { type: "drink",   prompt: "Drink If You're Wearing Black", emoji: "🖤", effect: { kind: "drink" } },
+
+  { type: "special", prompt: "Safe Zone", emoji: "✨", effect: { kind: "safe" } },
+
+  { type: "wild",    prompt: "Steal a Drink", emoji: "🥤", altDrink: "Take a sip from someone’s cup while maintaining eye contact." },
+
+  { type: "wild",    prompt: "Public Display of Affection: Kiss the Person Next to You for 30 Seconds", emoji: "💋", altDrink: "No awkward pauses allowed — commit to the bit." },
+
+  { type: "drink",   prompt: "Take a Sip & Relax", emoji: "🍷", effect: { kind: "drink" } },
+
+  { type: "wild",    prompt: "Flip a Coin, Loser Drinks", emoji: "🪙", altDrink: "Loser also has to reveal their current crush in the room." },
+
+  { type: "couple",  prompt: "Kiss or Drink", emoji: "💋", altDrink: "The room decides whether the kiss was weak or acceptable." },
+
+  { type: "wild",    prompt: "Dance Off", emoji: "🕺", altDrink: "Loser must dance alone in the center for 20 seconds." },
+
+  { type: "social",  prompt: "Nominate Someone to Dare", emoji: "😈", altDrink: "Pick carefully — revenge is definitely coming later." },
+
+  { type: "drink",   prompt: "Group Shot! Everyone Drinks", emoji: "🥃", effect: { kind: "both" } },
+
+  { type: "social",  prompt: "Truth or Shot", emoji: "🤫", altDrink: "Answer the most uncomfortable question honestly or suffer the shot." },
+
+  { type: "drink",   prompt: "Down Your Drink", emoji: "🍺", effect: { kind: "drink" } },
+
+  { type: "drink",   prompt: "Chug for 5 Seconds", emoji: "⏳", effect: { kind: "drink" } },
+
+  { type: "social",  prompt: "Pick Someone to Drink", emoji: "🥂", altDrink: "Pick the player most likely to make bad decisions tonight." },
+
+  { type: "end",     prompt: "FINISH", emoji: "🏁", effect: { kind: "safe" } },
+]);
 // ---------------------------------------------------------------------------
 // ADULT BOARD  (49 tiles, index 0-48, FINISH at index 48)
 // ---------------------------------------------------------------------------
 export const ADULT_BOARD: Tile[] = attachTilePoints([
-  { type: "start",   prompt: "Start Here",                                             emoji: "🚀",  effect: { kind: "safe" } },
+ { type: "start",   prompt: "Start Here",                                             emoji: "🚀",  effect: { kind: "safe" } },
   { type: "light",   prompt: "Share Your Favorite Memory Together",                    emoji: "💭",  altDrink: "or take a sip" },
-  { type: "special", prompt: "Safe Zone",                                                emoji: "✨",  effect: { kind: "safe" } },
-  { type: "couple",  prompt: "Lingering Kiss 💋",                                       emoji: "💋",  altDrink: "or drink" },
+  { type: "special", prompt: "Safe Zone — Relax, Nothing Happens",                      emoji: "✨",  effect: { kind: "safe" } },
+  { type: "couple",  prompt: "Lingering Kiss on the Cheek",                             emoji: "💋",  altDrink: "or drink" },
   { type: "drink",   prompt: "Take a Shot!",                                             emoji: "🍸",  effect: { kind: "drink" } },
   { type: "drink",   prompt: "Take a Sip",                                               emoji: "🍷",  effect: { kind: "drink" } },
-  { type: "social",  prompt: "Truth",                                                    emoji: "🎭",  altDrink: "or drink twice" },
+  { type: "social",  prompt: "Ask Truth",                                                    emoji: "🎭",  altDrink: "or drink twice" },
   { type: "special", prompt: "Go Back 2 Spaces",                                        emoji: "↩️",  effect: { kind: "back", n: 2 } },
   { type: "social",  prompt: "Choose Who Takes a Shot",                                 emoji: "🥃",  altDrink: "or take one yourself" },
-  { type: "couple",  prompt: "Kiss",                                                     emoji: "💋",  altDrink: "or drink" },
-  { type: "couple",  prompt: "Lingering Kiss 💋",                                       emoji: "💋",  altDrink: "or drink" },
-  { type: "wild",    prompt: "Spin Around Four Times",                                  emoji: "🌀",  altDrink: "or drink" },
+  { type: "couple",  prompt: "Act out a pole Lap Dance",                                                     emoji: "💋",  altDrink: "or drink" },
+  { type: "couple",  prompt: "Need to Kiss someone right now",                             emoji: "💋",  altDrink: "or drink" },
+  { type: "wild",    prompt: "Spin Around Four Times Then Walk Straight",               emoji: "🌀",  altDrink: "or drink" },
   { type: "special", prompt: "Go Back 2 Spaces",                                        emoji: "↩️",  effect: { kind: "back", n: 2 } },
   { type: "drink",   prompt: "Take a Shot!",                                             emoji: "🍸",  effect: { kind: "drink" } },
-  { type: "social",  prompt: "Dare",                                                     emoji: "🎭",  altDrink: "or drink twice" },
-  { type: "drink",   prompt: "Take a Sip",                                               emoji: "🍷",  effect: { kind: "drink" } },
+  { type: "social",  prompt: "Remove One Article From Your Outfit",                     emoji: "🎭",  altDrink: "or drink twice" },
+  { type: "drink",   prompt: "Reveal your Dirty Imagined Fantasy",emoji: "🤫",  altDrink: "or drink twice" },
   { type: "drink",   prompt: "Take a Shot!",                                             emoji: "🍸",  effect: { kind: "drink" } },
-  { type: "special", prompt: "Safe Zone",                                                emoji: "✨",  effect: { kind: "safe" } },
-  { type: "couple",  prompt: "Remove One Article of Clothing",                          emoji: "👗",  altDrink: "or take a shot" },
+  { type: "special", prompt: "Safe Zone — Relax, Nothing Happens",                      emoji: "✨",  effect: { kind: "safe" } },
+  { type: "couple",  prompt: "Remove One Item — Shoes & Accessories Count",             emoji: "👟",  altDrink: "or take a shot" },
   { type: "social",  prompt: "Truth or Dare",                                           emoji: "🎭",  altDrink: "or drink twice" },
-  { type: "couple",  prompt: "Lingering Kiss 💋",                                       emoji: "💋",  altDrink: "or drink" },
-  { type: "drink",   prompt: "Both Take a Shot",                                        emoji: "🥂",  effect: { kind: "both" } },
-  { type: "drink",   prompt: "Take a Shot!",                                             emoji: "🍸",  effect: { kind: "drink" } },
-  { type: "special", prompt: "Safe Zone",                                                emoji: "✨",  effect: { kind: "safe" } },
-  { type: "drink",   prompt: "Take a Sip",                                               emoji: "🍷",  effect: { kind: "drink" } },
-  { type: "social",  prompt: "Truth or Dare",                                           emoji: "🎭",  altDrink: "or drink twice" },
-  { type: "wild",    prompt: "Reveal a Secret Desire",                                  emoji: "🤫",  altDrink: "or drink twice" },
-  { type: "couple",  prompt: "Lingering Kiss 💋",                                       emoji: "💋",  altDrink: "or drink" },
-  { type: "special", prompt: "Safe Zone",                                                emoji: "✨",  effect: { kind: "safe" } },
+  { type: "couple",  prompt: "IFYKYK : Massage Anywhere below hips",                             emoji: "💋",  altDrink: "or drink" },
+  { type: "drink",   prompt: "All Players Take a Shot",                                emoji: "🥂",  effect: { kind: "both" } },
+  { type: "drink",   prompt: "Kiss! Kiss! Kiss! yes Maam!",                                             emoji: "💋",  effect: { kind: "drink" } },
+  { type: "special", prompt: "Pole or Lap Dance",                      emoji: "✨",  effect: { kind: "safe" } },
+  { type: "drink",   prompt: "reveal your Dirty Imagined Fantasy",emoji: "🤫",  altDrink: "or drink twice" },
+  { type: "social",  prompt: "Remove One Item — Shoes & Accessories Count",                                           emoji: "🎭",  altDrink: "or drink twice" },
+  { type: "wild",    prompt: "spin around four times then walk straight",                emoji: "🤫",  altDrink: "or drink twice" },
+  { type: "couple",  prompt: "Lingering Kiss on the Cheek",                             emoji: "💋",  altDrink: "or drink" },
+  { type: "special", prompt: "Safe Zone — Relax, Nothing Happens",                      emoji: "✨",  effect: { kind: "safe" } },
   { type: "social",  prompt: "Choose Who Takes a Shot",                                 emoji: "🥃",  altDrink: "or take one yourself" },
-  { type: "couple",  prompt: "Massage Anywhere Below the Hips",                         emoji: "🙌",  altDrink: "or drink twice" },
-  { type: "wild",    prompt: "Pick a Body Part to Lick",                                emoji: "👅",  altDrink: "or drink twice" },
+  { type: "couple",  prompt: "Give a  Massage for 15 Seconds,yk where",                  emoji: "🙌",  altDrink: "or drink twice" },
+  { type: "wild",    prompt: "Pick a body part to kiss",                         emoji: "👄",  altDrink: "or drink twice" },
   { type: "drink",   prompt: "Take a Shot!",                                             emoji: "🍸",  effect: { kind: "drink" } },
   { type: "social",  prompt: "Truth or Dare",                                           emoji: "🎭",  altDrink: "or drink twice" },
-  { type: "couple",  prompt: "Remove One Article of Clothing",                          emoji: "👗",  altDrink: "or take a shot" },
-  { type: "special", prompt: "Safe Zone",                                                emoji: "✨",  effect: { kind: "safe" } },
+  { type: "couple",  prompt: "Remove One Item — Shoes & Accessories Count",             emoji: "👟",  altDrink: "or take a shot" },
+  { type: "special", prompt: "Safe Zone — Relax, Nothing Happens",                      emoji: "✨",  effect: { kind: "safe" } },
   { type: "drink",   prompt: "Take a Shot!",                                             emoji: "🍸",  effect: { kind: "drink" } },
-  { type: "wild",    prompt: "Reveal a Secret Desire",                                  emoji: "🤫",  altDrink: "or drink twice" },
-  { type: "drink",   prompt: "Take a Sip — You're Almost There!",                       emoji: "🍷",  effect: { kind: "drink" } },
-  { type: "wild",    prompt: "Spin Around Four Times",                                  emoji: "🌀",  altDrink: "or drink" },
-  { type: "couple",  prompt: "Lingering Kiss 💋",                                       emoji: "💋",  altDrink: "or drink" },
-  { type: "wild",    prompt: "Lap Dance — 10 Seconds",                                  emoji: "💃",  altDrink: "or drink twice" },
+  { type: "wild",    prompt: "Reveal a Secret You've Kept All Night",                   emoji: "🤫",  altDrink: "or drink twice" }, 
+  { type: "drink",   prompt: "Take a Shot!",                       emoji: "🍷",  effect: { kind: "drink" } },
+  { type: "wild",    prompt: "Spin Around Four Times Then Walk Straight",               emoji: "🌀",  altDrink: "or drink" },
+  { type: "couple",  prompt: "Lingering Kiss on the Cheek",                             emoji: "💋",  altDrink: "or drink" },
+  { type: "wild",    prompt: "Give Someone a 15-Second Dance",                 emoji: "💃",  altDrink: "or drink twice" },
   { type: "social",  prompt: "Choose Who Takes a Shot",                                 emoji: "🥃",  altDrink: "or take one yourself" },
   { type: "special", prompt: "Go Back 2 Spaces",                                        emoji: "↩️",  effect: { kind: "back", n: 2 } },
   { type: "social",  prompt: "Truth or Dare",                                           emoji: "🎭",  altDrink: "or drink twice" },
-  { type: "couple",  prompt: "Remove One Article of Clothing",                          emoji: "👗",  altDrink: "or take a shot" },
-  { type: "couple",  prompt: "Massage Anywhere Below the Hips",                         emoji: "🙌",  altDrink: "or drink twice" },
-  { type: "drink",   prompt: "Take a Sip",                                               emoji: "🍷",  effect: { kind: "drink" } },
+  { type: "couple",  prompt: "Remove One Item — Shoes & Accessories Count",             emoji: "👟",  altDrink: "or take a shot" },
+  { type: "couple",  prompt: "Give a Massage for 30 Seconds",                  emoji: "🙌",  altDrink: "or drink twice" },
+  { type: "drink",   prompt: "Suggest a body part to kiss",                                               emoji: "🍷",  effect: { kind: "drink" } },
   { type: "end",     prompt: "FINISH — Claim the Crown!",                               emoji: "🏁",  effect: { kind: "safe" } },
 ]);

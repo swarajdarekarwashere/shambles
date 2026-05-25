@@ -16,6 +16,38 @@ type BoardCfg = {
   jumps: Record<number, { to: number; kind: "ladder" | "shot"; msg: string }>;
 };
 
+type TileChallenge = {
+  kind: "truth-dare" | "take-drink" | "give-drink";
+  title: string;
+  prompt: string;
+  cta: string;
+};
+
+const TILE_CHALLENGES: Record<number, TileChallenge> = {
+  2: { kind: "truth-dare", title: "Truth or Dare", prompt: "Pick truth or dare. Truth: reveal the boldest first impression you had about someone here. Dare: let the room choose one flirty challenge for you.", cta: "Done ->" },
+  5: { kind: "give-drink", title: "Give a Drink", prompt: "Choose one player and make them take 2 sips. Tell the room exactly why you picked them.", cta: "Chosen ->" },
+  7: { kind: "take-drink", title: "Take a Drink", prompt: "Take 2 slow sips, then say who in the room is most likely to start the chaos tonight.", cta: "Cheers ->" },
+  9: { kind: "give-drink", title: "Give a Drink", prompt: "Give 1 sip each to two different players, or give all 2 sips to one player if the room agrees.", cta: "Done ->" },
+  10: { kind: "truth-dare", title: "Truth or Dare", prompt: "Truth: name your most embarrassing drunk moment. Dare: act out a dramatic fake confession to the player on your right.", cta: "Done ->" },
+  13: { kind: "give-drink", title: "Give a Drink", prompt: "Nominate the most suspicious player in the room to drink 2 sips.", cta: "Done ->" },
+  15: { kind: "take-drink", title: "Take a Drink", prompt: "Take a shot or 3 long sips. No negotiation.", cta: "Survived ->" },
+  17: { kind: "give-drink", title: "Give a Drink", prompt: "Pick a player to drink and give them a playful reason in one sentence.", cta: "Done ->" },
+  19: { kind: "truth-dare", title: "Truth or Dare", prompt: "Truth: which player here would be the worst influence on you? Dare: give your best 10-second seductive runway walk.", cta: "Done ->" },
+  21: { kind: "take-drink", title: "Take a Drink", prompt: "Take 2 sips and keep eye contact with another player the whole time.", cta: "Done ->" },
+  23: { kind: "truth-dare", title: "Truth or Dare", prompt: "Truth: what's one thing you hope happens before tonight ends? Dare: let another player post a harmless emoji in your recent chat draft.", cta: "Done ->" },
+  24: { kind: "take-drink", title: "Take a Drink", prompt: "Take 2 sips, then hype yourself up like you just won the night.", cta: "Done ->" },
+  26: { kind: "give-drink", title: "Give a Drink", prompt: "Give a sip to the quietest player and a sip to the loudest player.", cta: "Done ->" },
+  29: { kind: "give-drink", title: "Give a Drink", prompt: "Before the snake drags you down, choose one player to take 2 sips with you.", cta: "Done ->" },
+  31: { kind: "give-drink", title: "Give a Drink", prompt: "Hand out 3 total sips however you like. Be strategic.", cta: "Done ->" },
+  32: { kind: "truth-dare", title: "Truth or Dare", prompt: "Truth: who's the best flirt in this room? Dare: deliver your smoothest pickup line to the group.", cta: "Done ->" },
+  34: { kind: "take-drink", title: "Take a Drink", prompt: "Take 2 sips and tell everyone your current confidence level out of 10.", cta: "Done ->" },
+  36: { kind: "take-drink", title: "Take a Drink", prompt: "Finish 3 quick sips, then spin once before your turn ends.", cta: "Done ->" },
+  41: { kind: "truth-dare", title: "Truth or Dare", prompt: "Truth: what kind of chaos do you secretly enjoy in a party game? Dare: compliment every player in one very short sentence.", cta: "Done ->" },
+  44: { kind: "take-drink", title: "Take a Drink", prompt: "Take 2 sips. The next player gets to decide your toast before you drink.", cta: "Done ->" },
+  46: { kind: "truth-dare", title: "Truth or Dare", prompt: "Truth: reveal your biggest green flag in dating. Dare: recreate your best flirty smile for 10 seconds.", cta: "Done ->" },
+  48: { kind: "give-drink", title: "Give a Drink", prompt: "You're near the finish. Give 3 sips to any player who looks too comfortable.", cta: "Done ->" },
+};
+
 const BOARD_49: BoardCfg = {
   src: board49,
   size: 7,
@@ -61,11 +93,20 @@ export default function ShotsAndLadders({ onExit, onFinish }: Props) {
     kind: "ladder" | "shot";
     msg: string;
   } | null>(null);
+  const [pendingChallenge, setPendingChallenge] = useState<{
+    playerId: string;
+    challenge: TileChallenge;
+    jump?: {
+      to: number;
+      kind: "ladder" | "shot";
+      msg: string;
+    };
+  } | null>(null);
 
   const current = players[turnIdx % players.length];
 
   const roll = () => {
-    if (rolling || pendingJump || !current) return;
+    if (rolling || pendingJump || pendingChallenge || !current) return;
     setRolling(true);
     let n = 0;
     const t = setInterval(() => {
@@ -97,7 +138,21 @@ export default function ShotsAndLadders({ onExit, onFinish }: Props) {
     setTimeout(() => {
       const tileNumber = target + 1;
       const jump = cfg.jumps[tileNumber];
-      if (jump) {
+      const challenge = TILE_CHALLENGES[tileNumber];
+
+      if (challenge) {
+        setPendingChallenge({
+          playerId: current.id,
+          challenge,
+          jump: jump
+            ? {
+                to: jump.to,
+                kind: jump.kind,
+                msg: jump.msg,
+              }
+            : undefined,
+        });
+      } else if (jump) {
         setPendingJump({
           playerId: current.id,
           to: jump.to,
@@ -108,6 +163,25 @@ export default function ShotsAndLadders({ onExit, onFinish }: Props) {
         setTurnIdx((t) => t + 1);
       }
     }, 350);
+  };
+
+  const closeChallenge = () => {
+    if (!pendingChallenge) return;
+
+    const { playerId, jump } = pendingChallenge;
+    setPendingChallenge(null);
+
+    if (jump) {
+      setPendingJump({
+        playerId,
+        to: jump.to,
+        kind: jump.kind,
+        msg: jump.msg,
+      });
+      return;
+    }
+
+    setTurnIdx((t) => t + 1);
   };
 
   const closeEvent = () => {
@@ -216,7 +290,7 @@ export default function ShotsAndLadders({ onExit, onFinish }: Props) {
       <div className="game-bottom-controls fixed inset-x-0 z-30 flex justify-center px-4">
         <button
           onClick={roll}
-          disabled={rolling || !!pendingJump}
+          disabled={rolling || !!pendingJump || !!pendingChallenge}
           className="flex items-center gap-3 rounded-full bg-gradient-romance px-6 py-3 font-pixel text-[11px] text-primary-foreground shadow-glow enabled:hover:scale-105 disabled:opacity-50"
         >
           <motion.span
@@ -232,6 +306,46 @@ export default function ShotsAndLadders({ onExit, onFinish }: Props) {
 
       {/* FIX #9: backdrop click removed — only the Continue button closes the modal */}
       <AnimatePresence>
+        {pendingChallenge && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-6 backdrop-blur-sm"
+          >
+            <motion.div
+              initial={{ scale: 0.75, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.92, opacity: 0 }}
+              className="w-full max-w-sm rounded-3xl border-[3px] border-pink-300 bg-gradient-to-b from-white to-pink-50 p-6 text-center shadow-2xl"
+            >
+              <p className="font-pixel text-[10px] uppercase tracking-[0.24em] text-pink-500">
+                {pendingChallenge.challenge.title}
+              </p>
+              <div className="mt-3 text-5xl">
+                {pendingChallenge.challenge.kind === "truth-dare"
+                  ? "🎭"
+                  : pendingChallenge.challenge.kind === "take-drink"
+                    ? "🥃"
+                    : "🍻"}
+              </div>
+              <p className="mt-4 font-pixel text-sm leading-6 text-pink-900">
+                {pendingChallenge.challenge.prompt}
+              </p>
+              {pendingChallenge.jump && (
+                <p className="mt-4 rounded-2xl bg-pink-100 px-4 py-3 font-pixel text-[10px] uppercase leading-5 tracking-wide text-pink-700">
+                  After this: {pendingChallenge.jump.msg}
+                </p>
+              )}
+              <button
+                onClick={closeChallenge}
+                className="mt-5 w-full rounded-full bg-gradient-romance py-2.5 font-pixel text-[10px] text-primary-foreground shadow-glow"
+              >
+                {pendingChallenge.challenge.cta}
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
         {pendingJump && (
           <motion.div
             initial={{ opacity: 0 }}

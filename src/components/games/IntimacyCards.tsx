@@ -69,6 +69,7 @@ function shuffle<T>(array: T[]): T[] {
 export default function IntimacyCards({ onExit, onFinish }: Props) {
   const { players, addScore, tone, gameState, setGameState } = useGame();
   const isAdult = tone === "adult";
+  const roundsPerPartner = 3;
   
   // Persistence logic for the randomized deck
   const [shuffledDeck, setShuffledDeck] = useState<string[]>(() => {
@@ -94,6 +95,7 @@ export default function IntimacyCards({ onExit, onFinish }: Props) {
     });
     return Object.values(map).filter(ids => ids.length === 2);
   }, [players]);
+  const isSingleCoupleMatch = couples.length === 1;
 
   // 2. Determine who is in the spotlight
   const activeCoupleIdx = idx % Math.max(1, couples.length);
@@ -104,6 +106,7 @@ export default function IntimacyCards({ onExit, onFinish }: Props) {
   const partnerId = activeCoupleIds[1 - actorIdx];
   const actor = players.find(p => p.id === actorId);
   const partner = players.find(p => p.id === partnerId);
+  const roundCycle = Math.floor(roundNum / 2) + 1;
 
   // Sync with GameContext for persistence
   useEffect(() => {
@@ -150,15 +153,19 @@ export default function IntimacyCards({ onExit, onFinish }: Props) {
   }, [timerActive, timeLeft]);
 
   const score = (did: boolean) => {
-    if (did) {
-      activeCoupleIds.forEach(id => addScore(id, 2));
+    if (did && actorId) {
+      if (isSingleCoupleMatch) {
+        addScore(actorId, 2);
+      } else {
+        activeCoupleIds.forEach(id => addScore(id, 2));
+      }
     }
 
     setOpened(false);
     const next = idx + 1;
     setIdx(next);
 
-    const totalRounds = Math.max(couples.length, 1) * 2;
+    const totalRounds = Math.max(couples.length, 1) * 2 * roundsPerPartner;
     if (next >= totalRounds) {
       setTimeout(onFinish, 250);
     }
@@ -175,7 +182,9 @@ export default function IntimacyCards({ onExit, onFinish }: Props) {
 
       <header className="relative z-10 mx-auto flex max-w-md items-center justify-between">
         <button onClick={onExit} className="rounded-full border border-white/20 bg-white/10 px-3 py-1.5 font-pixel text-[10px] backdrop-blur transition-all active:scale-95">← Exit</button>
-        <div className="rounded-full border border-pink-200/30 bg-white/10 px-3 py-1 font-pixel text-[9px] tracking-widest text-pink-100 backdrop-blur uppercase">Intimacy · {idx + 1}</div>
+        <div className="rounded-full border border-pink-200/30 bg-white/10 px-3 py-1 font-pixel text-[9px] tracking-widest text-pink-100 backdrop-blur uppercase">
+          Intimacy · Round {roundCycle}/{roundsPerPartner}
+        </div>
       </header>
 
       <div className="relative z-10 mx-auto mt-2 max-w-md text-center">
@@ -186,7 +195,9 @@ export default function IntimacyCards({ onExit, onFinish }: Props) {
       {actor && partner && (
         <div className="relative z-10 mx-auto mt-2 flex flex-col items-center justify-center">
           <p className="font-script text-3xl text-pink-100">{actor.name},</p>
-          <p className="font-pixel text-[8px] uppercase tracking-widest text-pink-200/60">surprise {partner.name}</p>
+          <p className="font-pixel text-[8px] uppercase tracking-widest text-pink-200/60">
+            {isSingleCoupleMatch ? `face off with ${partner.name}` : `surprise ${partner.name}`}
+          </p>
         </div>
       )}
 
@@ -288,7 +299,7 @@ export default function IntimacyCards({ onExit, onFinish }: Props) {
               disabled={timeLeft !== null && timeLeft > 0}
               className="rounded-full bg-gradient-romance px-5 py-3 font-pixel text-[10px] text-primary-foreground shadow-glow disabled:opacity-50 disabled:grayscale transition-all active:scale-95"
             >
-              {actor ? `${actor.name} did it! +2` : "We Did It +2"}
+              {actor ? `${actor.name} did it! +2` : "Completed +2"}
             </button>
           </motion.div>
         )}

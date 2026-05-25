@@ -16,6 +16,53 @@ function rollDie() {
   return Math.floor(Math.random() * 6) + 1;
 }
 
+function getOneCoupleTileCopy(tile: Tile, actorName?: string, partnerName?: string): Tile {
+  if (!actorName || !partnerName) return tile;
+
+  const replacements: Record<string, { prompt: string; altDrink?: string }> = {
+    "Take a Group Selfie": {
+      prompt: `Take a cute selfie with ${partnerName}.`,
+      altDrink: `Recreate your favorite late-night photo pose with ${partnerName} instead.`,
+    },
+    "Drink If You're Single": {
+      prompt: `If ${partnerName} thinks you're the clingier one, take a sip.`,
+      altDrink: `If you disagree, defend yourself before you drink.`,
+    },
+    "Group Shot! Everyone Drinks": { prompt: "Both of you take a drink together." },
+    "Truth or Shot": {
+      prompt: `Answer ${partnerName}'s question honestly or take the shot.`,
+      altDrink: `${partnerName} gets to ask the uncomfortable one.`,
+    },
+    "Never Have I Ever": {
+      prompt: `Play Never Have I Ever with ${partnerName}. Keep it about your relationship chaos.`,
+      altDrink: "The first one to hesitate takes the extra sip.",
+    },
+    "Dance Challenge": { prompt: `Give ${partnerName} your boldest 15-second dance.` },
+    "Kiss the Person to Your Left": { prompt: `Kiss ${partnerName} like you're stealing a movie scene.` },
+    "Rules of the Game": { prompt: "House rule: only the two of you matter this round." },
+    "Would You Rather?": { prompt: `${partnerName} gives you two terrible options. You must choose one immediately.` },
+    "Thumb Master (Thumb War)": { prompt: `Challenge ${partnerName} to a thumb war. Loser drinks.` },
+    "Lap Dance Contest": { prompt: `Give ${partnerName} a playful 10-second lap dance performance.` },
+    "Imitate a Celebrity": { prompt: `Do your best celebrity impression just for ${partnerName}.` },
+    "Group Dare": { prompt: `${partnerName} picks one chaotic dare for you.` },
+    "Spin Again": { prompt: `Drink a shot, spin 5 times, then stumble back to ${partnerName} dramatically.` },
+    "Kiss or Drink": { prompt: `Kiss ${partnerName} or take the drink.` },
+    "Dance Off": { prompt: `Dance off against ${partnerName}. The loser drinks.` },
+    "Nominate Someone to Dare": { prompt: `Nominate ${partnerName} for a dare and make it count.` },
+    "Pick Someone to Drink": { prompt: `Make ${partnerName} take the drink, or take it for them.` },
+    "Choose Who Takes a Shot": {
+      prompt: `Choose: you or ${partnerName} takes the shot.`,
+      altDrink: "If you can't decide in 3 seconds, you both drink.",
+    },
+    "Ask Truth": { prompt: `Ask ${partnerName} one truth question they have to answer honestly.` },
+    "All Players Take a Shot": { prompt: `You and ${partnerName} both take a shot.` },
+    "Give Someone a 15-Second Dance": { prompt: `Give ${partnerName} a 15-second dance they won't forget.` },
+  };
+
+  const override = replacements[tile.prompt];
+  return override ? { ...tile, ...override } : tile;
+}
+
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
@@ -101,6 +148,10 @@ export default function DrunkInLove({ mode, onExit, onFinish }: Props) {
   const [bothDrinkHighlight, setBothDrinkHighlight] = useState(false);
 
   const currentPlayer = players[turnIdx % players.length];
+  const isSingleCoupleMatch = mode === "couple" && players.length === 2;
+  const singleCouplePartner = isSingleCoupleMatch
+    ? players.find((player) => player.id !== currentPlayer?.id)
+    : null;
 
   // ── Derived ──────────────────────────────────────────────────────────────
   const tileGroups = useMemo(() => {
@@ -237,7 +288,14 @@ export default function DrunkInLove({ mode, onExit, onFinish }: Props) {
   }, [activeTile, tiles]);
 
   // ── Render ───────────────────────────────────────────────────────────────
-  const activeTileData = activeTile !== null ? tiles[activeTile] : null;
+  const activeTileData =
+    activeTile !== null
+      ? getOneCoupleTileCopy(
+          tiles[activeTile],
+          isSingleCoupleMatch ? currentPlayer?.name : undefined,
+          isSingleCoupleMatch ? singleCouplePartner?.name : undefined
+        )
+      : null;
 
   return (
     <section

@@ -22,9 +22,9 @@ type RazorpayOrderResponse = {
 export default function PaywallModal({ isOpen, userId }: PaywallModalProps) {
   const [loading, setLoading] = useState(false);
   const [pricing, setPricing] = useState({
-    amount: 3000,
+    amount: 10000,
     currency: "INR",
-    display: "Rs. 30",
+    display: "Rs. 100",
     symbol: "Rs.",
   });
   const { refreshStats, setShowPaywall } = useGame();
@@ -40,7 +40,7 @@ export default function PaywallModal({ isOpen, userId }: PaywallModalProps) {
         } else if (data.country === "GB") {
           setPricing({ amount: 200, currency: "GBP", display: "GBP 2", symbol: "GBP" });
         } else {
-          setPricing({ amount: 3000, currency: "INR", display: "Rs. 30", symbol: "Rs." });
+          setPricing({ amount: 10000, currency: "INR", display: "Rs. 100", symbol: "Rs." });
         }
       } catch (err) {
         console.error("Location detection failed, defaulting to INR", err);
